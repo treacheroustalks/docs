@@ -1,0 +1,160 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage{hyperref}
+
+\begin{document}
+\title{Diplomacy \\
+  Sprint 1: ``Get ready to Code!''}
+\date{\today}
+\maketitle
+
+\section{Overview}
+\url{http://www.it.uu.se/edu/course/homepage/projektDV/ht11} contains a high level overview of the university course.
+
+\section{Team}
+\begin{tabular}{c|rl}
+Position     & Name              & E-Mail \\
+\hline
+Spokesperson & Stephan Brandauer & stephan.brandauer@gmail.com \\
+Scrum Master & Jan Daniel Bothma & jbothma@gmail.com
+\end{tabular}
+\\
+\\
+We are nine students from {\em Austria, China, England/South Africa, Germany, India, Iran, Sweden, Tajikistan}.
+
+Since the tables in our office are arranged in a triangular shape (which aids communication a lot!),
+{\bf ``Bermuda Triangle''} for a name was a logical choice.
+
+\section{Methodology}
+We chose to use Scrum in our project and so far are very happy with it.
+The daily stand-up meetings are very useful to keep each other updated.
+Prioritizing and roughly estimating stories is not too much work and seems to pay off immediately.
+The estimated velocity from the first planning meeting was remarkably precise, we where out of tasks
+(from the committed stories) one day before the retrospective.
+\\
+\\
+We use Redmine as issue tracker (with backlogs, a Scrum plugin). Since we use backlogs,
+we gradually began replacing the physical taskboard. For the next sprint,
+the physical taskboard will probably go away.
+\\
+\\
+One problem with scrum, however, is that it takes considerable effort for the scrum master to manage the rest of the team.
+This could turn out to be a problem for some student projects since most people want to actively develop.
+
+\section{Tools}
+The tool-set we use/decided on includes (so far): 
+\\
+\\
+\label{tbl:tools}
+\begin{tabular}{r|l}
+Ubuntu 11.04 & operating system \\
+Git & version control \\
+Gerrit & code reviews \\
+Riak & database \\
+Nitrogen & webframework \\
+Ejabbered & XMPP server \\
+gen\_smtp & emailing \\
+Buildbot & continuous integration server
+\end{tabular}
+
+
+\section{Sprint 1}
+
+\subsection{``Get ready to code!''}
+
+\subsection{Stories}
+\subsubsection{Play a game of Diplomacy as a group}
+We played the game and discovered that the rules have many subtleties that are not immediately visible.
+
+\subsubsection{Server Setup}
+To be able to code in the next sprint, we need to have several servers up and running,
+ which includes setting up a project management system, version control and a code review system.
+\\
+\\
+We decided to use Redmine as our project management system, Git for version control
+and Gerrit for code reviewing, based on a mixture of experience, gut feeling,
+prototyping and browsing documentation.
+
+\subsubsection{School}
+To spread knowledge in the team we decided to have schools for Git, Gerrit and Redmine.
+\\
+\\
+One team member held the school and we did some exercises individually.
+
+\subsubsection{Refine Requirements}
+The requirements we receive needed to be clarified, grouped and prioritized.
+\\
+\\
+After discussion with Henry we had a better picture of how things in the system should work
+and we were able to prioritize them and group them to see what stories are connected.
+We will have to further divide the requirements into smaller pieces each sprint. 
+
+\subsubsection{Survey}
+We had already done a brief survey to find out what kind of open source systems we could use, 
+we still needed to know a bit more about them and how they work.
+
+After doing some experimenting we found that some systems might be more suitable for this project than others.
+\\
+\\
+This results of the survey are summarized in the tools-table on page \pageref{tbl:tools}.
+
+\subsubsection{Legal Game Name}
+The name 'Diplomacy' is already protected by copyright law.
+
+Everyone suggested at least one name and we had a vote, the winner was ``Treacherous Talks'', 
+and we're currently waiting for approval from our customer.
+
+\subsection{Preliminary Architecture}
+To be able to have an idea of what to do during the next sprint, we needed a preliminary architecture.
+In order to ensure the highest possible quality of this central topic, 
+as well as to achieve common ownership of this very important step, we adopted a peer review process:
+
+Four people formed the original architecture team and came up with a solution. 
+After that, a new group formed and tested the architecture by dry-running user stories, 
+one member of the original team joined them for clarifications but tried to remain in the background.
+
+Fault tolerance and scalability where top priorities.
+
+\subsection{Retrospective}
+
+\subsection{Opinions}
+We collected a few things in the retrospective:
+\begin{itemize}
+ \item What was good:
+  \begin{itemize}
+   \item Time boxing
+   \item Team-Fika
+   \item Good Teamwork
+   \item The team supported everyone
+   \item Used scrum well for the first sprint
+   \item Got a lot of work done
+   \item Architecture, Survey, \dots
+  \end{itemize}
+ \item What could have been done better:
+  \begin{itemize}
+   \item Longer sprint
+   \item Smaller stories/tasks
+   \item Think of what you say before the stand-up
+   \item Owner of stories, not just tasks
+  \end{itemize}
+ \item What should be done differently:
+  \begin{itemize}
+   \item Done criteria on the stories needed
+   \item The demo - too chaotic
+   \item Update the taskboard
+   \item Organize wiki, it starts to become a mess
+   \item Clearer stories/tasks
+  \end{itemize}
+\end{itemize}
+
+\subsection{Improve}
+The next sprint will take three weeks; we decided to focus on improving the following:
+\begin{itemize}
+ \item A clear ``definition of done'' for the stories - during sprint planning.
+ \item Better organized demo - one person (Stephan) will moderate and check that every one can demo.
+       Every person should stand up and do the demo. Don't demo while sitting.
+ \item Update the taskboard immediately! Otherwise people do not know what you're doing and might start the same.
+       It is also harder to track the progress
+\end{itemize}
+
+
+\end{document}
