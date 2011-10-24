@@ -1,0 +1,90 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage{hyperref}
+
+\begin{document}
+\title{Treacherous Talks 
+  Sprint 2: ``CRU Users''}
+\date{\today}
+\maketitle
+
+\begin{tabular}{c|rl}
+Position     & Name              & E-Mail \\
+\hline
+Spokesperson & Stephan Brandauer & stephan.brandauer@gmail.com \\
+Scrum Master & Andre Hilsendeger & andre.hilsendeger@gmail.com
+\end{tabular}
+\\
+\\
+With the end of sprint \#2, there has been a change in the team:
+Jan Daniel Bothma is no longer our scrum master, Andre Hilsendeger will
+take over from him. We did this in the hope that the benefits and disadvantages
+of that position are spread out more evenly across the team.
+
+\section{The Sprint}
+\subsection{Plan ..}
+The sprint 2 goal was ``CRU Users'' which, for us, entailed {\it C}reating, {\it R}eading, {\it U}pdating through all three interfaces, Web, Mail, IM.
+
+Even though software design does not directly relate to this goal, ``First Draft of a High Level Design'' was a high-priority story.
+
+Our estimated velocity was 89 story points (1 point being a person day), so we 
+also fitted two stories regarding game creation and search into the plan for 
+this sprint.
+
+\subsection{.. and Reality}
+
+We quickly ran into trouble integrating our tools with Buildbot, our continous 
+integration system (since that requires a build process that is able to work 
+from scratch). It was especially hard to build and release ejabberd but that 
+works now.
+We foresaw that this would take lots of time but, unfortunately, not the scale.
+Additionally, we use rebar to handle compilation and releasing of our code. 
+Rebar has, though, some issues that took a while to figure and iron out.
+
+Additionally, it turned out, that websockets and nitrogen with yaws don't play
+together, so we abandoned nitrogen in favour of simple yaws. This came with 
+certain cost, as well.
+
+Due to the amount of time we had to spend on the build system, we began lagging 
+behind.
+
+What we were able to deliver in the end was, in fact, the actual sprint goal 
+but not the game stories. This amounted to 70 story points. As a result of this,
+we are going to reduce the focus factor for this sprint but we hope that 
+problems on the scale of ejabberd will not arise in the coming sprint.
+
+\subsection{The Stories}
+\begin{tabular}{l|c}
+First draft of a high level design & done \\
+Set up continuous integration & done \\
+All team members must have basic testing competency & done \\
+Load test Riak & done \\
+A user should be able to connect using a web client & done \\
+A user should be able to connect using an im client & done \\
+The system should communicate with the mail interface using smtp & done \\
+A user should be able to register on the system & done \\
+A user should be able to log into the server & done \\
+A user should be able to update his/her personal information & done \\
+A user should be able to setup a game as an organiser & not done \\
+A user should be able to search for games based on properties & not done \\
+Unix School & not done
+\end{tabular}
+
+\subsection{Retrospective}
+We voted on the importance of issues (everyone had 4 votes). \\
+The results:
+\subsubsection*{What should be done differently:}
+\begin{itemize}
+\item {\bf Time estimation \& planning the sprint (10 votes)}
+\item {\bf More people on code review (10 votes)}
+\item {\bf Communicate solutions better (7 votes)}
+\item Sticking to the process (4 votes)
+\item Build process (3 votes)
+\item Coding efficiency (2 votes)
+\end{itemize}
+The bold items are the ones we will focus on in sprint 3.
+
+The issues from last retrospective (clearer ``Definitions of Done'', 
+better organized demo, keeping the taskboard updated) were all accepted as 
+reached, we therefore have time to focus on the new improvements.
+
+\end{document}
