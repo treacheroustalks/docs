@@ -5,9 +5,9 @@
 makefiles := $(shell find . -mindepth 2 -maxdepth 2 -name 'Makefile' -printf "%h\n")
 
 all: $(makefiles)
-	@echo Building document via Makefile in $< 
-	$(MAKE) -C $<
+	@echo Building document via Makefile in $^
+	$(foreach dir,$^, $(MAKE) -C $(dir) ;)
 
 clean: $(makefiles)
-	@echo Cleaning via Makefile in $<
-	$(MAKE) -C $< clean
+	@echo Cleaning via Makefile in $^
+	$(foreach dir,$^, $(MAKE) -C $(dir) clean ;)
