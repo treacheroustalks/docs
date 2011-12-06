@@ -1,0 +1,99 @@
+* Contents
+** Understanding of the project and the _difficulties_
+*** present game
+*** present some requirements
+    focus on NON-functional requirements
+    Original assignment slides:
+    The vision of CBFoW:
+***** A Diplomacy server
+      d'uh
+***** Play by mail/IM
+      example of text input format
+***** Play via web interface
+      screenshot
+***** _use websockets_
+***** _Simple game AI_
+      not going to happen - explain how this is possible in scrum
+***** _Scalable_
+      going to happen - explain why this is hard and how we are solving it
+***** _Always available_
+      going to happen - explain our approach, it's weaknesses
+** Timeline
+*** Sprint 1 - Get Ready to Code
+    ""we decided to try to deliver high quality code from the start -
+    a decision that made our project MUCH more fun""
+    2 weeks
+    * Play the game ;-)
+      * find a name
+      * setup servers - git, issue tracking
+      * surveys - try out libraries, tools, decide on what to use
+      * start working on architecture
+**** retrospective
+     define when a task is 'done'
+     the demo was chaotic
+     update the taskboard
+*** Sprint 2 - Create, Read & Update Users
+    ""we wanted to create users and have them do 'basic stuff'
+    since we thought, that our sprint was not full enough yet, we decided
+    to pull in some requirements regarding games. no smart move.""
+    * first version of a design
+      * load test riak - very shallow, just to try it out
+      * basic testing competency - testing school, decide on test framework
+      * get input channels working
+        Problems:
+         * set up continuous integration - xmpp server!
+         * get connections working - dropped the webframework!
+      * a user should be able to register and log in, update personal info
+      * _not done_: a user should be able to setup a game, search for games, unix school
+**** Retrospective
+     TIME ESTIMATION - it ALWAYS takes longer than you think.
+*** Sprint 3 - Play Basic Games
+    ""we wanted to be able to play! finally do the game stuff,
+    plus make them _run_. The design changed a lot""
+    * create, join games (and present them to the user)
+      * heavy refactoring in the UIs
+      * Rule Engine
+      * visit the Erlang User Conference! Thank you, Erlang Solutions!
+      * 'hidden' improvements: the build system got a lot more useful,
+        build time was reduced greatly!
+      * this time, we _undercommitted_, we could pull in more stories in the end
+**** Retrospective
+     * Better Demo Preparation - *again*
+       * Make Tasks less dependent on each other so no one is blocked
+       * Document code better!
+*** Sprint 4 - Find the Limits of Real Games
+    ""This sprint was mostly focusing on load testing our system.
+    We never had any doubts that we would discover loads of problems,
+    but we need(ed) to know where they where. ('Crash and Burn' was
+    a suggestion for the sprint goal).
+    Additionally, we started to work on fail-safety.""
+    --> slide presenting some load test results
+*** Sprint 5 - Play Game & Operator is watching
+    ""stuff we and the customer really want to see in the final product,
+    improving the operator-interface (web only) as well as the user interface,
+    finishing failure tolerance, tuning performance""
+** Lessons learned
+*** planning replaces chance by mistake!
+    estimation is terribly inaccurate if you look at single
+    tasks. Estimation of many tasks, however, is surprisingly
+    accurate because the errors tend to cancel each other out.
+*** definitions of done are important descriptions of tasks
+    never underestimate the human capacity for misunderstandings.
+    DoDs are a great tool to make everyone talk about the same thing - and to
+    prevent people from doing too much!
+*** do code reviews
+    in our system, code always gets reviewed after a push to the repository.
+    No code gets merged without a positive review by at least one other team
+    member. Knowing that your code is going to be reviewed alone makes you write
+    better code. In practice, most commits still need several changes before they
+    are deemed merge-worthy.
+*** be careful with promises
+    if you promise to get something done, people will rightfully expect that
+    you live up the promise. When in doubt, promise less and maybe deliver
+    more than promised in the end.
+    Do not let people make you promise more than you think what is possible
+    and have arguments (e.g. estimation of tasks) to defend your position.
+*** prioritize and think in features
+    find out what the most important feature is and finish it. Only start
+    something new if you are completely done (or the priorities have shifted).
+    Don't work a bit here, then a bit there, ...
