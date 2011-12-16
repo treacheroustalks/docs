@@ -1,0 +1,466 @@
+\documentclass[11pt,a4paper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{datetime}
+\usepackage{color}
+
+\newcommand{\hi}[1]{{\color{red}\tiny \em #1\/}\\}
+\newcommand{\todo}[1]{\footnote{{\color{red} {\bf TODO:} #1}}}
+
+\begin{document}
+\title{Course Report \\
+  ``Treacherous Talks''}
+\date{\today\ @ \currenttime}
+\author{Dilshod Aliev, Jan Daniel Bothma, Stephan Brandauer,\\
+ Andre Hilsendeger, Rahim Kadkhodamohammadi, Xinze Lin,\\
+Tiina Loukusa, Erik Timan, Sukumar Yethadka}
+\maketitle
+\tableofcontents
+
+\abstract{
+Treacherous Talks is an implementation of a board game (``Diplomacy'') as a web
+service.
+
+We developed the service completely in erlang while spending lots of time on
+optimizing performance and scalability. The project was mostly self organized
+by an international team of 9 students and developed using Scrum.
+}
+\chapter{Introduction}
+Diplomacy is a board game, invented in the 1950s where the goal is to try to 
+conquer Europe just before WW I. You come close to this goal by talking to the
+other players --- by diplomacy --- and making them your allies. And you achieve
+it by attack them when they do not expect it.
+
+The game is and was commonly played over distance --- starting with playing by 
+mail, then email and nowadays over pretty web pages with full-blown map
+visualization.
+
+The requirements we were faced with asked for implementation of Diplomacy as a
+web service while providing several interfaces to this service. Scalability and
+Failure Tolerance were of high priority. \\
+Even though a board game is a fun thing to implement, we do think that the most
+interesting part of our project is the scalability- and fault tolerance-
+engineering.
+\todo{Make unique - product rep uses same introduction}
+
+\chapter{Resources}
+\section{Team}
+Since we decided to arrange our workplaces in a triangular shape
+\todo{picture of office}, we gave our team the name ``Team Bermuda Triangle''.
+This is only one example for how quickly we had formed a well functioning
+team. \\
+Even though we differed in nationalities as well as ages, we had no
+troubles whatsoever to start working together from the start.\\
+\\
+The team members were: \\
+
+\newcommand{\flag}[1]{\includegraphics[height=10pt]{flags/#1}}
+
+\begin{tabular}{lcrl}
+Dilshod Aliev & Tajikistan & \flag{tajikistan.png} \\ \hline
+Jan Daniel Bothma & South Africa & \flag{south_africa.png} \\ \hline
+Stephan Brandauer & Austria & \flag{austria.jpg} \\ \hline
+Andre Hilsendeger & Germany & \flag{germany.jpg} \\ \hline
+Rahim Kadkhodamohammadi & Iran & \flag{iran.png} \\ \hline
+Xinze Lin & China & \flag{china.png} \\ \hline
+Tiina Loukusa & Sweden & \flag{sweden.png} \\ \hline
+Erik Timan & Sweden & \flag{sweden.png} \\ \hline
+Sukumar Yethadka & India & \flag{india.png}
+\end{tabular}\\
+\\
+A list of the team members would not be complete without mentioning
+Karl Marklund, the TA overlooking our project.
+Karl has been a great help with all kinds of problems, from getting more
+hardware to giving us tips and feedback. Thank you!
+
+\section{Equipment}
+We had nine development PCs (HP made) supplied from the university, as
+well as four more PCs as servers (git, redmine, gerrit, buildbot),
+as well as a meeting/presentation workstation. \\
+Our office room was equipped with several white boards that proved to be
+very valuable, especially in times where much design and architecture was done.
+\section{Tools}
+\subsection*{Issue Tracking}
+We used redmine, a web based issue tracker.
+Redmine was useful for several reasons:
+\begin{itemize}
+\item built-in wiki \\
+  we used the wiki as basis for high level documentation of the architecture
+\item scrum plugin \\
+  Backlogs, a scrum plugin was very valuable since it quickly replaced the
+  post-its-based scrum-board solution while providing the same overview.
+  The scrum masters had to spend no time on keeping issue tracking and scrum
+  board consistant any more.
+\end{itemize}
+\subsection*{Version Control}
+As a version control system, we used git, which was a choice we did not discuss
+at all since it was assumed by the teachers.
+
+\subsection*{Continuous Integration}
+Buildbot, our tenth team member, proved to be valuable by avoiding integration
+problems early on.
+Our combination of buildbot and gerrit made it impossible to merge anything
+before buildbot had confirmed that all tests passed.
+\subsection*{Code Reviews}
+We used gerrit, a web based code review tool that makes git safer.
+When a developer pushes a change to the repository, she can not push to the
+master branch directly but only to gerrit. Gerrit then publishes this change in
+a pretty web interface for everyone to see {\bf and} tells buildbot to run
+the tests with that change. \\
+Now the other developers can review that change by either looking at the changed
+files in the webinterface's diff viewer or by pulling them to their local
+repositories and try them out.
+If a developer finds any problems, she can insert comments directly in the 
+web interface for the author to see and give a negative review in order to
+prevent merging of the change. \\
+When the author has reacted to those comments, updated his change and the
+reviewer is finally happy, the reviewer can give the change a positive rating.
+
+If buildbot AND at least one reviewer agree that the change can be merged,
+gerrit will do so.
+This process proved to be incredibly safe, many bugs were found very early and
+our build broke only once during the whole project.
+Even though gerrit is not easy to set up, we think that future teams would
+profit a lot by using gerrit.
+
+While this report is written, it is being code reviewed as well.
+
+\subsection*{Testing}
+We used EUnit for testing and did so without really considering
+CommonTest, so we do not know whether that choice was optimal or not.
+EUnit worked ok for us, one problem we had with EUnit was that EUnit assumes
+an automatic timeout of 5 seconds for all tests. If a test takes a long time
+to run, this timeout can become really annoying because buildbot will sometimes
+reject changes only because there where several builds running on buildbot at
+one time and it therefore was under higher load. To make matters worse, EUnit
+does not seem to have one central switch to change that default value but only
+lets you change the value for single tests.
+
+\chapter{Project Methodology and Organization}
+
+\section{The Customer}
+Our customer was Henry Nyström from Erlang Solutions. Henry's job according to
+Scrum was to prioritize the tasks at hand and be at the planning meeting.
+What Henry did instead was to act more like a teacher which led to confusion on
+our side at the beginning of the project. Once we got accustomed to that,
+we were able to work very efficiently for and with him.
+Henry's experience in developing erlang systems was extremely useful and we hope
+that he learned a little bit through this project as well since some of our
+tools were not known to him (in practice) before.
+\section{Erlang User Conference!}
+We were invited to present our project in poster form at the
+Erlang User Conference in Stockholm. The attendance was free of charge for us thanks to Erlang Solutions. \\
+In Stockholm many people asked about the project, most questions were on a high
+level, though. We did not get direct feedback that changed the project after the
+EUC but the talks there were quite relevent to our project and therefore a big
+help. \\
+It was as well a very fortunate place for us to be as some companies that were 
+there are actively trying to hire young developers with erlang experience.
+\section{Scrum}
+For managing our project we used Scrum as in~\cite{kniberg}.
+We tried hard to start up a well functioning software process and believe that
+we succeeded. Our flavour of Scrum looked as follows: \\ \\
+\begin{tabular}{cc}
+  when & what \\ \hline
+  daily & standup meeting\\
+  weekly & fika \\
+  beginning of sprint & planning \\
+  end of sprint & demo \\
+  end of sprint & retrospective \\
+\end{tabular}
+
+\subsection{Standup Meeting}
+The standup meeting was strictly limited in time: to 15 minutes (although we
+rarely reached 15 minutes). The standup meeting was held at 9:00 sharp every day
+except for some planning days. In the standup meeting, everyone was giving a
+short overview of his/her last day and of the plan for this day: ``Yesterday, I
+did \ldots, I had problems with \ldots; today, I am going to \ldots''.
+The positive effects of this are quite subtle and it might be easy to think that
+such a meeting is not really necessary, especially when everyone is in the same
+room:\\
+\begin{itemize}
+\item it encourages people to talk about their problems!
+  Problems are not something one should hide. Many easy solutions for seemingly
+  big problems came out of this procedure.
+\item people maintain an overview of the project state even in the parts of the
+  project they have not touched in ages.
+\item since everything is announced before-hand,
+  (``today, I am going to \ldots''), bad decisions can be caught, the rule to
+  always work on the most important item is enforced and so on.
+\item the standup meeting is an ideal opportunity for the scrum master to team
+  up people who don't really know what they should work on.
+\end{itemize}
+\subsection{Fika}
+The swedish tradition of having Fika was something that has been practiced by
+several teams on this course before us and we unanimously voted to have weekly
+Fika, too. Every monday, one member of the team would bring cake or pastry and
+we would eat together and have coffee or tea. This was a delicious way to get to
+know the team better. \\
+In order to make people punctual (or: in order to have more Fika!), we decided
+that each time someone is late for the standup meeting, that person has to
+bring one extra Fika (or ``punishment Fika'', as we called it).
+JD was the clear winner!
+\subsection{Planning}
+Planning was our least favourite task but nonetheless a very important one.
+Our typical planning day looked as follows:
+\begin{itemize}
+\item 9.00--9.45: {\bf estimation of available person-days,
+  prioritizing of backlog stories}\\
+  Who will be missing? What else is coming up (presentations, EUC, etc.)?
+  What do we want to accomplish in this sprint?
+  What is most important to the customer? The customer was missing that task
+  often, so we had to guess Henry would think.
+\item 10.00--10.45: {\bf breaking down stories into tasks}\\
+  Splitting the big stories into smaller tasks that ideally do not depend on
+  each other --- but that was often easier said than done.
+  Also: setting ``definitions of done'' (DoDs).
+\item 11.00--14.30: {\bf estimating stories}\\
+  (with breaks!)
+  Guessing how long each story would take with the additional information from
+  task breakdown and DoDs.
+\item 14.30--15.00: {\bf committing to sprint}\\
+  Taking the prioritized, estimated stories and committing to as many as the
+  available person days allowed.
+\item 15.00--16.00: FIKA
+\end{itemize}
+
+\subsection{Demo}
+The demo was held at the end of each sprint. Since in Scrum to try to produce
+something that is potentially shippable in each sprint, the demo is there to
+ensure that. We invited teaching staff and customer to the demos and showed them
+what we did in the last weeks. The demo was always a nice ending of a sprint for
+us, because it in quite relaxed atmosphere and we were more proud of our
+product than worried.
+
+\subsection{Retrospectives}
+The retrospective was the absolutely last thing of a sprint --- in a team
+meeting we talked about what we liked about the last sprint, what we disliked,
+and what we would like to do differently in the next sprint. \\
+It was very important to focus on getting negative feedback at first, people
+were generally reluctant to give it because they did not want to seem rude or
+be critizised themselves. This is, why we had the rule in the first one or two
+retrospectives, that everyone {\em has\/} to come up with at least one of each
+category. This worked quite well and in the end, even negative feedback was
+coming quite easily, although personal criticism was very rare if occuring at
+all. \\
+After we collected feedback (we collected it in form of post-its on a
+whiteboard), we ``dot-voted'' --- everyone gets three or four votes and can
+distribute them in the form of a dot over the negative items on the board.
+Giving multiple dots to one item is allowed. We took the three items with the
+most points and tried to fix them in the course of the next sprint.
+
+\section{Quality Management}
+\subsection*{Coding Conventions}
+Our coding conventions were agreed on in sprint 1 and we enforced them through
+code reviews. Obviously some things were overlooked but the code quality
+doubtlessly profited a lot from that practice.
+The coding conventions governed coding style (eg.\ max-80-char-lines, no
+trailing white space) as well as erlang specifics (eg.\ how to use {\tt catch}).
+\subsection*{Reviews}
+Reviews were done mostly by whoever had time. A good time for a dev to do 
+reviews was while buildbot was testing her newest change. Sometimes, though,
+reviews were requested or even traded: ``I'll review your change, if you'll
+review mine''. \\
+At first it was annoying to have to wait for some time before a change was
+actually merged. After a while, though, we got used to the fact that nothing is
+merged immediately and continued to work on the next task while our old one was
+awaiting review.
+
+Reviews were generally well meaning but that does not mean that we accepted bad
+code quality. People tended to look away when a function was not documented here
+and there but there still were plenty of negative reviews.
+
+\subsection*{Testing}
+We took testing very seriously and the considerable time we invested payed off.
+A counting on december 7$^{th}$, 2011 showed that 47\% of code lines were testing
+code. This big suite of tests made it incredibly easy to verify that a change 
+didn't break anything. If developers are secured by a solid test suite, it is
+also easier to start working on code that is not so well known because one 
+always has a regression test suite that immediately highlights errors.
+
+\section{Timeline}
+\subsection*{Sprint 1 --- Sprint Goal: ``Getting Ready to Code''}
+\subsubsection{Servers}
+We set up a git- and a redmine-server, buildbot was not
+a task in this sprint. We started off with JD as scrum master and Stephan as
+spokesperson. Scrum was done on a whiteboard with post-its.
+As we all were new to the process, it took us a little while to figure out how
+to act.
+\subsubsection{Surveys}
+We tried out some tools/libraries and evaluated how they would fit
+our project. The end result of that process was: \\
+\\
+\begin{tabular}{r|l}
+Ubuntu 11.04 & operating system \\
+Git          & version control  \\
+Gerrit       & code reviews     \\
+Riak         & database         \\
+Nitrogen     & webframework     \\
+Ejabberd     & XMPP server      \\
+gen\_smtp    & emailing         \\
+Buildbot     & continuous integration server
+\end{tabular}
+\subsubsection{Git-School}
+Since almost everyone was new to git, Erik talked to some slides about git and
+we all did a couple assignments with git afterwards.
+The other team was invited as well.
+\subsubsection{Requirements}
+We worked on the requirements a lot: we clarified them, prioritized them and had
+our customer sign off the outcome of this process. It was crucial, that the
+customer was happy with the result since we knew that this result would shape
+the rest of our project.
+\subsubsection{Preliminary Architecture}
+We opted for a reviewed architecture process and would highly recommend it to
+future teams as well: \\
+A group of people was working on an architecture proposal for a couple of days.
+Then one person of that group walked a review~group through the result. The
+review~group then took the requirements and tried to run them through the
+architecture. This proved to be very effective but of course work-intensive. \\
+Given the importance of the architecture, the amount of work was acceptable.
+
+\subsection*{Sprint 2 --- Sprint Goal: ``CRU Users''}
+\subsubsection{Continuous Integration}
+We set up buildbot. Making our build process compatible with buildbot was a lot
+of work and maintaining the build process was a task in all future sprints.
+
+Even though Continuous Integration was a lot of work to get up and running, the
+productivity bonus it gave us more than made up for it in the long run.
+
+\subsubsection{Testing Competency}
+Some team members had not much or no real experience in writing tests, no one
+had experience in writing tests in erlang. Therefore we chose to hold a 
+{\em testing school\/} much like sprint 1's git school.
+
+\subsubsection{Load Test Riak}
+Since our first design drafts showed that riak would be very central to our
+performance, we decided that a quick load test of riak was in order just to
+ensure that it `works'. The results where not extremely surprising and therefore
+we continued to rely on riak.
+
+\subsubsection{Interfaces}
+We laid the foundations for our interfaces: http (websockets), xmpp, smtp.
+The DoD was to have them answer a `ping' with a `pong' or anything comparable.
+
+\subsubsection{Registering, Login, \ldots}
+We gave users the possibility to register on our system, to login and to update
+their user information. First connections from the interfaces down to the
+database were made!
+
+\subsubsection{Problems!}
+After sprint 1 which went very well, we were a bit too careless in sprint 2's
+planning, especially the estimation. For this reason, we committed to too many
+stories and were not able to complete them by the end of sprint 2. \\
+We vowed to not make this mistake again.
+
+\subsection*{Sprint 3 --- Sprint Goal: ``Play a Basic Game''}
+\subsubsection{Erlang User Conference '11}
+From this sprint on, JD resigned as our scrum master --- but he had warned us
+from the beginning of the project. Andre replaced him with the beginning of 
+sprint~3.
+
+Attending the EUC'11 was on our agenda. For that we had to make a
+poster, which had to pass several stages of reviews. This proved to be very
+time~consuming.
+\subsubsection{Refactor UIs}
+Since the input channels (http, xmpp, smtp) had been developed in parallel in
+the last sprint, they were full of code duplication. We changed that and as well
+extended them greatly.
+\subsubsection{Game Application}
+Since we wanted to be able to play games, we worked hard on the Game
+Application. This ranged from setting up games as user (stored in the DB),
+changing their phases according to a timer to implementing the game rules.
+
+\subsection*{Sprint 4 --- Sprint Goal: ``Find the Limits of Real Games''}
+\subsubsection{Load Testing}
+We applied high load to our system and measured where the limits are (and how
+they look like). The load tests showed us severe but easily fixable bugs that
+we had in our system; we would not have found them otherwise. The scalability
+was quite satisfactory for a first try, the raw performance however was
+degrading over time until after $\approx$1h the backends crashed. We fixed this
+easily by a riak-reconfiguration but did not figure out where the problem came
+from exactly.
+
+\subsubsection{Messaging}
+The messaging-part explains the word ``Real'' in the sprint goal since one
+cannot play a good diplomacy game without communicating.\\
+The messaging system needed to support offline messages (when a user receives a
+message while she is offline, the message should be delivered upon login).
+
+\subsection*{Sprint 5 --- TODO}
+\subsection*{Sprint 6 --- TODO}
+
+\chapter{Conclusion}
+\section*{To Future Students}
+\todo{Group Discussion}
+\begin{itemize}
+\item  Investing in code quality pays off. Do never, ever, say things like:
+``commit this now, we can make it pretty later''. Because you won't!
+Do it now or never.
+\item Think `product': everything you do is in order to make the product better.
+You write high quality code because it makes you more productive, not because
+it's cast in stone.
+\item Make everyone understand what you are talking about and take your time to
+do that.
+\item Create an environment where it's ok not to know something so that people
+ask instead of trying to cover their problems. Help each other out where you
+can.
+\item Planning is boring, but still: take your time to do it! It is incredibly
+motivating to see that a sprint goal was met after three weeks of hard work.
+\item Work transparent: let everyone know what you are doing and why. This way,
+you get a lot more valuable feedback and no one can tell you later that what you
+did was wrong --- because they knew what you did.
+\item Apply Scrum completely. Don't feel bad for saying ``no'' to TA/customer if
+you are running out of time and you didn't commit to something. 
+\item Do Fika! Because it's delicious!
+\end{itemize}
+\section*{To Teachers/TA}
+\todo{Group discussion}
+
+\chapter{References}
+
+\appendix
+\todo{double header}
+
+\chapter{Team Statements}
+\hi{ (required)
+
+Each group member explains his/her own contributions to the project, maybe half a page each. Make sure that all members agree on these descriptions.}
+\section{Dilshod Aliev}
+\section{Jan Daniel Bothma}
+\section{Stephan Brandauer}
+I was the spokesperson of the team from the beginning. As spokesperson,
+I saw it as my job to shield the team from distractions as much as possible.
+
+In the beginning, I was doing the survey on zotonic which looked great but too
+big for us. Then, I also was part of the architecture team for the initial
+draft.
+
+My main topic in sprint 2 was riak. I set up a cluster and was working with the
+first benchmark of riak, together with mostly Sukumar.
+I committed the initial version of our DB-wrapper module as well.
+
+In sprint 3, I was working on one task only: the rule engine, our implementation
+of the rules. During that sprint, I got a lot done but also lost a lot of
+overview over the project since I was working on one task, alone.
+
+Sprint 4 started with the generation of test data for the load tests. After
+this, my main contribution was necromancer, our fail-safefty module as well as
+integration of {\tt necromancer} in the system (Tiina and JD did the
+implementation of game-restarting).
+
+Sprint 5 had me mostly covered preparing for the presentation of Review~2.
+The feedback was quite good, but in my opinion we were forced to spend far too
+much time on tasks that do not contribute to the product (I estimate that the
+presentation preparation took roughly 3 person weeks).
+\section{Andre Hilsendeger}
+\section{Rahim Kadkhodamohammadi}
+\section{Xinze Lin}
+\section{Tiina Loukusa}
+\section{Erik Timan}
+\section{Sukumar Yethadka}
+
+\bibliographystyle{plain}
+\bibliography{course_rep}
+
+\end{document}
