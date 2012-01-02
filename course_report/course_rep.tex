@@ -445,7 +445,7 @@ of the rules. During that sprint, I got a lot done but also lost a lot of
 overview over the project since I was working on one task, alone.
 
 Sprint 4 started with the generation of test data for the load tests. After
-this, my main contribution was necromancer, our fail-safefty module as well as
+this, my main contribution was necromancer, our fail-safety module as well as
 integration of {\tt necromancer} in the system (Tiina and JD did the
 implementation of game-restarting).
 
@@ -453,7 +453,41 @@ Sprint 5 had me mostly covered preparing for the presentation of Review~2.
 The feedback was quite good, but in my opinion we were forced to spend far too
 much time on tasks that do not contribute to the product (I estimate that the
 presentation preparation took roughly 3 person weeks).
+
 \section{Andre Hilsendeger}
+In the first sprint I was looking into Erlang Web as part of the tools-/library survey.
+It turned out to be too basic and we did not use it.
+Additionally I was part of the team that created the initial architecture draft.
+
+As expected the initial draft of the architecture was not enough and needed more specifics.
+In the second sprint I was once again part of the architecture/design team.
+We defined in more detail what the processes are and how they are supervised.
+As part of our testing school I also took a look into meck, and gave the team a short introduction
+on how to use it.
+Since by design most of our backend apps had a similar structure I created a template for those
+and created the initial user management app.
+
+From the third sprint on I have been the scrum master.
+We noticed quite some code duplications and similarities between our frontends,
+so I refactored the logic away from the SMTP and XMPP frontends into the controller.
+Due to our database-drive design in combination with riak as our storage backend
+we had to figure out how to maintain consistency.
+We identified the problems and tried to solve them, adapting the controller to have a
+session process for every user was part of that.
+
+During the fourth sprint I implemented the event pushing to online users in the controller,
+so that other apps, like the message-app, could push messages to online users.
+After that I started my biggest and longest task, load testing.
+A big part of that was to automatically setup multiple machines and run load test on them,
+while Sukumar and Tiina wrote the actual load tests.
+
+The results from the load test were not very satisfactory, so my task in the fifth, and last real,
+sprint was to improve the performance.
+For that Rahim and I replaced secondary indices with riak search, so that we could switch back to the bitcask storage backend.
+But as it turned out riak search had serious performance problems with often updated data.
+So I replaces riak search by key filtering for parts of the system that did not really need the search feature,
+like messaging.
+
 \section{Rahim Kadkhodamohammadi}
 \section{Xinze Lin}
 \section{Tiina Loukusa}
