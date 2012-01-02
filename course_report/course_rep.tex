@@ -76,8 +76,7 @@ hardware to giving us tips and feedback. Thank you!
 
 \section{Equipment}
 We had nine development PCs (HP made) supplied from the university, as
-well as four more PCs as servers (git, redmine, gerrit, buildbot),
-as well as a meeting/presentation workstation. \\
+well as five more PCs as servers (git, redmine, gerrit, buildbot, load testing, fault tolerance testing), as well as a meeting/presentation workstation. \\
 Our office room was equipped with several white boards that proved to be
 very valuable, especially in times where much design and architecture was done.
 \section{Tools}
@@ -92,6 +91,8 @@ Redmine was useful for several reasons:
   post-its-based scrum-board solution while providing the same overview.
   The scrum masters had to spend no time on keeping issue tracking and scrum
   board consistant any more.
+\item forum \\
+  We used it for discussions during the intial sprints.
 \end{itemize}
 \subsection*{Version Control}
 As a version control system, we used git, which was a choice we did not discuss
@@ -140,7 +141,7 @@ lets you change the value for single tests.
 \chapter{Project Methodology and Organization}
 
 \section{The Customer}
-Our customer was Henry Nyström from Erlang Solutions. Henry's job according to
+Our customer was Jan Henry Nyström from Erlang Solutions. Henry's job according to
 Scrum was to prioritize the tasks at hand and be at the planning meeting.
 What Henry did instead was to act more like a teacher which led to confusion on
 our side at the beginning of the project. Once we got accustomed to that,
@@ -412,6 +413,9 @@ you get a lot more valuable feedback and no one can tell you later that what you
 did was wrong --- because they knew what you did.
 \item Apply Scrum completely. Don't feel bad for saying ``no'' to TA/customer if
 you are running out of time and you didn't commit to something.
+\item Document early, document often. While this is not the most interesting aspect
+of coding, it definitely pays. Invest in your project's future by adding documentation.
+\item Automate as much as possible. It always saves time in the long run.
 \item Do Fika! Because it's delicious!
 \end{itemize}
 \section*{To Teachers/TA}
@@ -518,6 +522,19 @@ thanks to JD who was working with fault tolerance testing this could be tested
 properly.
 \section{Erik Timan}
 \section{Sukumar Yethadka}
+Building large scale internet systems and its challenges are very interesting to me, which is why, this project along with its requirement of ``Erlang for everything" was an ideal fit.
+
+During the initial survey sprint, I looked at various open source applications (Yaws, ejabberd, Chicago boss) and tested to check if it worked with the kind of usage we had in mind. I created slides for the Unix school with help from Andre. I also helped create the coding guidelines and code review checklist.
+
+Sprint 2 mostly involved working with the database. I did some basic read up on Riak, learing how to use it efficiently. Then, I created the data model for the system, updating it as per team feedback. I tested the data model with basho bench thus making sure that Riak was a good starting point as the database. I also provided feedback and suggested improvements to the initial version of the architecture.
+
+During sprint 3, I worked on the web frontend. After holding the Unix school, I refactored the web frontend making it more modular, consistent and eaisily extendible. It could have been better if we had used a traditional MVC framework, but we decided to keep it simple making it javascript heavy.
+
+I worked on Riak search and load testing during sprint 4. I setup Riak search and setup the search schema for the buckets. I also got it to work with the web frontend. During the later half of the sprint, I worked on defining and creating load tests along with Tiina and also created good visuals for the load test results, using a open source project - highcharts.
+
+With most of the core features completed, I worked on adding the less important features, fixing bugs, cleaning code and fixing the documentation during sprint 5.
+
+Overall, this project was a unique and memorable experience for me and is definitely a recommendation for future students.
 
 \chapter{Survey}
 After a brief survey in the early stages of the project, we chose a few to look
