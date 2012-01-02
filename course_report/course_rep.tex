@@ -111,7 +111,7 @@ the tests with that change. \\
 Now the other developers can review that change by either looking at the changed
 files in the webinterface's diff viewer or by pulling them to their local
 repositories and try them out.
-If a developer finds any problems, she can insert comments directly in the 
+If a developer finds any problems, she can insert comments directly in the
 web interface for the author to see and give a negative review in order to
 prevent merging of the change. \\
 When the author has reacted to those comments, updated his change and the
@@ -258,7 +258,7 @@ doubtlessly profited a lot from that practice.
 The coding conventions governed coding style (eg.\ max-80-char-lines, no
 trailing white space) as well as erlang specifics (eg.\ how to use {\tt catch}).
 \subsection*{Reviews}
-Reviews were done mostly by whoever had time. A good time for a dev to do 
+Reviews were done mostly by whoever had time. A good time for a dev to do
 reviews was while buildbot was testing her newest change. Sometimes, though,
 reviews were requested or even traded: ``I'll review your change, if you'll
 review mine''. \\
@@ -274,9 +274,9 @@ and there but there still were plenty of negative reviews.
 \subsection*{Testing}
 We took testing very seriously and the considerable time we invested payed off.
 A counting on december 7$^{th}$, 2011 showed that 47\% of code lines were testing
-code. This big suite of tests made it incredibly easy to verify that a change 
+code. This big suite of tests made it incredibly easy to verify that a change
 didn't break anything. If developers are secured by a solid test suite, it is
-also easier to start working on code that is not so well known because one 
+also easier to start working on code that is not so well known because one
 always has a regression test suite that immediately highlights errors.
 
 \section{Timeline}
@@ -490,6 +490,27 @@ like messaging.
 
 \section{Rahim Kadkhodamohammadi}
 \section{Xinze Lin}
+In the first sprint, I was surveying and experimenting Erlang based SMTP servers for our project's need.
+Thanks to Erik's git school and tool support, I learned to use git to commit my code to our repository.
+
+In Sprint 2, I wrote the first version of our SMTP-frontend server,
+which enables Email clients to communicate with the backend to register or update users.
+The parser of SMTP server was later being refactored by Andre to support both SMTP and XMPP frontend at the same time.
+Besides, with the help of JD and Sukumar, I've also done our code review checklist.
+And thanks to Stephan, I learned the benefits of writing testing code.
+
+During Sprint 3, I worked with Rahim on extending parser and controller to support more user features.
+In addition, I extended the parser to support Diplomacy game orders,
+which interprets the player orders from plaintext to our rule engine compatible format.
+Great thanks to Sukumar's Unix school,
+it made life much easier to work with Linux since I've never truly used it before.
+
+Sprint 4, I extended web-interface and backend to support in-game messaging.
+I've also done the operator web-interface for inspecting DB status.
+With some help from Sukumar, I've polished the web-interface a bit.
+
+In Sprint 5, I created the operator-interface for inspecting details of a game.
+Also, I worked with Dilshod to make the game map usable on our web-interface.
 \section{Tiina Loukusa}
 In the first sprint, we were supposed to find out what tools and existing
 open source software to use, I had a look at the web servers Chicago Boss and
