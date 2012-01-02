@@ -27,12 +27,12 @@ optimizing performance and scalability. The project was mostly self organized
 by an international team of 9 students and developed using Scrum.
 }
 \chapter{Introduction}
-Diplomacy is a board game, invented in the 1950s where the goal is to try to 
+Diplomacy is a board game, invented in the 1950s where the goal is to try to
 conquer Europe just before WW I. You come close to this goal by talking to the
 other players --- by diplomacy --- and making them your allies. And you achieve
 it by attack them when they do not expect it.
 
-The game is and was commonly played over distance --- starting with playing by 
+The game is and was commonly played over distance --- starting with playing by
 mail, then email and nowadays over pretty web pages with full-blown map
 visualization.
 
@@ -155,7 +155,7 @@ In Stockholm many people asked about the project, most questions were on a high
 level, though. We did not get direct feedback that changed the project after the
 EUC but the talks there were quite relevent to our project and therefore a big
 help. \\
-It was as well a very fortunate place for us to be as some companies that were 
+It was as well a very fortunate place for us to be as some companies that were
 there are actively trying to hire young developers with erlang experience.
 \section{Scrum}
 For managing our project we used Scrum as in~\cite{kniberg}.
@@ -289,7 +289,7 @@ As we all were new to the process, it took us a little while to figure out how
 to act.
 \subsubsection{Surveys}
 We tried out some tools/libraries and evaluated how they would fit
-our project. The end result of that process was: \\
+our project. The end result of that process was (see Appendix B for details): \\
 \\
 \begin{tabular}{r|l}
 Ubuntu 11.04 & operating system \\
@@ -329,7 +329,7 @@ productivity bonus it gave us more than made up for it in the long run.
 
 \subsubsection{Testing Competency}
 Some team members had not much or no real experience in writing tests, no one
-had experience in writing tests in erlang. Therefore we chose to hold a 
+had experience in writing tests in erlang. Therefore we chose to hold a
 {\em testing school\/} much like sprint 1's git school.
 
 \subsubsection{Load Test Riak}
@@ -356,7 +356,7 @@ We vowed to not make this mistake again.
 \subsection*{Sprint 3 --- Sprint Goal: ``Play a Basic Game''}
 \subsubsection{Erlang User Conference '11}
 From this sprint on, JD resigned as our scrum master --- but he had warned us
-from the beginning of the project. Andre replaced him with the beginning of 
+from the beginning of the project. Andre replaced him with the beginning of
 sprint~3.
 
 Attending the EUC'11 was on our agenda. For that we had to make a
@@ -411,7 +411,7 @@ motivating to see that a sprint goal was met after three weeks of hard work.
 you get a lot more valuable feedback and no one can tell you later that what you
 did was wrong --- because they knew what you did.
 \item Apply Scrum completely. Don't feel bad for saying ``no'' to TA/customer if
-you are running out of time and you didn't commit to something. 
+you are running out of time and you didn't commit to something.
 \item Do Fika! Because it's delicious!
 \end{itemize}
 \section*{To Teachers/TA}
@@ -518,6 +518,82 @@ thanks to JD who was working with fault tolerance testing this could be tested
 properly.
 \section{Erik Timan}
 \section{Sukumar Yethadka}
+
+\chapter{Survey}
+After a brief survey in the early stages of the project, we chose a few to look
+at in more detail, to be able to make a fair decision on what might be suitable
+for the Diplomacy server.
+\section{Web Frameworks}
+\subsection{Zotonic}
+Zotonic is a CMS based on Erlang. It has a powerful control interface, has
+quite a number of modules available such as authentication and chat and it
+achieves modularity by following OTP-principles. Zotonic has support for
+websockets, and when websockets are not supported by the browser, it will use
+Comet instead. Zotonic has been insprired by Nitrogen and it can only be run
+on a MochiWeb server.
+\subsection{Erlang Web}
+Erlang Web is quite simplistic, it has support for multiple web servers and
+distribution. It does not have any extras like a chat nor does it have support
+for websockets. Erlang Web can be run on INETS and YAWS web servers.
+\subsection{Nitrogen}
+Nitrogen uses an event-driven model and offers hot code swapping, stability
+and scalability. It includes a simple, yet powerful, template system and is
+well documented which is important for us as developers. Nitrogen can run on
+several web servers; MochiWeb, YAWS and INETS.
+\subsection{Chicago Boss}
+Chicago Boss is a new web framework, which has not yet reached a stable state.
+In it current state, it still offers some nice features, as it supports multiple
+databases, hot code swapping and e-mail among other things. It is well
+documented but it does not support websockets nor distributed systems.
+\subsection{Results and discussion}
+When we tried to decide on what web framework to use, we wanted simplicity, as
+we had already decided on not to focus on the look and feel and we didn't want
+to spend a lot of time on learning a specific web framework.
+The project required the use of websockets and if the framework didn't
+provide that up front, we would need to implement it ourselves.\\
+
+Chicago Boss was too immature to be an option, as we want something stable that
+we won't need to patch up too much and Erlang Web was very basic and didn't
+provide many features that we could use, compared to the other ones.
+
+The only web framework that had support for websockets was Zotonic, but it was
+quite complex to learn to use it, and it didn't provide the kind of simplicity
+we were looking for. We came to the conclusion that it would be of more use to
+us to use a web framework that was easy to use and implement websocket support,
+rather than learning how to create new modules for Zotonic.\\
+
+We initially decided to use Nitrogen, because we found that it was one of the
+more mature and well used web frameworks out of those we looked at. It could
+work with both of the web servers we were choosing among, it was easy to use and
+it provided some nice and useful features. It didn't have websocket support but
+we thought we would be able to implement that.
+
+Unfortunately, we came to the conclusion that implementing websocket support
+into Nitrogen is a project on its own, and we decided to not use a web
+framework at all. We ended up using only Javascript, which was sufficient for
+our use.
+
+\section{Web Servers}
+\subsection{MochiWeb}
+\subsection{YAWS}
+\subsection{Results and discussion}
+
+\section{SMTP Servers}
+\subsection{Erlmail}
+\subsection{gen\_smtp}
+\subsection{erlang-smtp}
+\subsection{Results and discussion}
+
+\section{XMPP}
+\subsection{ejabberd server}
+\subsection{EXMPP client}
+\subsection{Results and discussion}
+
+\section{Databases}
+\subsection{Mnesia}
+\subsection{Riak}
+\subsection{CouchDB}
+\subsection{Results and discussion}
 
 \bibliographystyle{plain}
 \bibliography{course_rep}
