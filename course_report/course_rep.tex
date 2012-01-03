@@ -792,8 +792,17 @@ our architecture team voted for gen\_smtp for its simplicity.
 
 \section{XMPP}
 \subsection{ejabberd server}
+ejabberd is a distributed Jabber/XMPP instant messaging server. It has modular architecture, web administrator interface and simple configuration. It supports the addition of Erlang modules using hooks which can be added allowing it to control the server programtically. It also supports more advanced features such as components and server to server (S2S) protocol.
+
 \subsection{EXMPP client}
+EXMPP is a XMPP client with SSL support. It provides a lot of functionality to deal with XML and supports several XML parsers. However, its documentation is sparse.
+
 \subsection{Results and discussion}
+We didn't really have any options here and we had to go with ejabberd as our XMPP server.
+
+We did have choices as to how we connect to the XMPP server from our application - via ejabberd module, component or the EXMPP client. We ended up using the ejabberd module for its tight integration and simplicity.
+
+However, we did use EXMPP later in the project for integration testing the IM server.
 
 \section{Databases}
 \subsection{Mnesia}
