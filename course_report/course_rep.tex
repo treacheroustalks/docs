@@ -803,7 +803,7 @@ Mnesia is a distributed relational database designed for telecom systems and is 
 Riak is a distributed key value database based on CAP theorem\cite{cap_theorem} and Amazon's dynamo paper\cite{dynamo}. It provides features such as RESTful interface, protocol buffers interface, ability to tune CAP values at the bucket level, map reduce queries, link walking, secondary indicies and search. All the data is replicated across the nodes based on the configuration without the usage of a master node. It is fault tolerant and built with horizontal scaling in mind. Riak, by design, is eventually consistent.
 
 \subsection{CouchDB}
-CouchDB is a distributed document oriented database and is quite similar to Riak in terms of its feature set. Its differentiating factors are that the document is stored as a JSON object, it is ACID compliant, uses Multi-Version Concurrency Control (MVCC) and has indexed views providing fast queries. Also unlike Riak, each node of CouchDB stores the entire dataset and it has the concept of master node.
+CouchDB is a distributed document oriented database and is quite similar to Riak in terms of its feature set. Its differentiating factors are that the document is stored as a JSON object, it is ACID compliant, uses Multi-Version Concurrency Control (MVCC) and has indexed views providing fast queries. Also unlike Riak, each node of CouchDB stores the entire dataset and it has the concept of a master node.
 
 \subsection{Results and discussion}
 The initial thought we had when starting off with the project is that in order to make our system scalable and fault tolerant, we need to reduce the state of our backend as much as possbile. This resulted in a database driven architecture, making our choices more specific.
@@ -812,7 +812,7 @@ While Mnesia was a good option, it was not linearly scalable due to its transact
 
 CouchDB was also a good option, but because it stored all the data in all the nodes and had a single point of failure - the master, we couldn't use it.
 
-Riak, with all its features and documentation, seemed like a perfect fit for us. Basho releasing a stable 1.0 version during the survey helped as well.
+Riak, with all its features and documentation, seemed like a perfect fit for us. The main selling point for us was its advertised linear scaling and fault tolerance. Basho releasing a stable 1.0 version during the survey helped as well.
 
 \renewcommand\bibname{References}
 \bibliographystyle{unsrtnat}
