@@ -11,7 +11,7 @@
 \newcommand{\ask}[1]{\footnote{{\color{red} {\bf QUESTION:} #1}}}
 
 \begin{document}
-\title{Course Report \\
+\title{Product Report \\
   ``Treacherous Talks''}
 \date{\today\ @ \currenttime}
 \author{Dilshod Aliev, Jan Daniel Bothma, Stephan Brandauer,\\
@@ -101,7 +101,6 @@ performance characteristics and leaving the AI players for future work.
 
 \section{Architecture}
 \subsection{Overview}
-\todo{graphic}
 \todo{How modules communicate with each other}
 % http://redmine.pcs/projects/dip/wiki/Communication
 \todo{Supervision tree}
@@ -109,10 +108,21 @@ performance characteristics and leaving the AI players for future work.
 \todo{How we deal with concurrency and conflicts}
 % http://redmine.pcs/projects/dip/wiki/Concurrency_handling
 
-Our Architecture is divided in three main blocks, the {\em frontends}, the 
-{\em controller}, and the {\em backends}.
+\begin{figure}[h]
+ \centering
+ \includegraphics[width=13cm]{./graphics/arch.pdf}
+ \caption{a possible cluster}
+ \label{fig:arch}
+\end{figure}
 
-Their responsibilities are not surprising: the frontends receive user input and
+Our Architecture is divided in three main blocks, the {\em frontends}, the 
+{\em controller}, and the {\em backends}. In Fig.~\ref{fig:arch} a running
+cluster as it could be configured is shown. {\em Machine 1} shows a full
+configuration as it includes all three frontends, a backend and riak. The
+operator, however, is free to choose to only run a specific selection of these
+and can combine them freely.
+
+The responsibilities are not surprising: the frontends receive user input and
 transform the input into messages which are sent to the controller.
 The controller filters out illegal messages according to the session database
 and the user privileges before handing them off to the backends --- which will
@@ -124,16 +134,15 @@ architecture graphic shows a complete example of a running sample, we can choose
 to run some modules alone. \\
 If we would, for example, find out that our system is slow because the
 web~frontend is the bottleneck, we could add more servers to the cluster that
-run only a web~frontend. We can do the same with each frontend types,
-with backends and with riak nodes. Our architecture, therefore, inherently
-supports scaling out very well. Since the frontends are not relying on each
-other at all (they are completely parallel), we did not spend resources on
-load testing them since we needed that time to benchmark and load test our
-backends and riak nodes.
+run only a web~frontend (see Fig.~\ref{fig:arch}, ``Server n-1'').
+We can do the same with each frontend types, with backends and with riak nodes.
+Our architecture, therefore, inherently supports scaling out very well.
+Since the frontends are not relying on each other at all (they are completely
+parallel), we did not spend resources on load testing them since we needed that
+time to benchmark and load test our backends and riak nodes.
 \subsection{Frontends}
 \label{sec:frontends}
-
-The frontends spoke the almost the same language with the user, which aided
+The frontends spoke almost the same language to the user, which made the
 implementation of front-end logic very generic.
 
 \subsubsection{Web}
@@ -229,23 +238,45 @@ issues\ldots
 \hi{Describe the product from a user perspective, what you can do / what it looks like.}
 \section{The Three Interfaces}
 \subsection{HTTP}
-\todo{insert screenshots after feature freeze}
 The user goes to the landing page, there he finds a link to register which will
 display a simple form for him to fill out. After the user is registered, he is
 able to log in using the login textfields on the landing page.
 
-After logging in, the user is shown an overview page where he is able to search,
-look at the games he is playing in (if any) and chat with other users in-game or
-off-game.
+After logging in, the user is shown an overview page (see Fig.~\ref{fig:overview})
+ where he is able to search, look at the games he is playing in (if any) and chat
+with other users in-game or off-game.
+
+\begin{figure}[h]
+ \centering
+ \includegraphics[width=\textwidth]{./graphics/overviewpage.png}
+ \caption{the overview page}
+ \label{fig:overview}
+\end{figure}
 
 The web frontend has several key advantages over the two purely text based
 frontends:\\
 \begin{itemize}
 \item the user does not need to remember his session id
-\item the user sees a graphical map (generated using a HTML5 canvas!)
+\item the user sees a graphical map (generated using a HTML5 canvas!),
+  see Fig.~\ref{fig:map}
 \item it is easier to enter move orders because possible orders are represented
-  as drop-down lists
+  as drop-down lists, see Fig.~\ref{fig:orders}
 \end{itemize}
+
+\begin{figure}[h]
+ \centering
+ \includegraphics[width=10cm]{./graphics/graphicalmap.png}
+ \caption{the graphical map}
+ \label{fig:map}
+\end{figure}
+
+\begin{figure}[h]
+ \centering
+ \includegraphics[width=10cm]{./graphics/orderssmall.png}
+ \caption{the orders drop-down lists}
+ \label{fig:orders}
+\end{figure}
+
 
 \subsection{XMPP}
 \todo{Rahim: explain}
@@ -324,11 +355,9 @@ from the players and the players send each other letters.
 
 Noteworthy browser based solutions are:\\
 \begin{tabular}{lc}
-  page                           & registered users    \\
-\url{http://webdiplomacy.net}    & 40613
-\footnote{information included on landing page} \\
- \url{http://playdiplomacy.com/} & 6849
-\footnote{length of highscore list on Dec, 20th, 2011}
+  page                            & registered users \\
+  \url{http://webdiplomacy.net}   & 40613 \\
+  \url{http://playdiplomacy.com/} & 6849
 \end{tabular}
 
 The alternative email solutions seem to have even lower user numbers but precise
