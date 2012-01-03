@@ -24,9 +24,10 @@ Tiina Loukusa, Erik Timan, Sukumar Yethadka}
 Treacherous Talks is an implementation of a board game (``Diplomacy'') as a web
 service.
 
-We developed the service completely in Erlang while spending lots of time on
-optimizing performance and scalability. The project was mostly self organized
-by an international team of 9 students and developed using Scrum.
+The report explains the project and takes a look at the requirements.
+The technical details of the solutions chosen, are presented and their choices
+motivated. The features that distinguish the project from existing implementations
+are highlighted as well as some of our relative weaknesses are mentioned.
 }
 
 \chapter{Introduction}
@@ -296,8 +297,11 @@ application after the recipient logs in the next time. \\
 
 \section{Playing}
 The web frontend generates drop down lists to make it easier for the user to
-enter move orders. \todo{screenshot of drop down lists after feature freeze}
-\todo{People involved: explain text based move orders}.
+enter move orders as shown in Fig.~\ref{fig:orders} \\
+The other two (XMPP and SMTP) frontends take text based orders. Instead of
+clicking, the user has to type them and additionally is required to supply
+his session ID which he receives after logging in. A dialog between user and
+system via XMPP could look like this: \todo{sample dialog via text interface}
 
 \chapter{Evaluation and Testing}
 %\hi{Describe what experiments you have done to test your product.}
