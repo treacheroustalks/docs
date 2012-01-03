@@ -542,6 +542,46 @@ properly, with the help of the necromancer which Stephan had implemented, and
 thanks to JD who was working with fault tolerance testing this could be tested
 properly.
 \section{Erik Timan}
+I wanted this project to have good tool support so I was elected to be the
+system administrator for the team. I was very busy with administrative tasks in
+the beginning such as installing the needed software on our servers. The team
+opted to use Redmine for issue tracking and planning, Gerrit for code review and
+Buildbot for continuous integration. It took me a while to get everything up and
+running and I needed to hack some of the tools to support our workflow better. I
+also held schools on git and Redmine which took me a while to prepare.
+
+I started working on the actual codebase during sprint 2. I took charge of
+creating scripts for building and testing our system. Since we needed to
+integrate code from external projects into our product and many of them were
+quite painful to build, this was not as easy as we initially thought. By the end
+of the sprint, most things worked and we could create releases of our system.
+
+Initially in sprint 3 I worked with the poster that we would present at the
+Erlang User Conference. Tiina and I worked together on first draft of the
+poster. We got lots of feedback on our poster drafts and I spent quite some time
+improving it. Later in the sprint I worked on reducing the build time for our
+product since the long build times was making development slower. I also worked
+on integration tests, game orders and various build improvements during this
+sprint.
+
+For me, the fourth sprint was mostly about making our releases actually work,
+system configuration and fault tolerance testing. I created a proper staging
+environment using the configuration manager Puppet. This allowed us to have
+several light-weight virtual machines (containers) for fault tolerance testing
+in a very easy and automated way. I then worked with Jan Daniel on fault
+tolerance testing. We reached a point were we needed an easy way to configure a
+cluster of machines running various parts of our system. We created the cluster
+and system managers as the cure to those problems. By the end of the sprint we
+could actually deploy our system in a distributed fashion very easily.
+
+Since sprint 5 was mostly about wrapping up the product, most of my time was
+spent on polish and fixes. I added proper logging to the system and rolled our
+different releases into a single one. I spent time on getting our integration
+tests to actually use the cluster/system managers to control the system since
+this got rid of lots of false positives that we got on Buildbot. I spent several
+days on bug fixing our build-test-release cycle since we were hitting all kinds
+of weird bugs during testing. I also spent a few days on trying to fix problems
+found by Dialyzer in our codebase as part of the general clean-up.
 \section{Sukumar Yethadka}
 Building large scale internet systems and its challenges are very interesting to me, which is why, this project along with its requirement of ``Erlang for everything" was an ideal fit.
 
