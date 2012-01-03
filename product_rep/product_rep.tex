@@ -205,7 +205,11 @@ it.
 \subsubsection{Search}
 Our search module provides the functionality to search, for instance, for games,
 based on their properties (like all game parameters). For the implementation of
-search, we relied on the riak extension {\tt riak\_search}. \todo{Suku: explain how riak\_search works, Andre: explain performance problems}
+search, we relied on the riak extension {\tt riak\_search}. 
+
+Riak search is a search engine that is tightly coupled with the Riak datastore. We add a precommit hook to the properties of the bucket whose data is to be searched along with search schema which specifies how the object is to be indexed. Whenever a new object is added or an old one updated, the object is indexed (tokenization with standard Lucene analyzers) and saved. It provides a rich query language consisting of term searches, field searches, boolean operators and wildcards to fetch matching objects ordered by relevance.
+
+\todo{Andre: explain performance problems}
 \subsubsection{User Management}
 The user management module was one of the first modules we implemented in the
 backend; its purpose is to create, update, read, delete users in or from the
