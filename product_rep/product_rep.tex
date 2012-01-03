@@ -149,9 +149,28 @@ The web frontend is running yaws as a web server, after deciding to use nitrogen
 as a web framework, we had to drop nitrogen because of the websockets
 requirement. Yaws is configured as a ``/" application module (appmod) so that we can have a single entry point for handling all the requests. Server side includes (ssi) are also used to load static content via ajax.
 
-The web frontend relies heavily on javascript since it contains a good part of the application logic handling user interactions, requests, responses and game functionalities. We also use the toolkit Bootstrap\ref{bootstrap} for the user interface which allows us to quickly develop clean pages.
+The web frontend relies heavily on javascript since it contains a good part of the application logic handling user interactions, requests, responses and game functionalities. We also use the toolkit Bootstrap\ref{bootstrap} for the user interface which allows us to quickly develop clean pages.\\
 
-\todo{People involved: explain the trouble with websockets}
+We had the option to extend Nitrogen to support websockets, but after spending
+some time investigating the possibility and walking through the code to
+understand it properly, we came to the conclusion that it would be a project on
+its own to do that. Nitrogen uses SimpleBridge which provides a standardized
+interface to all its supported web servers. We found that adding websockets
+would mean to change/add a lot of code, in a lot of modules, the way
+Nitrogen/SimpleBridge is structured. Instead, as previously mentioned, the web
+frontend is using plain javascript, which is very conventient for creating a
+websocket connection.
+
+Throughout the course of the project the websocket handshake protocol has
+been changing.
+Not until the end of the project has a protocol (RFC 6455) been released that
+has been proposed to be the official standard, we did not have the resources
+to update our system whenever a new version was released. Instead, a decision
+on what version to support had to be made in the beginning of the project, so we
+could focus developing our product. 
+It would influence what webserver to use and which web browser to support. We
+chose hybi-10, that is what the yaws server that is running, and Chromium 14
+which we developed for, supports.\todo{JD: correct if inaccurate or fix if yaws is updated}
 
 \subsubsection{XMPP}
 Using ejabberd as XMPP server was an obvious choice since ejabberd is widely
