@@ -24,7 +24,7 @@ Tiina Loukusa, Erik Timan, Sukumar Yethadka}
 Treacherous Talks is an implementation of a board game (``Diplomacy'') as a web
 service.
 
-We developed the service completely in erlang while spending lots of time on
+We developed the service completely in Erlang while spending lots of time on
 optimizing performance and scalability. The project was mostly self organized
 by an international team of 9 students and developed using Scrum.
 }
@@ -58,12 +58,13 @@ engineering.
 %This is the core of your report, and is therefore most likely the largest section.}
 
 \section{Requirements}
+
 \subsection{Three Interfaces}
 The requirement stated that we have to provide three interfaces that expose
 the same functionality to the user (the operator is forced to use the
 web~interface). Those interfaces are:\\
 \begin{enumerate}
-\item {\bf web interface} ---
+\item {\bf Web interface} ---
   the game should be accessible via a modern webbrowser {\em and\/} it should
   use websockets to communicate with the browser.
 \item {\bf XMPP interface} --- 
@@ -71,10 +72,10 @@ web~interface). Those interfaces are:\\
 \item {\bf SMTP interface} ---
   the game should be accessible via sending of emails using text based orders.
 \end{enumerate}
+
 \subsection{Scalability}
-The system should be scalable. No further explanations were provided regarding
-this feature, but since we saw it as a challenge we invested a lot of work into
-it.
+The system should be scalable. Scalability in this context refers to horizontal scaling where the system should be able to handle more load by simply adding more nodes. No further explanations were provided regarding this feature, but since we saw it as a challenge we invested a lot of work into it.
+
 \subsection{Fail-Safety}
 The system should be highly available. We interpreted this by assuming that we
 should handle hardware failure of physical machines. As with scalability, we
@@ -101,6 +102,13 @@ performance characteristics and leaving the AI players for future work.
 \section{Architecture}
 \subsection{Overview}
 \todo{graphic}
+\todo{How modules communicate with each other}
+% http://redmine.pcs/projects/dip/wiki/Communication
+\todo{Supervision tree}
+% http://redmine.pcs/projects/dip/wiki/Supervision_tree
+\todo{How we deal with concurrency and conflicts}
+% http://redmine.pcs/projects/dip/wiki/Concurrency_handling
+
 Our Architecture is divided in three main blocks, the {\em frontends}, the 
 {\em controller}, and the {\em backends}.
 
@@ -124,24 +132,40 @@ load testing them since we needed that time to benchmark and load test our
 backends and riak nodes.
 \subsection{Frontends}
 \label{sec:frontends}
+
 The frontends spoke the almost the same language with the user, which aided
 implementation of front-end logic very generic.
+
 \subsubsection{Web}
 The web frontend is running yaws as a web server, after deciding to use nitrogen
 as a web framework, we had to drop nitrogen because of the websockets
-requirement.\todo{People involved: explain the trouble with websockets}.
+requirement. Yaws is configured as a ``/" application module (appmod) so that we can have a single entry point for handling all the requests. Server side includes (ssi) are also used to load static content via ajax.
+
+The web frontend relies heavily on javascript since it contains a good part of the application logic handling user interactions, requests, responses and game functionalities. We also use the toolkit Bootstrap\ref{bootstrap} for the user interface which allows us to quickly develop clean pages.
+
+\todo{People involved: explain the trouble with websockets}
+
 \subsubsection{XMPP}
 Using ejabberd as XMPP server was an obvious choice since ejabberd is widely
 regarded as the standard solution for XMPP servers and ejabberd is implemented
-in erlang which led us to hope that it would play well with our code. \todo{People involved: tell a story}
+in Erlang which led us to hope that it would play well with our code. \todo{People involved: tell a story}
 \subsubsection{SMTP}
 \todo{Lin: explain}
 
 \subsection{Controller}
 \subsubsection{Session Management}
 \todo{People involved: explain}
+
 \subsubsection{Access Control}
-\todo{People involved: explain}
+What users can perform what actions on the system is defined by a set of identities known as roles. The system has four roles.
+
+\begin{itemize}
+\item User - registered member of the system who can create and play games
+\item Blacklisted user - a user who has been removed from the system
+\item Moderator - a user with enhanced privileges to moderate games and help other users
+\item Operator - an administrator who has complete control over the system
+
+\end{itemize}
 
 \subsection{Backend}
 \subsubsection{Game Managing}
