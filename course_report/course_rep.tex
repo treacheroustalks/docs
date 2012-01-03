@@ -56,7 +56,7 @@ troubles whatsoever to start working together from the start.\\
 \\
 The team members were: \\
 
-\newcommand{\flag}[1]{\includegraphics[height=10pt]{flags/#1}}
+\newcommand{\flag}[1]{\includegraphics[height=10pt,width=15pt]{flags/#1}}
 
 \begin{tabular}{lcrl}
 Dilshod Aliev & Tajikistan & \flag{tajikistan.png} \\ \hline
@@ -77,7 +77,9 @@ hardware to giving us tips and feedback. Thank you!
 
 \section{Equipment}
 We had nine development PCs (HP made) supplied from the university, as
-well as five more PCs as servers (git, redmine, gerrit, buildbot, load testing, fault tolerance testing), as well as a meeting/presentation workstation. \\
+well as 3 more PCs as servers (git, redmine, gerrit, buildbot),
+a meeting/presentation workstation, a fault tolerance testing PC,
+and one PC as load generator for load testing. \\
 Our office room was equipped with several white boards that proved to be
 very valuable, especially in times where much design and architecture was done.
 \section{Tools}
@@ -96,8 +98,8 @@ Redmine was useful for several reasons:
   We used it for discussions during the intial sprints.
 \end{itemize}
 \subsection*{Version Control}
-As a version control system, we used git, which was a choice we did not discuss
-at all since it was assumed by the teachers.
+As a version control system, we used git, which was a choice we did not discuss much,
+since most of us have not used it before but were eager to try it out.
 
 \subsection*{Continuous Integration}
 Buildbot, our tenth team member, proved to be valuable by avoiding integration
@@ -134,10 +136,12 @@ CommonTest, so we do not know whether that choice was optimal or not.
 EUnit worked ok for us, one problem we had with EUnit was that EUnit assumes
 an automatic timeout of 5 seconds for all tests. If a test takes a long time
 to run, this timeout can become really annoying because buildbot will sometimes
-reject changes only because there where several builds running on buildbot at
+reject changes only because there were several builds running on buildbot at
 one time and it therefore was under higher load. To make matters worse, EUnit
 does not seem to have one central switch to change that default value but only
 lets you change the value for single tests.
+
+For integration testing we used Selenium (web) and exmpp (xmpp).
 
 \chapter{Project Methodology and Organization}
 
@@ -213,7 +217,7 @@ Our typical planning day looked as follows:
   Who will be missing? What else is coming up (presentations, EUC, etc.)?
   What do we want to accomplish in this sprint?
   What is most important to the customer? The customer was missing that task
-  often, so we had to guess Henry would think.
+  often, so we had to guess what Henry would think.
 \item 10.00--10.45: {\bf breaking down stories into tasks}\\
   Splitting the big stories into smaller tasks that ideally do not depend on
   each other --- but that was often easier said than done.
@@ -233,7 +237,7 @@ The demo was held at the end of each sprint. Since in Scrum to try to produce
 something that is potentially shippable in each sprint, the demo is there to
 ensure that. We invited teaching staff and customer to the demos and showed them
 what we did in the last weeks. The demo was always a nice ending of a sprint for
-us, because it in quite relaxed atmosphere and we were more proud of our
+us, because it is in a quite relaxed atmosphere and we were more proud of our
 product than worried.
 
 \subsection{Retrospectives}
@@ -352,15 +356,18 @@ database were made!
 
 \subsubsection{Problems!}
 After sprint 1 which went very well, we were a bit too careless in sprint 2's
-planning, especially the estimation. For this reason, we committed to too many
-stories and were not able to complete them by the end of sprint 2. \\
+planning, especially the estimation - we underestimated the integration of
+all user interfaces into the system A LOT.
+For this reason, we committed to too many stories and were not able to complete
+them by the end of sprint 2. \\
 We vowed to not make this mistake again.
 
 \subsection*{Sprint 3 --- Sprint Goal: ``Play a Basic Game''}
-\subsubsection{Erlang User Conference '11}
 From this sprint on, JD resigned as our scrum master --- but he had warned us
 from the beginning of the project. Andre replaced him with the beginning of
 sprint~3.
+
+\subsubsection{Erlang User Conference '11}
 
 Attending the EUC'11 was on our agenda. For that we had to make a
 poster, which had to pass several stages of reviews. This proved to be very
@@ -390,8 +397,79 @@ cannot play a good diplomacy game without communicating.\\
 The messaging system needed to support offline messages (when a user receives a
 message while she is offline, the message should be delivered upon login).
 
-\subsection*{Sprint 5 --- TODO}
-\subsection*{Sprint 6 --- TODO}
+\subsubsection{Fault tolerance testing}
+We needed a (semi-) automatic way of testing fault tolerance, since distributed
+functionality like that is not possible to test with eunit and can be quite tedious.
+So we installed some VM containers on one of our servers, that could be used to run
+multiple instances of the system on one machine.
+The goal for this story was to provide the testing framework, not the fault tolerance itself,
+as this would have been too much.
+Our system- and cluster managers are a byproduct of this.
+They simplify the setup and start of a cluster by a great deal.
+
+\subsection*{Sprint 5 --- Play game \& Operator is watching}
+\subsubsection{Review 2}
+Each team had to present their results, including a short demo.
+Both teams, the teachers and the customers were present at those presentations.
+Additionally some reviewers from the university and other master students were invited.
+
+This was, like the EUC poster, very time consuming.
+Since we did not just prepare the demo and the presentation, but we also had a test run,
+where Henry Nyström and the teachers were present to give us feedback on the presentation.
+
+We kept it quite non-technical, so that the end presentation could be mostly the same.
+
+\subsubsection{Tune performance}
+After load testing in Sprint 4 we discovered that the performance of our system was degrading over time.
+The DoD for this story was quite vaguely, as you are never done tuning - and it's just fun!
+So we decided to solve the degradation and if there is time left to tune performance,
+but not to spend more than 20 man days on that story.
+
+Our riak storage backend was eleveldb, because it is the only one supporting secondary indices.
+The assumption was that eleveldb, was responsible for the degradation.
+The reason for that assumption was that riak in general does not show such a degradation pattern,
+and the default and well-tested storage backend is bitcask.
+After replacing all uses of riak's secondary indices with riak search we could switch our backend back to bitcask.
+This solved the degradation problem.
+
+Further performance tuning involved adapting the riak write parameters.
+Reducing these for the non-crucial writes, like message logging, was a simple optimization.
+
+The last change regarding the performance was regarding another not so well-tested riak feature.
+On the \#riak IRC room on irc.freenode.net we have been advised to trying it without riak search.
+So we tried to remove it from as many places as possible, and use riak key filtering instead.
+Load tests showed this was indeed an improvement in performance.
+
+Worth mentioning about the continuous load tests is that we discovered a drastic performance drop
+due to some code changes.
+After a little while we could even tell which commit was responsible and why.
+As it turns out it once again increased the use of riak search.
+
+\subsubsection{Handle loss of servers}
+We implemented the fault tolerance in the fifth sprint after providing the testing framework for it in the previous one.
+This was achieved by our necromancer module.
+Its responsibility was to watch nodes and react once a node goes down.
+The nodes watched each other in circular manner, so that each would be watched by one other node.
+Processes with state would simply write important data to the database,
+and another node could then resurrect it with that data.
+
+\subsubsection{Operator/Moderator functionality}
+Many of our requirements were finished by sprint 5 and the majority of the backlog consisted of
+operator/moderator functionality.
+So we introduced these user roles and implemented an access control list together with some
+functionality requiring privileged access, like inspecting servers and games or blacklisting users.
+
+\subsubsection{Graphical map}
+A rather small, but to us very important, feature of that sprint was the graphical map for the web interface.
+The game was not really playable with just the textual representation of the map.
+We decided to do this only for the web interface, since the other interface are purely text based anyway,
+and this was a good task for html5 canvas.
+
+\subsection*{Sprint 6}
+The last sprint was very short and was just about finishing up - we did not even have a real planning meeting.
+We wrote all required reports (including this one), published our project on github,
+and fixed some bugs.
+We did not introduce any new features whatsoever.
 
 \chapter{Conclusion}
 \section*{To Future Students}
@@ -707,5 +785,6 @@ early beta when we did the survey when we had more mature options to choose from
 \renewcommand\bibname{References}
 \bibliographystyle{unsrtnat}
 \bibliography{course_rep}
+\todo{add bibtex}
 
 \end{document}
