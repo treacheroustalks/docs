@@ -767,9 +767,23 @@ early beta when we did the survey when we had more mature options to choose from
 
 \section{SMTP Servers}
 \subsection{Erlmail}
+Erlmail is a complete email solution written in Erlang. It contains OTP
+compliant SMTP, IMAP and POP clients and servers. According to our observation
+of its source code, it didn't support encryption.
+
 \subsection{gen\_smtp}
+Gen\_smtp is written in OTP style, it inlcudes only SMTP client and server,
+which means it doesn't involve any email retrieval mechanism like IMAP or POP,
+and this makes it look simple. Besides, it supports SMTP SSL/TLS-encryption.
+
 \subsection{erlang-smtp}
+Erlang-smtp contains client and server for SMTP and POP3.
+According to its author, it does not yet support encryption.
+
 \subsection{Results and discussion}
+Considering the fact that we only need a simple server to send and receive
+emails, we didn't need any feature other than SMTP. Therefore,
+our architecture team voted for gen\_smtp for its simplicity.
 
 \section{XMPP}
 \subsection{ejabberd server}
