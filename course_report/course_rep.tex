@@ -77,72 +77,152 @@ hardware to giving us tips and feedback. Thank you!
 
 \section{Equipment}
 We had nine development PCs (HP made) supplied from the university, as
-well as 3 more PCs as servers (git, redmine, gerrit, buildbot),
+well as three more PCs as servers (git, redmine, gerrit, buildbot),
 a meeting/presentation workstation, a fault tolerance testing PC,
 and one PC as load generator for load testing. \\
 Our office room was equipped with several white boards that proved to be
 very valuable, especially in times where much design and architecture was done.
 \section{Tools}
-\subsection*{Issue Tracking}
-We used redmine, a web based issue tracker.
-Redmine was useful for several reasons:
+\subsection{Issue Tracking}
+All projects need a system for tracking issues and planning. We opted to use
+one of the more popular open-source solutions called Redmine, a web-based issue
+tracker and project management system. Redmine was useful to us for several
+reasons:
 \begin{itemize}
-\item built-in wiki \\
-  we used the wiki as basis for high level documentation of the architecture
-\item scrum plugin \\
-  Backlogs, a scrum plugin was very valuable since it quickly replaced the
-  post-its-based scrum-board solution while providing the same overview.
-  The scrum masters had to spend no time on keeping issue tracking and scrum
-  board consistant any more.
-\item forum \\
-  We used it for discussions during the intial sprints.
+\item Built-in wiki \\
+  We used the wiki as a basis for high level documentation of things such as our
+  architecture and design, guidelines, scrum process details, test flow results,
+  our data model and many other things.
+\item Scrum plugin \\
+  Redmine has a plugin system and we used the Backlogs plugin heavily. It is a
+  plugin designed to help teams using scrum. It was very valuable since it
+  quickly replaced the post-it based scrum board solution while providing the
+  same visual overview. The scrum master had to spend no time on keeping our
+  issue tracker and physical scrum board consistent any more.
+\item Forum \\
+  We used it for discussions during the initial sprints.
+\item Version control integration \\
+  We used the version control integration mostly for connecting tickets in
+  Redmine to the associated commits in our git repository.
 \end{itemize}
-\subsection*{Version Control}
-As a version control system, we used git, which was a choice we did not discuss much,
-since most of us have not used it before but were eager to try it out.
+\subsection{Version Control}
+Perhaps even more vital to a software development project is a good version
+control system. There are several out there, but the most common open-source
+ones are Subversion and git. They are fundamentally different and we chose git
+since it has very good tool support and handles branching and merging very well.
 
-\subsection*{Continuous Integration}
-Buildbot, our tenth team member, proved to be valuable by avoiding integration
-problems early on.
-Our combination of buildbot and gerrit made it impossible to merge anything
-before buildbot had confirmed that all tests passed.
-\subsection*{Code Reviews}
-We used gerrit, a web based code review tool that makes git safer.
+Another plus for git is Github, an online repository hosting service. Most
+open-source software written in Erlang (including Erlang/OTP itself) is hosted
+on Github. This makes the process of making modifications to upstream code a lot
+easier since it is trivial to fork (create your own hosted copy of another
+repository) repositories on Github.
+\subsection{Continuous Integration}
+Continuous Integration (CI) is the process of building, testing and integrating
+software in a continuous fashion. In practice, you use a special software that
+checks out a copy of your source code tree from a version control repository and
+runs various commands manipulating that source tree, returning some result to
+the developers.
+
+Initially we installed Jenkins to do this since it is widely used. We tried to
+integrate it with our code review system, but the plugins for doing that was
+very unstable and crashed often. We set out to find another system we could use
+and found Buildbot. Buildbot is a bit different from most other CI servers since
+it is more like a framework than a finished product. You configure Buildbot by
+writing a Python program describing what it should do.
+
+When we got Buildbot running and working integration with the code review
+system, the team almost started treating it as our tenth team member. It proved
+to be valuable to have this since it allowed us to avoid integration problems
+early on. Our combination of Buildbot and the code review system made it
+impossible to merge anything to our master branch without passing all tests.
+\subsection{Code Reviews}
+It is well known that it can be very useful to review code when developing
+software for a number of reasons. One is that it often catches bugs that can be
+hard to find with regular testing, another is that it allows other developers to
+get acquainted with your own code. While many development projects uses code
+review in some fashion or another, we wanted to try a more formal approach to
+see if it could help us improve our code quality.
+
+We quickly settled on using the code review system Gerrit. It was by far the
+easiest code review system to setup for git. The idea was to combine continuous
+integration with the code review system to ensure that developers pay attention
+to the results from Buildbot and that the master branch always is buildable and
+releasable. It works like this:
+
 When a developer pushes a change to the repository, she can not push to the
-master branch directly but only to gerrit. Gerrit then publishes this change in
-a pretty web interface for everyone to see {\bf and} tells buildbot to run
-the tests with that change. \\
-Now the other developers can review that change by either looking at the changed
-files in the webinterface's diff viewer or by pulling them to their local
-repositories and try them out.
-If a developer finds any problems, she can insert comments directly in the
-web interface for the author to see and give a negative review in order to
-prevent merging of the change. \\
-When the author has reacted to those comments, updated his change and the
-reviewer is finally happy, the reviewer can give the change a positive rating.
+master branch directly but only to a new branch in Gerrit. Gerrit then publishes
+this change in a pretty web interface for everyone to see {\bf and} tells
+Buildbot to run the tests with that change. Now the other developers can review
+that change by either looking at the changed files in the web interface or by
+pulling them to their local repositories and try them out. If a developer finds
+a problem, she can insert comments directly in the web interface for the author
+to see and give a negative review in order to prevent merging of the change.
 
-If buildbot AND at least one reviewer agree that the change can be merged,
-gerrit will do so.
-This process proved to be incredibly safe, many bugs were found very early and
-our build broke only once during the whole project.
-Even though gerrit is not easy to set up, we think that future teams would
-profit a lot by using gerrit.
+When the author has reacted to those comments, updated her change and the
+reviewer is finally happy, the reviewer can give the change a positive rating
+and submit the change, merging it to the master branch.
 
-While this report is written, it is being code reviewed as well.
+We configured our system so that if Buildbot {\bf and} at least one reviewer
+agree that the change can be merged, Gerrit will do so. This process proved to
+be incredibly safe, many bugs were found very early and our build broke (could
+not compile the master branch) only once during the whole project. Some team
+members actually started to use this system to get early feedback on unfinished
+code and this worked out pretty well. Even though Gerrit+Buildbot is not easy to
+set up, we think that future teams could profit a lot by using something
+similar. We really do think that this workflow has improved our product and that
+the invested time payed off.
 
-\subsection*{Testing}
-We used EUnit for testing and did so without really considering
-CommonTest, so we do not know whether that choice was optimal or not.
-EUnit worked ok for us, one problem we had with EUnit was that EUnit assumes
-an automatic timeout of 5 seconds for all tests. If a test takes a long time
-to run, this timeout can become really annoying because buildbot will sometimes
-reject changes only because there were several builds running on buildbot at
-one time and it therefore was under higher load. To make matters worse, EUnit
-does not seem to have one central switch to change that default value but only
-lets you change the value for single tests.
+We also use this system for more than code. In fact, while this report is
+written, it is being code reviewed as well in the same manner.
+\subsection{Building}
+Build tools are important, especially since bad tools tend to cause frustration
+among developers. We started using the Erlang build tool Rebar from day one in
+our project since it is the de-facto build tool in the Erlang community. Rebar
+can do quite a lot of things besides just compiling code. It also helps us run
+tests and create releases.
 
-For integration testing we used Selenium (web) and exmpp (xmpp).
+We spent many hours integrating code from external parties into our system, such
+as the server parts of our frontends. The majority of the external projects was
+buildable with Rebar, but not the major ones such as ejabberd and exmpp. They
+use plain Makefiles and are not releasable since they are not proper OTP
+applications. To our great pleasure we learned at the Erlang User Conference
+that there are forked versions of these projects that are OTP compliant and can
+be built with Rebar. We switched to these forked ones late in our project, and
+it simplified and sped up our build system a lot.
 
+One thing we did not fully understand in the beginning was the relationship
+between applications and releases. We thought that having a separate release for
+our backend and each of our frontends was a good idea. While this is a fully
+valid way to do things, it made life more complex when we tried to deploy and
+configure a whole cluster. In retrospective, we should have kept all our
+applications in one release and then dynamically start the ones we want to be
+running on a specific node. That would have saved us some time and gray hair.
+\subsection{Unit and Integration Testing}
+There are several test frameworks for Erlang, but we used the standard EUnit
+framework for testing for pretty much everything. We did so without really
+considering CommonTest, so we do not know whether that choice was optimal or
+not. EUnit worked okay for us but we had some problems with it.
+
+One problem is that EUnit assumes an automatic timeout of 5 seconds for all
+tests. If a test takes a long time to run (not uncommon in our system - we're
+talking to a database), this timeout can become really annoying since some tests
+takes longer under high load. Often tests would fail on Buildbot that did not
+fail on our local machines. This was mostly because of the Buildbot machine
+running several builds in parallel, creating a high load on that system. To make
+matters worse, EUnit does not seem to have one central switch to change that
+default value but only lets you change the value for single tests.
+
+Another problem with EUnit is that tests often gets highly nested with lots of
+anonymous functions being passed around. This makes it confusing to read test
+code and sometimes hard to find the real problem behind a failing test.
+
+We also had integration tests for our frontends. Each frontend had a basic
+integration test checking that a user could log in and maybe do a few
+operations. We used Selenium for testing the web frontend, and it turned out to
+work okay-ish even though it was hard to write good tests for our
+Javascript-heavy web frontend.
+\subsection{Load Testing}
+\todo{Write something about Basho Bench}
 \chapter{Project Methodology and Organization}
 
 \section{The Customer}
