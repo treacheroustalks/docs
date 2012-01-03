@@ -106,8 +106,6 @@ performance characteristics and leaving the AI players for future work.
 % http://redmine.pcs/projects/dip/wiki/Communication
 \todo{Supervision tree}
 % http://redmine.pcs/projects/dip/wiki/Supervision_tree
-\todo{How we deal with concurrency and conflicts}
-% http://redmine.pcs/projects/dip/wiki/Concurrency_handling
 
 \begin{figure}[h]
  \centering
@@ -163,8 +161,23 @@ in Erlang which led us to hope that it would play well with our code. \todo{Peop
 \todo{Lin: explain}
 
 \subsection{Controller}
+The main characteristic distinguishing requests is whether they belong to a session or not.
+So the controller has two kinds of workers.
+Those responsible for requests with a session and those for requests without.
+
+The simple ones without sessions are completely stateless and can handle requests from any user.
+They are spawned on startup and will handle requests on arrival.
+Their main responsibilities are registration, login and the like.
+
 \subsubsection{Session Management}
-\todo{People involved: explain}
+The session management consists of a group of processes and a mnesia table.
+Each session spawns its own session process and writes an entry into the mnesia table,
+so that one such process exists for each logged in user.
+The mnesia table is necessary to have a mapping between users and sessions.
+The processes handle all requests for their session and have the session data
+(user data, knowledge of how to push events to the frontend, etc).
+The reasons for that are concurrency issues (more on that in \ref{sec:concurrency}).
+
 
 \subsubsection{Access Control}
 What users can perform what actions on the system is defined by a set of identities known as roles. The system has four roles.
@@ -208,9 +221,20 @@ Our search module provides the functionality to search, for instance, for games,
 based on their properties (like all game parameters). For the implementation of
 search, we relied on the riak extension {\tt riak\_search}. 
 
-Riak search is a search engine that is tightly coupled with the Riak datastore. We add a precommit hook to the properties of the bucket whose data is to be searched along with search schema which specifies how the object is to be indexed. Whenever a new object is added or an old one updated, the object is indexed (tokenization with standard Lucene analyzers) and saved. It provides a rich query language consisting of term searches, field searches, boolean operators and wildcards to fetch matching objects ordered by relevance.
+Riak search is a search engine that is tightly coupled with the Riak datastore.
+We add a precommit hook to the properties of the bucket whose data is to be
+searched along with search schema which specifies how the object is to be indexed.
+Whenever a new object is added or an old one updated, the object is indexed
+(tokenization with standard Lucene analyzers) and saved.
+It provides a rich query language consisting of term searches, field searches,
+boolean operators and wildcards to fetch matching objects ordered by relevance.
 
-\todo{Andre: explain performance problems}
+This feature comes with a price though and should be used with caution.
+During load testing we discovered, that it should be avoided for often updated data.
+As it has to re-index all fields of an object on every write it can kill the performance.
+Therefore we tried minimizing writes on search indexed data and if possible not
+to use the riak search feature at all.
+
 \subsubsection{User Management}
 The user management module was one of the first modules we implemented in the
 backend; its purpose is to create, update, read, delete users in or from the
@@ -220,8 +244,9 @@ database. The implementation is quite short and should contain few surprises.
 The choice of riak as database was a carefule one: we evaluated riak, couchDB
 and mnesia but riak was our favourite in the end --- it's scalability features
 are very simple to use and it's potential for scalability is what we needed.
-For managing of sessions, we had to resort to using mnesia for one class of
-data:\todo{people involved: explain}. \\
+Due to consistency issues, we had to resort to using mnesia for sessions and
+the game joining processes, as it provides transactions.
+
 Riak proved to be a good choice for us since its performance parameters (called
 ``CAP controls'' in riak-lingo) are very easy to tune and it is quite well
 documented how riak behaves under load. The scalability problems we had
@@ -238,6 +263,11 @@ we had to switch the storage backend to {\tt bitcask}, riak's standard storage
 backend. Bitcask does not support secondary indices, and because of that it was
 necessary to use {\tt riak\_search} more --- which led to scalability
 issues\ldots
+
+\subsection{Concurrency}
+\label{sec:concurrency}
+\todo{How we deal with concurrency and conflicts}
+% http://redmine.pcs/projects/dip/wiki/Concurrency_handling
 
 \chapter{Treacherous Talks}
 \hi{Describe the product from a user perspective, what you can do / what it looks like.}
