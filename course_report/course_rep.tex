@@ -231,7 +231,31 @@ operations. We used Selenium for testing the web frontend, and it turned out to
 work okay-ish even though it was hard to write good tests for our
 Javascript-heavy web frontend.
 \subsection{Load Testing}
-\todo{Write something about Basho Bench}
+For load testing we decided to use Basho Bench, which made it possible to run
+load tests that were repeatable and produce graphs out of the given results.
+Basho Bench would run our tests, which contains a number of user commands, for
+example logging in, sending messages and playing games. To really push our
+system, we could configure it to use a number of workers, which would run the
+test in parallel, over and over again until a given amount of time has passed.
+With the architecture our system has, it is possible to tune many parameters,
+such as the number of applications, the distribution of them and the number of
+workers each application has.
+
+To test something that would make sense, to us and the customer, we needed to
+find some kind of average user behaviour, to get more realistic results on how
+many users our system could deal with. We also needed to stress test parts of
+the system, to find what configuration is best for each application, such as the
+number of workers and the distribution of the database (which many applications
+use). We had the system distributed across multiple machines, to be able to
+test all aspects of the distribution and we tried to run them during nights so
+we would get a fair result and be able to see if the system degrades over time
+or not.
+
+With Basho Bench, we were able to change the configuration of our system, run
+the load tests and get some results, which we then could compare to other
+configurations and analyze. During load testing we were able to find both bugs
+and performance bottlenecks.
+
 \chapter{Project Methodology and Organization}
 
 \section{The Customer}
