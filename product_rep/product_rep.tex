@@ -478,7 +478,8 @@ and one for ingame-chat. The user manually has to enter the recipient (in
 in-game chat the recipient-country and the game ID). If the recipient is not
 online when a message is sent, it will be stored and delivered by the message
 application after the recipient logs in the next time. \\
-\todo{People involved: explain text based message sending}
+Appendix D contains more detailed information on interaction through the text
+based interfaces.
 
 \section{Playing}
 The web frontend generates drop down lists to make it easier for the user to
@@ -487,6 +488,8 @@ The other two (XMPP and SMTP) frontends take text based orders. Instead of
 clicking, the user has to type them and additionally is required to supply
 his session ID which he receives after logging in. A dialog between user and
 system via XMPP could look like this: \todo{sample dialog via text interface}
+
+A full list of how to make plays can be found in appendix D.
 
 \chapter{Evaluation and Testing}
 %\hi{Describe what experiments you have done to test your product.}
@@ -613,5 +616,184 @@ instance). This could be done quite easily in the rule engine.
 
 \chapter{Maintenance Instructions}
 \todo{Erik}
+
+\chapter{Suggested Future Work}
+
+\chapter{Text based commands}
+
+\subsection{Playing the game}
+The web interface is the only one to provide means to interactively select
+orders, but it is also possible to give text based orders as through IM and
+mail.\\
+
+\subsubsection*{Writing orders}
+Alternative ways to write a move order (also used for retreat orders):
+\begin{verbatim}
+army warsaw move prussia
+a war m pru
+a war - pru
+a war -> pru
+\end{verbatim}
+Alternative ways to write a convoy order:
+\begin{verbatim}
+fleet north_atlantic_ocean convoy army london move norwegian_sea
+f nth c a lon m nrg
+f nth c a lon - nrg
+f nth c a lon -> nrg
+\end{verbatim}
+Alternative ways to write a hold order:
+\begin{verbatim}
+army london hold
+a lon h
+\end{verbatim}
+Alterantive ways to write a support order:
+\begin{verbatim}
+army galicia support budapest
+a dal s a bud
+\end{verbatim}
+Alternative ways to write a build order:
+\begin{verbatim}
+build army munich
+b a mun
+\end{verbatim}
+\newpage
+
+\subsubsection*{List of provinces and water bodies and their abbreviations}
+\begin{tabular}{ l | l | l }
+adriatic\_sea - adr & aegean\_sea - aeg & albania - alb \\
+ankara - ank & apulia - apu & armenia arm \\
+baltic\_sea - bal & barents\_sea - bar & belgium - bel \\
+berlin - ber & black\_sea - bla & bohemia - boh \\
+brest - bre & budapest - bud & bulgaria - bul \\
+burgundy - bur & clyde - bly & constantinople - con \\
+denmark - den & eastern\_mediterranean - eas & edinburgh - edi \\
+english\_channel - eng & finland - fin & galicia - gal \\
+gascony - gas & greece - gre & gulf\_of\_bothnia - bot \\
+gulf\_of\_lyon - gol & helgoland\_bight - hel & holland - hol \\
+ionian\_sea - ion & irish\_sea - iri & kiel - kie \\
+liverpool - lvp & livonia - lvn & london - lon \\
+marseilles - mar & mid\_atlantic\_ocean - mid & moscow - mos \\
+munich - mun & naples - nap & north\_africa - naf \\
+north\_atlantic\_ocean - nat & north\_sea - nth & norway - why \\
+norwegian\_sea - nrg & paris - par & picardy - pic \\
+piedmont - pie & portugal - por & prussia - pru \\
+rome - rom & ruhr - ruh & rumania - rum \\
+serbia - ser & sevastopol - sev & silesia - sil \\
+skagerrak - ska & smyrna - smy & spain - spa \\
+st\_petersburg - stp & sweden - swe & syria - syr \\
+trieste - tri & tunis - tun & tuscany - tus \\
+tyrolia - tyr & tyrrhenian\_sea - tyn & ukraine ukr \\
+venice - ven & vienna - vie & wales - wal \\
+warsaw - war & western\_mediterranean & yorkshire - yor \\
+\end{tabular}
+
+\newpage
+\subsection{Commands for IM and Mail}
+The following commands are available for IM and mail users:
+
+\begin{verbatim}
+REGISTER
+required: NICKNAME, PASSWORD, EMAIL, FULLNAME
+optional: CHANNEL
+
+UPDATE
+required: SESSION
+optional: PASSWORD, EMAIL, FULLNAME
+
+LOGIN
+required: NICKNAME, PASSWORD
+
+LOGOUT
+required: SESSION
+
+ORDER
+required: SESSION, GAMEID
+
+CREATE
+required: SESSION, GAMENAME, PRESSTYPE, ORDERCIRCLE,
+          RETREATCIRCLE, GAINLOSTCIRCLE, WAITTIME
+optional: PASSWORD, DESCRIPTION, NUMBEROFPLAYERS
+
+RECONFIG
+required: SESSION, GAMEID
+optional: GAMENAME, PRESSTYPE, ORDERCIRCLE, RETREATCIRCLE,
+          GAINLOSTCIRCLE, WAITTIME, PASSWORD, DESCRIPTION,
+          NUMBEROFPLAYERS
+
+OVERVIEW
+required: SESSION, GAMEID
+
+VIEWCURRENTGAMES
+required: SESSION
+
+JOIN
+required: SESSION, GAMEID, COUNTRY
+
+SEARCH
+required: SESSION
+optional: GAMEID, GAMENAME, DESCRIPTION, PRESSTYPE, STATUS,
+          ORDERCIRCLE, RETREATCIRCLE, GAINLOSTCIRCLE,
+          WAITTIME, NUMBEROFPLAYERS
+
+MESSAGE (in game messages)
+required: SESSION, GAMEID, CONTENT
+optional: TO
+
+MESSAGE (out of game messages)
+required: SESSION, TO, CONTENT
+
+GETPROFILE
+required: SESSION
+
+GETPRESENCE
+required: SESSION, NICKNAME
+
+REPORTPLAYER
+required: SESSION, CONTENT
+
+REPORTISSUE
+required: SESSION, CONTENT
+\end{verbatim}
+
+
+The general format to send any command is
+\begin{verbatim}
+COMMAND
+FIELD: <data>
+END
+\end{verbatim}
+
+where \verb|FIELD| is the name of the field and \verb|<data>| is the
+input from the user.
+
+\subsubsection*{Example commands}
+\begin{verbatim}
+REGISTER
+NICKNAME: bob
+PASSWORD: secret
+EMAIL: bob@email.com
+FULLNAME: Bob Cat
+END
+
+MESSAGE
+SESSION: g2dkABFiYWNrZW5kQDEyNy4wLjAuMQAAA+QAAAAAAQ==
+GAMEID: 12345
+TO: england, france
+CONTENT:
+Hi! Would you like to help me take down russia?
+END
+\end{verbatim}
+
+Order writing is done as in the previous section, as content for the
+\verb|ORDER| command:
+\begin{verbatim}
+ORDER
+SESSION: g2dkABFiYWNrZW5kQDEyNy4wLjAuMQAAA+QAAAAAAQ==
+GAMEID: 12345
+
+army ven -> tri
+army tyr support a ven -> tri
+END
+\end{verbatim}
 
 \end{document}
