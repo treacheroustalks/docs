@@ -142,6 +142,18 @@ Our architecture, therefore, inherently supports scaling out very well.
 Since the frontends are not relying on each other at all (they are completely
 parallel), we did not spend resources on load testing them since we needed that
 time to benchmark and load test our backends and riak nodes.
+\subsubsection*{Process groups}
+The system uses process groups to provide load balancing by distributing work
+across nodes.
+This is done by each process in the backend joininng the process group for its
+application. A calling process can then use the process groups to find a
+process to call. The selection is done semi-randomly, if there is not a local
+process to call, a random process is used out of that group.
+Work is then distributed across the running nodes and prevents one node from 
+receiving all calls. But, as it is done randomly it does not guarantee equal
+distribution, but during load testing we didn't see that the random selection
+caused any bottlenecks.
+
 \subsection{Frontends}
 \label{sec:frontends}
 The frontends speak almost the same language to the user, which made the
