@@ -238,22 +238,21 @@ There are three ways to implement integration with ejabberd.
 \begin{itemize}
 \item Client - A bot that uses an Erlang client such as exmpp can be used to
 connect to the server.
-All users send messages to the bot via the ejabberd server. e.g.
-bot@example.com
+All users send messages to the bot via the ejabberd server. e.g. bot@example.com
 An issue jabber client is that it doesn’t scale. Using a single bot will mean
-all the users will have  to be in the bot’s roster (user list).
-ejabberd doesn’t handle the scaling of rosters very well
-(known to fail for clients > 40k).
-\item Component - A component is a trusted piece of an XMPP server that can send and receive arbitrary stanzas. 
+all the users will have to be in the bot’s roster (user list). ejabberd doesn’t
+handle the scaling of rosters very well (known to fail for clients > 40k).
+\item Component - A component is a trusted piece of an XMPP server that can send
+and receive arbitrary stanzas.
 In other words, we can add a module to ejabberd and define a virtual domain to
-get all messages that are sent to this domain.  
-Because the name of a component is a domain (example: tt.localhost), a
-component can pretend to be many users. 
-Any stanza addressed to service@tt.localhost will be delivered to
-tt.localhost no matter what the value is of 'service'.
-\item S2S(server to server) - This is the next step for those who need very large scale. This was not suitable for us since it requires us to learn a new
+get all messages that are sent to this domain.
+Because the name of a component is a domain (example: tt.localhost), a component
+can pretend to be many users.
+Any stanza addressed to service@tt.localhost will be delivered to tt.localhost
+no matter what the value is of 'service'.
+\item S2S(server to server) - This is the next step for those who need very
+large scale. This was not suitable for us since it requires us to learn a new
 protocol and is most possibly not necessary for our needs.
-
 \end{itemize}
 
 We decided to use component to communicate with users. We added a module to
@@ -264,8 +263,7 @@ If we need to communicate with a user, we use the corresponding process.
 
 In this way, not only users that have an account on our ejabberd server, but
 also users that have account on any XMPP server can send their commands to the
-specified address and use our system.  
-
+specified address and use our system.
 
 \subsubsection{SMTP}
 SMTP, together with POP and IMAP are the three most prevalent protocols for
@@ -713,19 +711,31 @@ Users who log into our XMPP server, will get the address of the component that
 commands should be sent to. If user has an account on any other XMPP servers, 
 the commands should be sent to ``service@tt.localhost''. 
 
-If user sends  ``HELP'' or any unknown command to our component, it will return the
- list of all valid commands. All commands can be found in appendix \ref{sec:textbasedcommands}. 
-Each command starts with the command keyword and must end with ``END'' tag. 
-All commands and keywords should be entered in capital letters e.g 
-see appendix \ref{sec:textbasedcommands}. If the user enters some text before the command keyword 
-or after the end keyword, they are simply ignored. Users can get the list of 
-all mandatory fields for each command by sending the command name and ``END''. 
+If user sends  ``HELP'' or any unknown command to our component, it will return
+the list of all valid commands. All commands can be found in appendix
+\ref{sec:textbasedcmd}.
+Each command starts with the command keyword and must end with ``END'' tag.
+All commands and keywords should be entered in capital letters e.g
+see appendix \ref{sec:examplecmd}. If the user enters some text before the
+command keyword or after the end keyword, they are simply ignored. Users can get
+the list of all mandatory fields for each command by sending the command name
+and ``END''.
 
 The user will get a unique session ID after logging in. The session ID should be 
 stored, because it is necessary for all the future commands.
 
 \subsection{SMTP}
-\todo{Lin: explain}
+Like most play-by-email games, we enable users to play the game using their own
+account from any email service provider.
+To connect to our game server, users need to write an email in a required
+format(see appendix \ref{sec:examplecmd}),
+then send it as an operation request to the email-address of our SMTP frontend
+server. After the email is sent, the users will soon receive an email in reply
+to their previous request from our game server. To users, the required format
+of the email text content is exactly the same as what they use in the XMPP
+interface(see appendix \ref{sec:textbasedcmd}), but the difference is that users
+are likely to receive replies more instantly in XMPP than in SMTP.
+
 \section{Messages}
 In the web frontend, the user is shown two chat boxes: one for off-game chat
 and one for in-game-chat (they can be seen --- minimized --- in
@@ -733,8 +743,8 @@ fig.~\ref{fig:dashboard}. The user manually has to enter the recipient (in
 in-game chat the recipient-country and the game ID). If the recipient is not
 online when a message is sent, it will be stored and delivered by the message
 application after the recipient logs in the next time. \\
-Appendix \ref{sec:textbasedcommands} contains more detailed information on interaction through the text
-based interfaces.
+Appendix \ref{sec:textbasedcmd} contains more detailed information on
+interaction through the text based interfaces.
 
 \section{Playing}
 The web frontend generates drop down lists to make it easier for the user to
@@ -855,7 +865,7 @@ Bug fixing in the rule engine is necessary. Scalability could be improved by app
 tracing to the cluster which would be lots of interesting work. as well as the
 interfaces polished.
 
-In order to make the game playable by the public, a better system to find and join 
+In order to make the game playable by the public, a better system to find and join
 games would probably be necessary in the web frontend --- and we would need to
 do lots of hallway testing and/or maybe publish an alpha version in order to collect
 feedback.
@@ -1118,7 +1128,7 @@ warsaw - war & western\_mediterranean & yorkshire - yor \\
 
 \newpage
 \section{Commands for IM and Mail}
-\label{list of all commands}
+\label{sec:textbasedcmd}
 The following commands are available for IM and mail users:
 
 \begin{verbatim}
@@ -1196,8 +1206,9 @@ END
 where \verb|FIELD| is the name of the field and \verb|<data>| is the
 input from the user.
 
+
 \subsection*{Example commands}
-\label{sec:examplecommands}
+\label{sec:examplecmd}
 \begin{verbatim}
 REGISTER
 NICKNAME: bob
