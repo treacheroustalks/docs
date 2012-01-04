@@ -10,6 +10,9 @@
 \newcommand{\todo}[1]{\footnote{{\color{red} {\bf TODO:} #1}}}
 \newcommand{\ask}[1]{\footnote{{\color{red} {\bf QUESTION:} #1}}}
 
+\setcounter{secnumdepth}{3}
+\newcommand{\subsubsubsection}[1]{\paragraph{#1}\mbox{}\\}
+
 \begin{document}
 \title{Product Report \\
   ``Treacherous Talks''}
@@ -230,9 +233,18 @@ The main characteristic distinguishing requests is whether they belong to a sess
 So the controller has two kinds of workers.
 Those responsible for requests with a session and those for requests without.
 
+\begin{figure}[h]
+ \centering
+ \includegraphics[width=10cm, angle=-90]{./graphics/Concurrency_-_session_proc.pdf}
+ \vspace{-1cm}
+ \caption{Controller flow of a request with/without session.}
+ \label{fig:controller:session_proc}
+\end{figure}
+
 The simple ones without sessions are completely stateless and can handle requests from any user.
 They are spawned on startup and will handle requests on arrival.
 Their main responsibilities are registration, login and the like.
+Figure \ref{fig:controller:session_proc} illustrates this.
 
 \subsubsection{Session Management}
 The session management consists of a group of processes and a mnesia table.
@@ -345,9 +357,111 @@ We used Mnesia to keep track of user sessions. Combining this with
 the use of one Erlang process per session, the implementation was complete.
 
 \subsection{Concurrency}
-\label{sec:concurrency}
-\todo{How we deal with concurrency and conflicts}
 % http://redmine.pcs/projects/dip/wiki/Concurrency_handling
+\label{sec:concurrency}
+\subsubsection{Problem}
+Handling concurrency can be quite tricky.
+Especially with an eventually consistent database like Riak.
+The system is designed so that any node can handle incoming requests,
+since it is database driven, and on one node there are multiple workers,
+that can perform the same tasks.
+Thus two requests involving an update on the same key-value pair can, and will,
+end up on different workers or even nodes.
+This can lead to inconsistency, because they might have different work load
+and execute the tasks out of order.
+Figure \ref{fig:concurrency:problem_expl} illustrates this.
+\begin{figure}[htbp!]
+ \centering
+ \includegraphics[width=8cm, angle=-90]{./graphics/Concurrency_-_Earlier_session_write_replace_later_session_write.pdf}
+ \vspace{-1cm}
+ \caption{First request written after second one, leading to inconsistency.}
+ \label{fig:concurrency:problem_expl}
+\end{figure}
+
+\begin{figure}[htbp!]
+ \hspace{-3cm}
+ \includegraphics[width=\textwidth, angle=-90]{./graphics/Concurrency_-_Siblings.pdf}
+ \vspace{-4cm}
+ \caption{Sibling creation.}
+ \label{fig:concurrency:siblings}
+\end{figure}
+Another problem is shown in Figure \ref{fig:concurrency:siblings}.
+Two different nodes might end up writing to the same key without even knowing
+there was a concurrent write.
+Riak's CAP control specifies how many Riak nodes should respond a positive write
+before returning.
+In case 2/4 have to respond, two different writes can get the ``ok''.
+Our backends would not even know there was a simultaneous write.
+Riak tries to automatically resolve this among others with vclocks.
+If Riak cannot resolve this it will leave both values as so called siblings
+in the database.
+It is then up to the backend to resolve the conflict on the next read
+and write back the real value.
+
+\subsubsection{Solution}
+A common solution for this problem is to serialize requests/writes to the same key.
+A sequential execution of tasks will always ensure the correct order and not
+create inconsistent data.
+In Erlang this is best done with processes.
+Each process has a message queue and can only handle one message after another.
+Thus requests are serialized if they have to go to the same process.
+
+In our system there are two kinds of interactions that need to be considered:
+single user concurrency and multi user concurrency.
+
+\subsubsubsection{Single user concurrency}
+Single user concurrency involves all the data that is written by only one user,
+like user profile updates and game orders.
+In order to serialize these there is one process for each session,
+and each user is only allowed to be logged in once at a time.
+\begin{figure}[htbp!]
+  \centering
+ \includegraphics[width=8cm, angle=-90]{./graphics/Concurrency_-_Login.pdf}
+ \vspace{-1cm}
+ \caption{User login.}
+ \label{fig:concurrency:login}
+\end{figure}
+To ensure only one active session the login has to consider concurrency as well.
+Figure \ref{fig:concurrency:login} shows how the login works.
+Any old session needs be terminated before we can start a new one.
+Also we use mnesia instead of riak to store session information,
+as it supports transactions.
+
+Unfortunately this still leaves one case.
+For example a user might re-login while his requests to update the profile is
+being handled and then tries to update the profile again before the previous
+update has been written.
+This is very unlikely to happen, as the user needs to do the update very quickly.
+However it still needs to be handled.
+\begin{figure}[htbp!]
+  \centering
+ \includegraphics[width=9cm]{./graphics/Concurrency_-_Conflict_resolution_using_session_history.pdf}
+ \vspace{-1cm}
+ \caption{Siblings resolutions using session history.}
+ \label{fig:concurrency:history}
+\end{figure}
+We use a session history to resolve siblings, which is updated during login.
+Additionally we store which session was responsible for the update.
+When the backend encounters siblings it then checks the session history which
+is the newer one and picks the corresponding value to be the correct one.
+Figure \ref{fig:concurrency:history} illustrates this.
+
+\subsubsubsection{Multi user concurrency}
+Multi user concurrency involves the data that can be written by multiple users,
+like joining or updating a game.
+In general we tried to  design our database schema to avoid shared writable data
+as much as possible.
+For example the game orders for a certain phase could be stored as one value in riak,
+instead we keep one value for each player.
+This leads to seven reads on phase change, but order writing does not have conflicts.
+
+Nevertheless, we could not avoid it completely.
+Multiple users might try to join the same game.
+There might be a conflict, if they want to play the same country or only one spot is left.
+Besides the creator of the game is no longer allowed to update the game once a player has joined.
+Therefore we have a game joining process for every game that has not started yet.
+All join and update requests go through that process, thus ensuring consistency.
+To ensure only one such process per game we use mnesia due to its transactions.
 
 \section{Code organization}
 
