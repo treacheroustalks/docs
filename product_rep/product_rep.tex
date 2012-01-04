@@ -5,6 +5,7 @@
 \usepackage{datetime}
 \usepackage{color}
 \usepackage{url}
+\usepackage{fancyvrb}
 
 \newcommand{\hi}[1]{{\color{red}\em #1\/}\\}
 \newcommand{\todo}[1]{\footnote{{\color{red} {\bf TODO:} #1}}}
@@ -726,8 +727,179 @@ instance). This could be done quite easily in the rule engine.
 
 \appendix
 \chapter{Installation Instructions}
-\todo{Erik}
+\section{Requirements}
+Treacherous Talks was developed using Erlang/OTP version R14B03 on Ubuntu 11.04
+(AMD64). It has not been tested with other versions of Erlang/OTP or other Linux
+distributions. Since some of our dependencies, notably Riak, currently doesn't
+support Erlang/OTP R15, we have not been able to test the system under that
+version of Erlang/OTP.
 
+Since all Erlang-releated packages in Ubuntu 11.04 are out-of-date, we opted for
+compiling and installing Erlang/OTP by hand on our development machines. In
+general, we recommend that users do this as well since it is the easiest way to
+get all of the required parts of Erlang/OTP installed on your system.
+
+We will not provide you with build instructions for the Erlang/OTP distribution,
+but under Ubuntu 11.04 you will most likely need the {\tt make}, {\tt gcc}, {\tt
+  perl}, {\tt m4}, {\tt ncurses-dev} and {\tt libssl-dev} packages available
+before attempting to build it.
+
+Before you can build Treacherous Talks itself, a few extra libraries and tools
+need to be present on your machine: \\
+
+\begin{tabular}{lll}
+  Name & Version & Ubuntu package name \\ \hline
+  libexpat & $>$ 1.95 & libexpat-dev \\
+  libxml   & -        & libxml2-dev \\
+  libpam   & -        & libpam0g-dev \\
+  git      & -        & git \\
+  wget     & -        & wget \\
+\end{tabular} \\
+\\
+There are two deployment options regarding the database Riak: running a
+standalone Riak installation or distributing it alongside the Treacherous Talks
+release package. Here we assume that you want to distribute Riak along with the
+release package. This involves building Riak as a part of the system build
+process.
+
+In order to build Riak you will need the GNU C++ compiler ({\tt g++}) installed
+and the package {\tt libstdc++6-VERSION-dev} where {\tt VERSION} is the current
+version in the package repository (in Ubuntu 11.04 {\tt VERSION} is 4.5). For
+some reason there are no generic packages any more in Ubuntu, so you need to
+specify the version.
+\section{Building}
+With all dependencies in place, building Treacherous Talks should be
+straightforward. First you need to get hold of the source code. The simplest way
+is probably to either clone it from Github using git or download a tagged tar
+file from the same place. Enter the source code directory.
+\todo{Add address to Github repo and tagged tar file}
+
+First we build Riak since we want to distribute it together with the Treacherous
+Talks release package. There is support in the Treacherous Talks Makefile for
+building Riak, just run {\tt make riak\_release}. This will download, compile
+and release Riak. It then moves the release package into the directory {\tt
+  system-release} in the top-level source code directory.
+
+Next it's time to build Treacherous Talks. This is done by executing {\tt
+  make}. This will invoke the build tool Rebar that is present in the source
+code directory. Rebar will download all dependencies and compile everything in
+the right order. This step can take a while to complete.
+
+The final two steps after compiling is to make an Erlang release and create a
+tarball that contains everything needed to run the system. By executing {\tt
+  make release} a release package will be created and placed into the {\tt
+  system-release} directory alongside Riak. After this step, we create a tarball
+of everything inside that directory with {\tt make tar\_release}. The resulting
+tarball is outputted to the {\tt system-release} directory.
+\section{Installing from a release tarball}
+The resulting tarball from the build step is self-contained and can be freely
+moved to other computers running the same version of the operating system. To
+install the system, simply extract the tarball to a location of your choice. As
+usual in Unix-like systems, take care to have the ownership of the files setup
+correctly so that the user running Riak and Treacherous Talks has the correct
+permissions on all directories and files. The simplest is to have the user
+executing the program owning the files.
+
+If you intend to allow any part of the system to communicate over privileged
+ports, ensure that the user has privileges to do so.
+\section{Setting up and starting the System Manager}
+There is an application called the System Manager in Treacherous Talks. The
+purpose of this application is to configure, start and stop Riak and the rest of
+the Treacherous Talks system on a single machine. The System Operator uses the
+escript called Cluster Manager to interact with a cluster of System Managers via
+RPC calls.
+
+\begin{sloppypar}
+Before we can start and configure the system we must set up and start the System
+Manager itself. There is only one major setting one can change, and that is the
+Erlang node name. Enter the directory where the release tarball was extracted.
+Edit the file {\tt system-release/tt/etc/nodename.system\_manager} and change
+the domain name or ip address as needed (the part after the @-sign). Note that
+you must set domain to something externally available if you intend to run the
+Cluster Manager on another machine.
+\end{sloppypar}
+
+\begin{sloppypar}
+When the node name is set, the System Manager is ready to be started. This is
+done by proceeding to the directory where the release tarball was extracted and
+then executing the command {\tt system-release/tt/bin/system\_manager start} in
+a shell.
+\end{sloppypar}
+\section{Creating a system-wide configuration file}
+The main purpose of having both a System Manager and a Cluster Manager is to
+simplify the task of configuring and controlling a cluster of nodes running on
+different machines. Even if you only run the releases on a single machine, it
+simplifies the task of handling the Treacherous Talks system and Riak.
+
+To do this, a single configuration file is used. The file specifies for the
+Cluster Manager where the different System Managers are, what releases a single
+machine should run and the configuration of such releases. The configuration is
+given as a list of host tuples.
+
+Each host tuple describes a host (machine) and contains the domain or ip address
+it has, the name of the System Manager and another list of release tuples.
+
+Each release tuple contains a release name (riak, backend, smtp\_frontend,
+xmpp\_frontend, web\_frontend), the actual node name for that release and a list
+of configuration options. These configuration options correspond exactly to the
+ones available in the release configuration file in the {\tt etc} directory of a
+release package. Here is a minimal example for running all releases on a single
+machine:
+
+\begin{Verbatim}[samepage=true]
+[{host, "127.0.0.1", "system_manager",
+  [{release, riak, riak,
+    [
+     {riak_core, [{http, [{"127.0.0.1", 8091}]}]},
+     {riak_kv, [{pb_ip, "127.0.0.1"}, {pb_port, 8081}]},
+     {riak_search, [{enabled, true}]}
+    ]},
+   {release, backend, backend,
+    [
+     {db, [{riak_ip, "127.0.0.1"}, {riak_database_port, 8091},
+           {riak_protobuf_port, 8081}]}
+    ]},
+   {release, smtp_frontend, smtp_frontend, []},
+   {release, xmpp_frontend, xmpp_frontend, []},
+   {release, web_frontend, web_frontend, []}
+  ]}
+].
+\end{Verbatim}
+
+\begin{sloppypar}
+For more information on the available configuration options, please see the
+example configuration file in {\tt system\-release/tt/etc/example.config}.
+\end{sloppypar}
+\section{Using the Cluster Manager}
+When the system-wide configuration file is finished, it is time to put it to
+use. The Cluster Manager is a small command-line tool (an escript) that reads
+the configuration file and connects to running System Managers to enforce the
+state given in the configuration file and/or performs a specific action.
+
+The actions performed is controlled by adding switches when invoking the
+command. One can use multiple switches to perform more than one action. A short
+description of the more common ones follow.
+
+By using the {\tt --setconfig} switch, the Cluster Manager will try to connect
+to all specified System Managers and give them the configuration they should
+apply. Note that this does automatically apply the configuration to a running
+system. To be able to use the new configuration, the system must be restarted.
+
+The {\tt --join} switch is intended to be used whenever a Riak node is added to
+the cluster. It will make any new Riak nodes join the already present
+nodes. This is only necessary when you add a new node, not after stopping or
+starting a Riak node.
+
+Finally, the {\tt --start} and {\tt --stop} switches starts and stops the needed
+releases, including Riak if that is needed. To see what releases are running and
+responding across a cluster, the {\tt--ping} switch comes handy.
+
+\begin{sloppypar}
+To run the Cluster Manager, first go to the directory where the release tarball
+was extracted and then execute {\tt system-release/tt/bin/cluster\_manager}. You
+also need to supply the name of the configuration file to use and the action to
+perform.
+\end{sloppypar}
 \chapter{Maintenance Instructions}
 \todo{Erik}
 
