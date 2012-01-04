@@ -141,7 +141,7 @@ parallel), we did not spend resources on load testing them since we needed that
 time to benchmark and load test our backends and riak nodes.
 \subsection{Frontends}
 \label{sec:frontends}
-The frontends spoke almost the same language to the user, which made the
+The frontends speak almost the same language to the user, which made the
 implementation of front-end logic very generic.
 
 \subsubsection{Web}
@@ -149,7 +149,7 @@ The web frontend is running yaws as a web server, after deciding to use nitrogen
 as a web framework, we had to drop nitrogen because of the websockets
 requirement. Yaws is configured as a ``/" application module (appmod) so that we can have a single entry point for handling all the requests. Server side includes (ssi) are also used to load static content via ajax.
 
-The web frontend relies heavily on javascript since it contains a good part of the application logic handling user interactions, requests, responses and game functionalities. We also use the toolkit Bootstrap\ref{bootstrap} for the user interface which allows us to quickly develop clean pages.\\
+The web frontend relies heavily on javascript since it contains a good part of the application logic handling user interactions, requests, responses and game functionalities. We also use the toolkit Bootstrap\cite{bootstrap} for the user interface which allows us to quickly develop clean pages.\\
 
 We had the option to extend Nitrogen to support websockets, but after spending
 some time investigating the possibility and walking through the code to
@@ -222,10 +222,10 @@ The reasons for that are concurrency issues (more on that in \ref{sec:concurrenc
 What users can perform what actions on the system is defined by a set of identities known as roles. The system has four roles.
 
 \begin{itemize}
-\item User - registered member of the system who can create and play games
-\item Blacklisted user - a user who has been removed from the system
-\item Moderator - a user with enhanced privileges to moderate games and help other users
-\item Operator - an administrator who has complete control over the system
+\item User --- registered member of the system who can create and play games
+\item Blacklisted user --- a user who has been removed from the system
+\item Moderator --- a user with enhanced privileges to moderate games and help other users
+\item Operator --- an administrator who has complete control over the system
 
 \end{itemize}
 
@@ -237,7 +237,7 @@ Game timing was implemented as a {\tt gen\_fsm} that changes states when a game
 phase needs to stop, eg.\ when the deadline for handing in orders is over.\\
 Before a phase is started, the rules processing is done by a module we call
 the ``rule engine'': the orders which were sent by the users before the deadline
-are read from the database and passed, along with the current game map to the
+are read from the database and passed, along with the current game map, to the
 rule engine.
 \subsubsection{Messaging}
 Since communication is very important in the game --- some even say, that the
@@ -289,15 +289,14 @@ the game joining processes, as it provides transactions.
 Riak proved to be a good choice for us since its performance parameters (called
 ``CAP controls'' in riak-lingo) are very easy to tune and it is quite well
 documented how riak behaves under load. The scalability problems we had
-came from using the search module too much and in places where we shouldn't
-have.
+came from using the search module too much.
 \subsubsection{eleveldb}
 Another problem was riak's storage backend. Riak has the feature to switch the
 storage backend --- the way, key/value pairs are stored on a node.
 We initially used {\tt eleveldb} because it supported secondary indices, a
-feature we wanted to use. {\tt eleveldb} however showed degrading performance
+feature we wanted have. {\tt eleveldb} however showed degrading performance
 in our context: the throughput of database operations was decreasing linearly
-over time, down to zero. We could not find out, what the problem here was, so
+over time, down to zero. We could not find out what the problem was, so
 we had to switch the storage backend to {\tt bitcask}, riak's standard storage
 backend. Bitcask does not support secondary indices, and because of that it was
 necessary to use {\tt riak\_search} more --- which led to scalability
@@ -386,7 +385,7 @@ Briefly describing the applications,
     utils & Commonly used tools and utilities \\ \hline
     web\_frontend & Code for handling the web frontend, including client
     side code \\ \hline
-    xmpp\_lib & Library for handline XMPP communication \\ \hline \hline
+    xmpp\_lib & Library for handling XMPP communication \\ \hline \hline
     \end{tabular}
 \end{center}
 
