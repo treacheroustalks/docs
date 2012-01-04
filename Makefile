@@ -8,6 +8,14 @@ all: $(makefiles)
 	@echo Building document via Makefile in $^
 	$(foreach dir,$^, $(MAKE) -C $(dir) ;)
 
+cd:
+	rm -rf cd
+	mkdir cd
+	cp -Lrf handin_cd/* cd
+	cp -r ../main cd/project
+
 clean: $(makefiles)
 	@echo Cleaning via Makefile in $^
 	$(foreach dir,$^, $(MAKE) -C $(dir) clean ;)
+
+.PHONY: cd
