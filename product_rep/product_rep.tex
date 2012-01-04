@@ -30,8 +30,9 @@ service.
 
 The report explains the project and takes a look at the requirements.
 The technical details of the solutions chosen, are presented and their choices
-motivated. The features that distinguish the project from existing implementations
-are highlighted as well as some of our relative weaknesses are mentioned.
+motivated. The features that make the project interesting,
+failure tolerance, scalability and multiple interfaces are highlighted.
+To conclude, some of our relative weaknesses are mentioned.
 }
 
 \chapter{Introduction}
@@ -70,12 +71,12 @@ the same functionality to the user (the operator is forced to use the
 web~interface). Those interfaces are:\\
 \begin{enumerate}
 \item {\bf Web interface} ---
-  the game should be accessible via a modern webbrowser {\em and\/} it should
+  The game should be accessible via a modern webbrowser {\em and\/} it should
   use websockets to communicate with the browser.
 \item {\bf XMPP interface} ---
-  the game should be accessible via a chat client using text based orders.
+  The game should be accessible via a chat client using text based orders.
 \item {\bf SMTP interface} ---
-  the game should be accessible via sending of emails using text based orders.
+  The game should be accessible via sending of emails using text based orders.
 \end{enumerate}
 
 \subsection{Scalability}
@@ -89,14 +90,16 @@ too interesting too resist focusing on it.
 
 \subsection{Websockets}
 Websockets are a tcp-like connection between a browser and a webserver.
+Their novelty is that they are not implemented by polling which makes them quite
+fast.
 They can be used to send javascript that updates only parts of the client page
 instead of reloading a page and are a great tool to shift computing to the
 client side.
 
 The websockets feature was mostly an issue because of the tool support (or lack
 thereof) we were faced with. More is explained in Sec.~\ref{sec:frontends}.
-Otherwise, websockets are an amazing technology and will have a great impact on
-web development in the future.
+Otherwise, websockets are an amazing technology and as will have a great impact on
+web development in the future since tool support is increasing.
 
 \subsection{AI}
 Writing a simple AI was a requirement which interested us as well. However, we
@@ -114,16 +117,17 @@ performance characteristics and leaving the AI players for future work.
 \begin{figure}[h]
  \centering
  \includegraphics[width=13cm]{./graphics/arch.pdf}
- \caption{a possible cluster}
+ \caption{A possible cluster.}
  \label{fig:arch}
 \end{figure}
 
 Our Architecture is divided in three main blocks, the {\em frontends}, the
 {\em controller}, and the {\em backends}. In Fig.~\ref{fig:arch} a running
-cluster as it could be configured is shown. {\em Machine 1} shows a full
-configuration as it includes all three frontends, a backend and riak. The
-operator, however, is free to choose to only run a specific selection of these
-and can combine them freely.
+cluster as it could be configured is shown. {\em server 1} shows a full
+configuration as it includes all three frontends, a backend and riak. Riak, our
+database is explained in sec.~\ref{sec:riak}.
+The operator, however, is free to choose to only run a specific selection of
+these and can combine them freely.
 
 The responsibilities are not surprising: the frontends receive user input and
 transform the input into messages which are sent to the controller.
@@ -133,15 +137,17 @@ respond with an answer.
 \subsubsection{Modularity --- and its Relation to Scalability}
 One thing that is not immediately visible in our architecture is the fact that
 the individual modules are very independent of each other. Even though the
-architecture graphic shows a complete example of a running sample, we can choose
-to run some modules alone. \\
+architecture graphic shows a complete example of a running cluster, we can
+choose to run some modules alone. \\
 If we would, for example, find out that our system is slow because the
 web~frontend is the bottleneck, we could add more servers to the cluster that
 run only a web~frontend (see Fig.~\ref{fig:arch}, ``Server n-1'').
+A controller, however is mandatory, since in our implementation, the controller
+is responsible for starting the other applications.
 We can do the same with each frontend types, with backends and with riak nodes.
 Our architecture, therefore, inherently supports scaling out very well.
-Since the frontends are not relying on each other at all (they are completely
-parallel), we did not spend resources on load testing them since we needed that
+Since the frontends are not depending on each other at all, we did not spend
+resources on load testing them --- we needed that
 time to benchmark and load test our backends and riak nodes.
 \subsubsection*{Process groups}
 The system uses process groups to provide load balancing by distributing work
@@ -161,11 +167,15 @@ The frontends speak almost the same language to the user, which made the
 implementation of front-end logic very generic.
 
 \subsubsection{Web}
-The web frontend is running yaws as a web server, after deciding to use nitrogen
-as a web framework, we had to drop nitrogen because of the websockets
-requirement. Yaws is configured as a ``/" application module (appmod) so that we can have a single entry point for handling all the requests. Server side includes (ssi) are also used to load static content via ajax.
+The web frontend is running Yaws as a web server.
+After deciding to use nitrogen as a web framework, we had to drop nitrogen 
+because of the websockets requirement for reasons detailed below.
+Yaws is configured as a ``/" application module (appmod) so that we can have a
+single entry point for handling all the requests. Server side includes (ssi) are
+also used to load static content via ajax.
 
 The web frontend relies heavily on javascript since it contains a good part of the application logic handling user interactions, requests, responses and game functionalities. We also use the toolkit Bootstrap\cite{bootstrap} for the user interface which allows us to quickly develop clean pages.\\
+\todo{Karl: ``what are clean pages?''}
 
 We had the option to extend Nitrogen to support websockets, but after spending
 some time investigating the possibility and walking through the code to
@@ -174,7 +184,7 @@ its own to do that. Nitrogen uses SimpleBridge which provides a standardized
 interface to all its supported web servers. We found that adding websockets
 would mean to change/add a lot of code, in a lot of modules, the way
 Nitrogen/SimpleBridge is structured. Instead, as previously mentioned, the web
-frontend is using plain javascript, which is very conventient for creating a
+frontend is using plain javascript, which is very convenient for creating a
 websocket connection.
 
 Throughout the course of the project the websocket handshake protocol has
@@ -185,64 +195,79 @@ to update our system whenever a new version was released. Instead, a decision
 on what version to support had to be made in the beginning of the project, so we
 could focus developing our product.
 It would influence what webserver to use and which web browser to support. We
-chose hybi-10, that is what the yaws server that is running, and Chromium 14
-which we developed for, supports.\todo{JD: correct if inaccurate or fix if yaws is updated}
+chose the ``hybi-10'' version of the protocol --- this is the version, Yaws and
+Chromium 14 implement. 
+\todo{JD: correct if inaccurate or fix if Yaws is updated}
 
 \subsubsection{XMPP}
-Using ejabberd as XMPP server was an obvious choice since ejabberd is widely
-regarded as the standard solution for XMPP servers and ejabberd is implemented
+Using ejabberd as XMPP server was an obvious choice since ejabberd is the
+standard solution for XMPP servers and ejabberd is implemented
 in Erlang which led us to hope that it would play well with our code.\todo{People involved: tell a story}
 
 There are three ways to implement integration with ejabberd.
 
 \begin{itemize}
-\item Client - A bot that uses an Erlang client such as exmpp can be used to connect to the server. 
-All users send messages to the bot via the ejabberd server. e.g. bot@example.com
-An issue jabber client is that it doesn’t scale. Using a single bot will mean all the users will have 
-to be in the bot’s roster (user list). ejabberd doesn’t handle the scaling of rosters very well (known to fail for clients > 40k).
+\item Client - A bot that uses an Erlang client such as exmpp can be used to
+connect to the server.
+All users send messages to the bot via the ejabberd server. e.g.
+bot@example.com
+An issue jabber client is that it doesn’t scale. Using a single bot will mean
+all the users will have  to be in the bot’s roster (user list).
+ejabberd doesn’t handle the scaling of rosters very well
+(known to fail for clients > 40k).
 \item Component - A component is a trusted piece of an XMPP server that can send and receive arbitrary stanzas. 
-In other words, we can add module to ejabberd and define a virtual domain to get all messages that are sent to this domian.  
-Because the name of a component is a domain (example: tt.localhost), a component can pretend to be many users. 
-Any stanza addressed to service@tt.localhost will be delivered to tt.localhost no matter what the value is of 'service'.
-\item S2S(server to server) - This is the next step for those who need very large scale. This was not suitable for us  
-since it requires us to learn a new protocol and is most possibly an overkill for our needs.
+In other words, we can add a module to ejabberd and define a virtual domain to
+get all messages that are sent to this domian.  
+Because the name of a component is a domain (example: tt.localhost), a
+component can pretend to be many users. 
+Any stanza addressed to service@tt.localhost will be delivered to
+tt.localhost no matter what the value is of 'service'.
+\item S2S(server to server) - This is the next step for those who need very large scale. This was not suitable for us since it requires us to learn a new
+protocol and is most possibly not necessary for our needs.
 
 \end{itemize}
 
-We decided to use component to communicate with users. We added a module to ejabberd that registers
- a hook to get all the messages that are sent to tt.localhost and forwards it to our backend. ejabberd
- automatically spawns a new process for a new user who sends message to this component.
- If we need to communicate with a user, we use the corresponding process.
+We decided to use component to communicate with users. We added a module to
+ejabberd that registers a hook to get all the messages that are sent to
+tt.localhost and forwards it to our backend. ejabberd automatically spawns a
+new process for a new user who sends message to this component.
+If we need to communicate with a user, we use the corresponding process.
 
-In this way, not only users that have an account on our ejabberd server, but also users 
-that have account on any XMPP server can send their commands to the specified address and use our system.  
+In this way, not only users that have an account on our ejabberd server, but
+also users that have account on any XMPP server can send their commands to the
+specified address and use our system.  
 
 
 \subsubsection{SMTP}
-SMTP, together with POP and IMAP are the three most prevalent protocols for today's email servers.
-And SMTP itself is used for sending email from client to server while POP or IMAP
-are used for retrieving email from server to client.
-For our email server, we found three quilified candidates: Erlmail, gen\_smtp and erlang-smtp.
-At first sight, Erlmail seemed to be the most competitive one since it supports all these three
-protocols when others support only one or two of them.
-But since our SMTP frontend doesn't directly talk to email clients, we figured out
-that there's no need for email retrieving mechanism for our servers. Therefore,
-we picked gen\_smtp server as our SMTP frontend since all of its modules are only focused
-on SMTP. In our system architecture, the SMTP frontend is the bridge between client side and the backend
+SMTP, together with POP and IMAP are the three most prevalent protocols for
+today's email servers.
+SMTP is used for sending emails from clients to servers while POP or IMAP
+are used for retrieving email from servers to clients.
+For our email server, we found three quilified candidates: Erlmail, gen\_smtp
+and erlang-smtp.
+At first sight, Erlmail seemed to be the most competitive one since it 
+supports all these three protocols when others support only one or two of them.
+However, since our SMTP frontend doesn't directly talk to email clients, we
+figured out that there's no need for email retrieving mechanism for our
+servers. Therefore, we picked gen\_smtp server as our SMTP frontend since all
+of its modules are only focused on SMTP. In our system architecture, the
+SMTP~frontend is the bridge between client side and the backend
 (see Fig.~\ref{fig:smtp_arch}).
-Once the SMTP frontend receives an email from the client side, it will extract the
-email content and pass it to the backend controller. The controller will interpret and execute
-the valid orders carried by the email content, then respond to client side through the SMTP frontend again.
+Once the SMTP frontend receives an email from the client side, it will extract
+the email content and pass it to the backend controller. The controller will
+interpret and execute the valid orders carried by the email content, then
+respond to client side through the SMTP frontend again.
 
 \begin{figure}[h]
  \centering
  \includegraphics[width=5cm]{./graphics/smtp_arch.pdf}
- \caption{Communication between client side and backend}
+ \caption{Communication between client side and backend.}
  \label{fig:smtp_arch}
 \end{figure}
 
 \subsection{Controller}
-The main characteristic distinguishing requests is whether they belong to a session or not.
+The main characteristic distinguishing requests is whether they belong to a
+session or not.
 So the controller has two kinds of workers.
 Those responsible for requests with a session and those for requests without.
 
@@ -255,82 +280,41 @@ Those responsible for requests with a session and those for requests without.
 \end{figure}
 
 The simple ones without sessions are completely stateless and can handle requests from any user.
-They are spawned on startup and will handle requests on arrival.
+A fixed number of them is spawned on startup and will handle requests on
+arrival.
 Their main responsibilities are registration, login and the like.
-Figure \ref{fig:controller:session_proc} illustrates this.
+Figure~\ref{fig:controller:session_proc} illustrates this.
 
 \subsubsection{Session Management}
 The session management consists of a group of processes and a mnesia table.
-Each session spawns its own session process and writes an entry into the mnesia table,
-so that one such process exists for each logged in user.
+Each session spawns its own session process and writes an entry into the mnesia
+table, so that one such process exists for each logged in user.
 The mnesia table is necessary to have a mapping between users and sessions.
 The processes handle all requests for their session and have the session data
 (user data, knowledge of how to push events to the frontend, etc).
-The reasons for that are concurrency issues (more on that in \ref{sec:concurrency}).
+The reasons for that are concurrency issues
+(more on that in \ref{sec:concurrency}).
 
 
 \subsubsection{Access Control}
-What users can perform what actions on the system is defined by a set of identities known as roles. The system has four roles.
+What users can perform what actions on the system is defined by a set of
+identities known as roles. The system has four roles.
 
 \begin{itemize}
-\item User --- registered member of the system who can create and play games
-\item Blacklisted user --- a user who has been removed from the system
-\item Moderator --- a user with enhanced privileges to moderate games and help other users
-\item Operator --- an administrator who has complete control over the system
+\item User --- registered member of the system who can create and play games.
+\item Blacklisted user --- a user who has been removed from the system.
+\item Moderator --- a user with enhanced privileges to moderate games and help
+other users.
+\item Operator --- an administrator who has complete control over the system.
 
 \end{itemize}
 
-\subsection{Backend}
-\subsubsection{Game Managing}
-Managing games was split up in two main tasks: {\em game timing\/} and
-{\em order-processing}. \\
-Game timing was implemented as a {\tt gen\_fsm} that changes states when a game
-phase needs to stop, eg.\ when the deadline for handing in orders is over.\\
-Before a phase is started, the rules processing is done by a module we call
-the ``rule engine'': the orders which were sent by the users before the deadline
-are read from the database and passed, along with the current game map, to the
-rule engine.
-\subsubsection{Messaging}
-Since communication is very important in the game --- some even say, that the
-game is mostly about communication --- the messaging module was a very central
-feature for us. We support two types of messages: {\em in-game\/} and
-{\em off-game\/}-messages.\\
-Messages in game never involve the user name for
-tactical reasons: if someone remembers my nickname, he has an easier time to
-anticipate my moves since he will most likely remember my actions in last games.
-Or, worse: he might still hold a grudge against me. This is why you never
-communicate with players in-game by using their nickname, but by using their
-country.
-
-Off-game messages on the other hand are sent to a nickname and the recipient
-will see the sender's nickname. The basic usecase for the off-game messaging is
-giving users the chance to set up games for their friends and tell them about
-it.
-\subsubsection{Search}
-Our search module provides the functionality to search, for instance, for games,
-based on their properties (like all game parameters). For the implementation of
-search, we relied on the riak extension {\tt riak\_search}.
-
-Riak search is a search engine that is tightly coupled with the Riak datastore.
-We add a precommit hook to the properties of the bucket whose data is to be
-searched along with search schema which specifies how the object is to be indexed.
-Whenever a new object is added or an old one updated, the object is indexed
-(tokenization with standard Lucene analyzers) and saved.
-It provides a rich query language consisting of term searches, field searches,
-boolean operators and wildcards to fetch matching objects ordered by relevance.
-
-This feature comes with a price though and should be used with caution.
-During load testing we discovered, that it should be avoided for often updated data.
-As it has to re-index all fields of an object on every write it can kill the performance.
-Therefore we tried minimizing writes on search indexed data and if possible not
-to use the riak search feature at all.
-
-\subsubsection{User Management}
-The user management module was one of the first modules we implemented in the
-backend; its purpose is to create, update, read, delete users in or from the
-database. The implementation is quite short and should contain few surprises.
 
 \subsection{Riak}
+\label{sec:riak}
+\todo{more details on how riak works}
+\todo{reference to explain CAP controls}
+\todo{explain, what a node is}
 The choice of riak as database was a careful one: we evaluated riak, couchDB
 and mnesia but riak was our favourite in the end --- its scalability features
 are very simple to use and its potential for scalability is what we needed.
@@ -347,9 +331,9 @@ storage backend --- the way, key/value pairs are stored on a node.
 We initially used {\tt eleveldb} because it supported secondary indices, a
 feature we wanted have. {\tt eleveldb} however showed degrading performance
 in our context: the throughput of database operations was decreasing linearly
-over time, down to zero. We could not find out what the problem was, so
-we had to switch the storage backend to {\tt bitcask}, riak's standard storage
-backend. Bitcask does not support secondary indices, and because of that it was
+over time, down to zero. We could not pinpoint the problem, so we had to switch
+the storage backend to {\tt bitcask}, riak's standard storage backend.
+Bitcask does not support secondary indices, and because of that it was
 necessary to use {\tt riak\_search} more --- which led to scalability
 issues\ldots
 
@@ -362,12 +346,63 @@ Another issue was that multiple orders sent by the same user can arrive at the
 backend in a different sequence creating inconsistent data. This was
 fixed by serializing the user's commands.
 
-The implementation of the above two solutions was not possible using Riak since
-its an eventually consistent database. Mnesia, which is distributed and has
-transactions, was the right fit.
+The implementation of the above two solutions is not possible using Riak since
+it is an eventually consistent database. Mnesia, which is distributed and has
+transactions, is the right fit.
 
-We used Mnesia to keep track of user sessions. Combining this with
-the use of one Erlang process per session, the implementation was complete.
+We use Mnesia to keep track of user sessions. Combining this with
+the use of one Erlang process per session makes the implementation complete.
+
+
+\subsection{Backend}
+\subsubsection{Game Managing}
+Managing games is split up in two main tasks: {\em game timing\/} and
+{\em order-processing}. \\
+Game timing is implemented as a {\tt gen\_fsm} that changes states when a game
+phase needs to stop, eg.\ when the deadline for handing in orders is over.\\
+Before a phase is started, the rules processing is done by a module we call
+the ``rule engine'': the orders which were sent by the users before the
+deadline are read from the database and passed, along with the current game
+map, to the rule engine.
+\subsubsection{Messaging}
+Since communication is very important in the game --- some even say, that the
+game is mostly about communication --- the messaging module is a very central
+feature for us. We support two types of messages: {\em in-game\/} and
+{\em off-game\/}-messages.\\
+Messages in game never involve the user nick for tactical reasons: if someone
+remembers my nickname, he has an easier time to anticipate my moves since he
+will likely remember my actions in last games.
+Or, worse: he might still hold a grudge against me. This is why you never
+communicate with players in-game by using their nickname, but by using their
+country.
+
+Off-game messages on the other hand are sent to a nickname and the recipient
+will see the sender's nickname. The basic use case for the off-game messaging
+is giving users the chance to set up games for their friends and tell them
+about it.
+\subsubsection{Search}
+Our search module provides the functionality to search, for instance, for
+games, based on their properties (like all game parameters). For the
+implementation of search, we relied on the riak extension {\tt riak\_search}.
+
+Riak search is a search engine that is tightly coupled with the Riak datastore.
+We add a precommit hook to the properties of the bucket whose data is to be
+searched along with search schema which specifies how the object is to be indexed. \todo{``Bucket'': either explain or don't use}
+Whenever a new object is added or an old one updated, the object is indexed
+(tokenization with standard Lucene analyzers) and saved.
+It provides a rich query language consisting of term searches, field searches,
+boolean operators and wildcards to fetch matching objects ordered by relevance.
+
+This feature comes with a price though and should be used with caution.
+During load testing we discovered, that it should be avoided for often updated data.
+As it has to re-index all fields of an object on every write it can kill the performance.
+Therefore we tried minimizing writes on search indexed data and if possible not
+to use the riak search feature at all.
+
+\subsubsection{User Management}
+The user management module's purpose is to create, update, read, delete users
+in or from the database. The implementation is quite short and should contain
+few surprises.
 
 \subsection{Concurrency}
 % http://redmine.pcs/projects/dip/wiki/Concurrency_handling
@@ -553,45 +588,44 @@ Additional notes on the code,
 
 
 \chapter{Treacherous Talks}
-\hi{Describe the product from a user perspective, what you can do / what it looks like.}
 \section{The Three Interfaces}
 \subsection{HTTP}
 The user goes to the landing page, there he finds a link to register which will
 display a simple form for him to fill out. After the user is registered, he is
 able to log in using the login textfields on the landing page.
 
-After logging in, the user is shown an overview page (see Fig.~\ref{fig:overview})
+After logging in, the user is shown a dashboard page (see Fig.~\ref{fig:dashboard})
  where he is able to search for games, look at the games he is playing in (if any) and
 chat with other users in-game or off-game.
 
 \begin{figure}[h]
  \centering
  \includegraphics[width=\textwidth]{./graphics/overviewpage.png}
- \caption{the overview page}
- \label{fig:overview}
+ \caption{The dashboard page.}
+ \label{fig:dashboard}
 \end{figure}
 
 The web frontend has several key advantages over the two purely text based
 frontends:
 \begin{itemize}
-\item the user does not need to remember his session id
-\item the user sees a graphical map (generated using a HTML5 canvas!),
-  see Fig.~\ref{fig:map}
-\item it is easier to enter move orders because possible orders are represented
-  as drop-down lists, see Fig.~\ref{fig:orders}
+\item The user does not need to remember his session id.
+\item The user sees a graphical map (generated using a HTML5 canvas),
+  see Fig.~\ref{fig:map}.
+\item It is easier to enter move orders because possible orders are represented
+  as drop-down lists, see Fig.~\ref{fig:orders}.
 \end{itemize}
 
 \begin{figure}[h]
  \centering
  \includegraphics[width=10cm]{./graphics/graphicalmap.png}
- \caption{the graphical map}
+ \caption{The graphical map.}
  \label{fig:map}
 \end{figure}
 
 \begin{figure}[h]
  \centering
  \includegraphics[width=10cm]{./graphics/orderssmall.png}
- \caption{the orders drop-down lists}
+ \caption{The orders drop-down lists.}
  \label{fig:orders}
 \end{figure}
 
@@ -601,34 +635,35 @@ commands should be sent to. If user has an account on any other XMPP servers,
 the commands should be sent to ``service@tt.localhost''. 
 
 If user sends  ``HELP'' or any unknown command to our component, it will return the
- list of all valid commands. All commands can be found in appendix\ref{list of all commands}. 
+ list of all valid commands. All commands can be found in appendix \ref{sec:textbasedcommands}. 
 Each command starts with the command keyword and must end with ``END'' tag. 
 All commands and keywords should be entered in capital letters e.g 
-see\ref{example commands}. If the user enters some text before the command keyword 
+see appendix \ref{sec:textbasedcommands}. If the user enters some text before the command keyword 
 or after the end keyword, they are simply ignored. Users can get the list of 
 all mandatory fields for each command by sending the command name and ``END''. 
 
-The user will get a unique session id after logging in. The session id should be 
+The user will get a unique session ID after logging in. The session ID should be 
 stored, because it is necessary for all the future commands.
 
 \subsection{SMTP}
 \todo{Lin: explain}
 \section{Messages}
 In the web frontend, the user is shown two chat boxes: one for off-game chat
-and one for ingame-chat. The user manually has to enter the recipient (in
+and one for in-game-chat (they can be seen --- minimized --- in
+fig.~\ref{fig:dashboard}. The user manually has to enter the recipient (in
 in-game chat the recipient-country and the game ID). If the recipient is not
 online when a message is sent, it will be stored and delivered by the message
 application after the recipient logs in the next time. \\
-Appendix D contains more detailed information on interaction through the text
+Appendix \ref{sec:textbasedcommands} contains more detailed information on interaction through the text
 based interfaces.
 
 \section{Playing}
 The web frontend generates drop down lists to make it easier for the user to
-enter move orders as shown in Fig.~\ref{fig:orders} \\
-The other two (XMPP and SMTP) frontends take text based orders. Instead of
+enter move orders as shown in Fig.~\ref{fig:orders}. \\
+The other two frontends (XMPP and SMTP) take text based orders. Instead of
 clicking, the user has to type them and additionally is required to supply
 his session ID which he receives after logging in. A dialog between user and
-system via XMPP could look like this: \todo{sample dialog via text interface}
+system via XMPP could look like this:
 
 A full list of how to make plays can be found in appendix D.
 
@@ -643,7 +678,7 @@ thing: EUnit declares a test as failed as soon as it runs for 5 seconds and
 there is no central way to change that behaviour. It's possible to do it for
 single tests, but the code duplication in that case is, of course, sub-optimal.
 That 5 seconds ``feature'' was especially annoying in combination with
-continuous integration: our build server had a lot to work and therefore was
+continuous integration: our build server was very busy and therefore was
 interacting with our database a lot. When several builds were running at the
 same time, the database would get slower, therefore pushing tests over the
 time-limit, even though they ran perfectly fine on our local machines. Had we
@@ -698,27 +733,29 @@ to the snail mail solution where a game host receives letters with move orders
 from the players and the players send each other letters.
 
 Noteworthy browser based solutions are:\\
+
 \begin{tabular}{lc}
   page                            & registered users \\
   \url{http://webdiplomacy.net}   & 40613 \\
   \url{http://playdiplomacy.com/} & 6849
 \end{tabular}
-
-The alternative email solutions seem to have even lower user numbers but precise
+\\
+\\The alternative email solutions seem to have even lower user numbers but precise
 details are hard to be found. Please note that the numbers in
 the table are about {\em registered\/} users, while our benchmarks are in terms
 of {\em active\/} users.
 
-The advantages the existing solutions have, are generally better interfaces: \\
+The advantages the existing solutions have, are generally better interfaces:
 the existing email systems are a bit easier to use since you reference games by
-name and not by a number and there is no session id handling involved.
+name and not by a number and there is no session ID handling involved.
 These issues would be fixable with reasonable resources though. \\
 The web interfaces provide better user interfaces as well --- a clickable map
 is the norm (click on a unit and then on the target province to issue a move
 order, for instance) as well as the timing is handled a bit nicer. They also
 provide several game modes (from minor changes to starting units to playing on
 a world map). We have the code to handle new maps, but we don't have the map
-data. Creating those would be easy but involve a lot of typing.
+data. Creating those would be an easy but work-intensive task since you have
+to specify all provinces, all connections, starting units, and so on.
 
 Our rules are not perfect yet, they are still a bit rough around the edges but
 in probably one or two person weeks would work satisfyingly well.
@@ -733,7 +770,7 @@ in bug fixing and user interaction.
 We are very happy with the work we have done and that the product is, even though
 the seemingly endless scope, quite close to being ``ready''.
 
-Despite all this, the work that has to be done is considerable:
+Despite all this, the work left to be done is considerable:
 An AI was in the original requirements but was not delivered due to time constraints.
 Bug fixing in the rule engine is necessary. Scalability could be improved by applying
 tracing to the cluster which would be lots of interesting work. as well as the
@@ -932,6 +969,7 @@ perform.
 \chapter{Suggested Future Work}
 
 \chapter{Text based commands}
+\label{sec:textbasedcommands}
 
 \subsection{Playing the game}
 The web interface is the only one to provide means to interactively select
@@ -1080,7 +1118,7 @@ where \verb|FIELD| is the name of the field and \verb|<data>| is the
 input from the user.
 
 \subsubsection*{Example commands}
-\label{example commands}
+\label{sec:examplecommands}
 \begin{verbatim}
 REGISTER
 NICKNAME: bob
