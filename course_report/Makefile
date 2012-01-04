@@ -1,34 +1,15 @@
-########################################################################
-# Makefile for MPItutorial
-#
-########################################################################
+all:	course_rep.pdf
 
-MAKE       = $$(which make)
-
-TEXS	   = course_rep.tex
-PDFS 	   = $(TEXS:.tex=.pdf)
-AUXS	   = $(TEXS:.tex=.aux)
-BBLS	   = $(TEXS:.tex=.bbl) # for bibtex
-all:	$(PDFS)
-
-$(AUXS): %.aux: %.tex
-	@echo AUX
-	pdflatex $<
-
-$(BBLS): %.bbl: %.aux
-	@echo BBL
-	bibtex $*
-
-$(PDFS): %.pdf: %.tex
-	@echo PDF
-	pdflatex $<
-	pdflatex $< > /dev/null
+course_rep.pdf: course_rep.tex
+	pdflatex course_rep
+	bibtex course_rep
+	pdflatex course_rep
+	pdflatex course_rep
 
 clean: clean_latex clean_logs
 
 clean_latex: clean_logs
-	rm -f $(PDFS)
-	rm -f *nav *out *snm *toc *.aux *.bbl *.blg
+	rm -f *.pdf *nav *out *snm *toc *.aux *.bbl *.blg
 
 clean_logs:
 	rm -f *.log *~
