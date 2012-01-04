@@ -303,6 +303,22 @@ backend. Bitcask does not support secondary indices, and because of that it was
 necessary to use {\tt riak\_search} more --- which led to scalability
 issues\ldots
 
+\subsubsection{Mnesia}
+A user can access our system from multiple frontends resulting in
+concurrency issues. We dealt with them by making sure that the user
+can use only one frontend at a time.
+
+Another issue was that multiple orders sent by the same user can arrive at the
+backend in a different sequence creating inconsistent data. This was
+fixed by serializing the user's commands.
+
+The implementation of the above two solutions was not possible using Riak since
+its an eventually consistent database. Mnesia, which is distributed and has
+transactions, was the right fit.
+
+We used Mnesia to keep track of user sessions. Combining this with
+the use of one Erlang process per session, the implementation was complete.
+
 \subsection{Concurrency}
 \label{sec:concurrency}
 \todo{How we deal with concurrency and conflicts}
