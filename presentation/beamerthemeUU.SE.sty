@@ -1,0 +1,61 @@
+% Unofficial LaTeX beamer class for Uppsala University
+% Created by Andre Hilsendeger 2010/10/19
+% You are welcome to send me changes: Andre.Hilsendeger.6365@student.uu,se
+\ProvidesPackage{beamerthemeUU.SE}
+  [2010/10/19 v1.0 beamer 'UU.SE' theme]
+
+\RequirePackage{pgf}
+%\pgfdeclareimage[width=0.50\paperwidth]{seal-title}{seal-title}
+%\pgfdeclareimage[width=0.50\paperwidth]{seal}{seal}
+\pgfdeclareimage[width=2cm]{logo}{logo}
+
+\mode<presentation>
+
+\usefonttheme{default}
+\usecolortheme{UU.SE}
+\useinnertheme{default}
+\useoutertheme{default}
+
+\setbeamerfont{author}{size=\large}
+\setbeamerfont{date}{size=\large}
+\setbeamerfont{example text}{series=\bfseries}
+\setbeamerfont{frametitle}{series=\bfseries,size=\large,}
+\setbeamerfont{framesubtitle}{series=\mdseries,size=\large}
+\setbeamerfont{section}{series=\bfseries}
+\setbeamerfont{title}{series=\bfseries}
+
+%\setbeamertemplate{background}{
+%  \ifnum\thepage=1 \relax
+%  \begin{picture}(0,0)(0,225)\pgfuseimage{seal-title}\end{picture} \else
+%  \begin{picture}(0,0)(-185,275)\pgfuseimage{seal}\end{picture} \fi
+%}
+
+\setbeamertemplate{navigation symbols}{}
+
+\setbeamertemplate{title page}
+{
+%\pgfuseimage{seal-title}
+\vskip0pt plus 1filll
+\begin{flushright}
+{\usebeamerfont{title}\usebeamercolor[fg]{title}\inserttitle \\ \vskip-10pt \rule{0.6\paperwidth}{0.5mm} \vskip10pt}
+{\usebeamerfont{author}\usebeamercolor[fg]{author}\insertauthor \\ \vskip5pt}
+{\usebeamerfont{institute}\usebeamercolor[fg]{institute}\insertinstitute \\ \vskip5pt}
+{\usebeamerfont{date}\usebeamercolor[fg]{date}\insertdate \\}
+\end{flushright}
+\vskip0pt plus 1filll
+}
+
+\setbeamertemplate{headline}
+{
+  \framelatex{
+  \begin{beamercolorbox}[wd=\paperwidth,ht=0.2\paperheight]{title bar}
+    \hskip1.5cm \insertsectionnavigationhorizontal{0pt}{\hskip0.5cm}{}%
+    \vskip1.5cm
+  \end{beamercolorbox}}
+  \vskip -2cm
+  \pgfuseimage{logo}
+}
+
+
+\mode
+<all>
