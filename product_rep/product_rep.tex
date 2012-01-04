@@ -583,7 +583,21 @@ frontends:
 \end{figure}
 
 \subsection{XMPP}
-\todo{Rahim: explain}
+Users who log into our XMPP server, will get the address of the component that 
+commands should be sent to. If user has an account on any other XMPP servers, 
+the commands should be sent to ``service@tt.localhost''. 
+
+If user sends  ``HELP'' or any unknown command to our component, it will return the
+ list of all valid commands. All commands can be found in appendix\ref{list of all commands}. 
+Each command starts with the command keyword and must end with ``END'' tag. 
+All commands and keywords should be entered in capital letters e.g 
+see\ref{example commands}. If the user enters some text before the command keyword 
+or after the end keyword, they are simply ignored. Users can get the list of 
+all mandatory fields for each command by sending the command name and ``END''. 
+
+The user will get a unique session id after logging in. The session id should be 
+stored, because it is necessary for all the future commands.
+
 \subsection{SMTP}
 \todo{Lin: explain}
 \section{Messages}
@@ -803,6 +817,7 @@ warsaw - war & western\_mediterranean & yorkshire - yor \\
 
 \newpage
 \subsection{Commands for IM and Mail}
+\label{list of all commands}
 The following commands are available for IM and mail users:
 
 \begin{verbatim}
@@ -881,6 +896,7 @@ where \verb|FIELD| is the name of the field and \verb|<data>| is the
 input from the user.
 
 \subsubsection*{Example commands}
+\label{example commands}
 \begin{verbatim}
 REGISTER
 NICKNAME: bob
