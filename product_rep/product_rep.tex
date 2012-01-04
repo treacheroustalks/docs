@@ -442,7 +442,26 @@ So, in short: to fully catch up with the alternatives, we would need to invest
 in bug fixing and user interaction.
 
 \chapter{Conclusions and Future Work}
-\hi{no comments given\ldots}
+We are very happy with the work we have done and that the product is, even though
+the seemingly endless scope, quite close to being ``ready''.
+
+Despite all this, the work that has to be done is considerable:
+An AI was in the original requirements but was not delivered due to time constraints.
+Bug fixing in the rule engine is necessary. Scalability could be improved by applying
+tracing to the cluster which would be lots of interesting work. as well as the
+interfaces polished.
+
+In order to make the game playable by the public, a better system to find and join 
+games would probably be necessary in the web frontend --- and we would need to
+do lots of hallway testing and/or maybe publish an alpha version in order to collect
+feedback.
+
+One more thing would be to think a lot about security --- not much thought has been
+spent on it yet.
+
+The rule engine does not support multi-fleet convoys yet but they are important for
+the game tactics (the classic Italian opening called ``lepanto~opening'' uses it, for
+instance). This could be done quite easily in the rule engine.
 
 \appendix
 \chapter{Installation Instructions}
@@ -450,8 +469,5 @@ in bug fixing and user interaction.
 
 \chapter{Maintenance Instructions}
 \todo{Erik}
-
-\chapter{Suggested Future Work}
-
 
 \end{document}
