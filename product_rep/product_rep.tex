@@ -288,6 +288,82 @@ issues\ldots
 \todo{How we deal with concurrency and conflicts}
 % http://redmine.pcs/projects/dip/wiki/Concurrency_handling
 
+\section{Code organization}
+
+The project consists of a set of Erlang applications logically grouped
+based on their functionalities. We have two more directories at the
+project level, one for external tests and the other for the release.
+
+Below is the high level directory structure of the project.
+
+\begin{verbatim}
+   |-apps
+   |---cluster_manager
+   |---controller_app
+   |---datatypes
+   |---db
+   |---game
+   |---gen_moves
+   |---load_test
+   |---message
+   |---necromancer
+   |---service
+   |---smtp_frontend
+   |---system_manager
+   |---user_management
+   |---utils
+   |---web_frontend
+   |---xmpp_lib
+   |-ext_test
+   |---bench
+   |---fault_tolerance
+   |---smtp_integration_test
+   |---websocket_client
+   |---xmpp_integration_test
+   |-rel
+\end{verbatim}
+
+Briefly describing the applications,
+
+\begin{center}
+    \begin{tabular}{ | l | p{10cm} |}
+    \hline
+    Application & Description \\ \hline \hline
+    cluster\_manager & escript for management of the distributed
+    cluster \\ \hline
+    controller\_app & The controller application \\ \hline
+    datatypes & A central place for common configuration. It contains bucket
+    names and records \\ \hline
+    db & The database wrapper that handles all the db requests\\ \hline
+    game & Contains game logic, game timer, rule engine and other game
+    related code \\ \hline
+    gen\_moves & Generates moves that can be used for load testing \\ \hline
+    load\_test & Code used for load testing \\ \hline
+    message & Code used for handling messages \\ \hline
+    necromancer & Code used for resurrecting dead VMs \\ \hline
+    service &  OTP application library that provides functionality used by
+    all service applications \\ \hline
+    smtp\_frontend & Handles all the mail communication \\ \hline
+    system\_manager & Single point of entry for configuring and controlling
+    the whole system on a server. \\ \hline
+    user\_management & Handles all user related functions \\ \hline
+    utils & Commonly used tools and utilities \\ \hline
+    web\_frontend & Code for handling the web frontend, including client
+    side code \\ \hline
+    xmpp\_lib & Library for handline XMPP communication \\ \hline \hline
+    \end{tabular}
+\end{center}
+
+
+
+Additional notes on the code,
+
+\begin{itemize}
+\item General Erlang coding style and conventions were followed.
+\item The public API of all the modules has specs and edocs.
+\end{itemize}
+
+
 \chapter{Treacherous Talks}
 \hi{Describe the product from a user perspective, what you can do / what it looks like.}
 \section{The Three Interfaces}
