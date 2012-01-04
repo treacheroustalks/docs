@@ -85,7 +85,7 @@ Karl has been a great help with all kinds of problems, from getting more
 hardware to giving us tips and feedback. Thank you!
 
 \section{Equipment}
-We had nine development PCs (HP made) supplied from the university, as
+We had nine development PCs (HP made) supplied by the university, as
 well as three more PCs as servers (git, redmine, gerrit, buildbot),
 a meeting/presentation workstation, a fault tolerance testing PC,
 and one PC as load generator for load testing. \\
@@ -133,7 +133,7 @@ runs various commands manipulating that source tree, returning some result to
 the developers.
 
 Initially we installed Jenkins to do this since it is widely used. We tried to
-integrate it with our code review system, but the plugins for doing that was
+integrate it with our code review system, but the plugins for doing that were
 very unstable and crashed often. We set out to find another system we could use
 and found Buildbot. Buildbot is a bit different from most other CI servers since
 it is more like a framework than a finished product. You configure Buildbot by
@@ -378,7 +378,7 @@ doubtlessly profited a lot from that practice.
 The coding conventions governed coding style (eg.\ max-80-char-lines, no
 trailing white space) as well as erlang specifics (eg.\ how to use {\tt catch}).
 \subsection*{Reviews}
-Reviews were done mostly by whoever had time. A good time for a dev to do
+Reviews were done mostly by whoever had time. A good time for a developer to do
 reviews was while buildbot was testing her newest change. Sometimes, though,
 reviews were requested or even traded: ``I'll review your change, if you'll
 review mine''. \\
@@ -647,7 +647,7 @@ pair programming, but those who felt more comfortable doing that had the
 possibility to do it. In our working agreements we recommended team members to
 eat lunch in the lunchroom, so we could have a casual chat.\\
 
-Although, it has not been a breeze all the time. The project introduced 
+Although, it has not been a breeze all the time. The project introduced
 challenges in many regards, as there would be in any project.
 But we had basically the same experience with Erlang, and we were more or less
 on the same level in regards to that. Tools like git and gerrit were something
@@ -665,7 +665,7 @@ I did a survey on the Nitrogen web framework: experimented with it and tried to
 get it running on Yaws web server. It seemed to be quite suitable for our
 project and, therefore, we decided to use it. However, later on it has been
 eliminated from the list of tools we have been using in our project, due to some
-problems. In addition to the survey, I spent some time on reading about scrum
+problems. In addition to the survey, I spent some time on reading about Scrum
 and attended Erik's Git School, together with other team members.
 
 In the beginning of Sprint 2 I was supposed to work on the data model together
@@ -759,30 +759,30 @@ So I replaces riak search by key filtering for parts of the system that did not 
 like messaging.
 
 \section{Rahim Kadkhodamohammadi}
-In the beginning, I was doing some review on Erlang tools for SMTP and XMPP. 
+In the beginning, I was doing some review on Erlang tools for SMTP and XMPP.
 In this sprint Lin and me listed Erlang tools for SMTP and XMPP. I did some experiments with Mnesia database as well.
- 
-In the second sprint, I continued to do some experiments with ejabberd, 
-the only Erlang based XMPP server. I designed and developed an ejabberd component 
-that is able to exchange messages with users. Since EXMPP is the 
-only Erlang based XMPP client and we need integration tests, I developed the first 
-draft of an application with EXMPP to do integration tests through the IM client. 
+
+In the second sprint, I continued to do some experiments with ejabberd,
+the only Erlang based XMPP server. I designed and developed an ejabberd component
+that is able to exchange messages with users. Since EXMPP is the
+only Erlang based XMPP client and we need integration tests, I developed the first
+draft of an application with EXMPP to do integration tests through the IM client.
 I was also part of the architecture team.
 
-Sprint 3 was the sprint where we provided functionalities that allow users to play games. 
-During this sprint I mainly worked on the command parser, the controller and the game application. 
-I could say that it was a great sprint that I worked on most part of the system. 
+Sprint 3 was the sprint where we provided functionalities that allow users to play games.
+During this sprint I mainly worked on the command parser, the controller and the game application.
+I could say that it was a great sprint that I worked on most part of the system.
 
-In sprint 4, I created our first draft of the message application which provides functionality 
-to send messages between users. Then I added the ACL (access control list) to our controller. 
-I also extended our web frontend to show some system stats to 
+In sprint 4, I created our first draft of the message application which provides functionality
+to send messages between users. Then I added the ACL (access control list) to our controller.
+I also extended our web frontend to show some system stats to
 operators and provide functionality to add/remove moderators.
 
-In sprint 5, I was part of the presentation team. I was responsible 
+In sprint 5, I was part of the presentation team. I was responsible
 to prepare a demo to show during the presentation. I spent some time to
  prepare the demo and fix some bugs which I encountered when played with our system.
  I also extended our game and message applications to support black-listed users.
- 
+
 \section{Xinze Lin}
 In the first sprint, I was surveying and experimenting Erlang based SMTP servers for our project's need.
 Thanks to Erik's git school and tool support, I learned to use git to commit my code to our repository.
@@ -902,13 +902,13 @@ on a MochiWeb server.
 \subsection{Erlang Web}
 Erlang Web\cite{erlangweb} is quite simplistic, it has support for multiple web servers and
 distribution. It does not have any extras like a chat nor does it have support
-for websockets. Erlang Web can be run on INETS and YAWS web servers.
+for websockets. Erlang Web can be run on INETS and Yaws web servers.
 
 \subsection{Nitrogen}
 Nitrogen\cite{nitrogen} uses an event-driven model and offers hot code swapping, stability
 and scalability. It includes a simple, yet powerful, template system and is
 well documented which is important for us as developers. Nitrogen can run on
-several web servers; MochiWeb, YAWS and INETS.
+several web servers; MochiWeb, Yaws and INETS.
 
 \subsection{Chicago Boss}
 Chicago Boss\cite{chicagoboss} is a new web framework, which has not yet reached
