@@ -175,7 +175,33 @@ which we developed for, supports.\todo{JD: correct if inaccurate or fix if yaws 
 \subsubsection{XMPP}
 Using ejabberd as XMPP server was an obvious choice since ejabberd is widely
 regarded as the standard solution for XMPP servers and ejabberd is implemented
-in Erlang which led us to hope that it would play well with our code. \todo{People involved: tell a story}
+in Erlang which led us to hope that it would play well with our code.\todo{People involved: tell a story}
+
+There are three ways to implement integration with ejabberd.
+
+\begin{itemize}
+\item Client - A bot that uses an Erlang client such as exmpp can be used to connect to the server. 
+All users send messages to the bot via the ejabberd server. e.g. bot@example.com
+An issue jabber client is that it doesn’t scale. Using a single bot will mean all the users will have 
+to be in the bot’s roster (user list). ejabberd doesn’t handle the scaling of rosters very well (known to fail for clients > 40k).
+\item Component - A component is a trusted piece of an XMPP server that can send and receive arbitrary stanzas. 
+In other words, we can add module to ejabberd and define a virtual domain to get all messages that are sent to this domian.  
+Because the name of a component is a domain (example: tt.localhost), a component can pretend to be many users. 
+Any stanza addressed to service@tt.localhost will be delivered to tt.localhost no matter what the value is of 'service'.
+\item S2S(server to server) - This is the next step for those who need very large scale. This was not suitable for us  
+since it requires us to learn a new protocol and is most possibly an overkill for our needs.
+
+\end{itemize}
+
+We decided to use component to communicate with users. We added a module to ejabberd that registers
+ a hook to get all the messages that are sent to tt.localhost and forwards it to our backend. ejabberd
+ automatically spawns a new process for a new user who sends message to this component.
+ If we need to communicate with a user, we use the corresponding process.
+
+In this way, not only users that have an account on our ejabberd server, but also users 
+that have account on any XMPP server can send their commands to the specified address and use our system.  
+
+
 \subsubsection{SMTP}
 SMTP, together with POP and IMAP are the three most prevalent protocols for today's email servers.
 And SMTP itself is used for sending email from client to server while POP or IMAP
