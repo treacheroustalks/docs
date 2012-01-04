@@ -31,12 +31,12 @@ are highlighted as well as some of our relative weaknesses are mentioned.
 }
 
 \chapter{Introduction}
-Diplomacy is a board game, invented in the 1950s where the goal is to try to 
+Diplomacy is a board game, invented in the 1950s where the goal is to try to
 conquer Europe just before WW I. You come close to this goal by talking to the
 other players --- by diplomacy --- and making them your allies. And you achieve
 it by attack them when they do not expect it.
 
-The game is and was commonly played over distance --- starting with playing by 
+The game is and was commonly played over distance --- starting with playing by
 mail, then email and nowadays over pretty web pages with full-blown map
 visualization.
 
@@ -68,7 +68,7 @@ web~interface). Those interfaces are:\\
 \item {\bf Web interface} ---
   the game should be accessible via a modern webbrowser {\em and\/} it should
   use websockets to communicate with the browser.
-\item {\bf XMPP interface} --- 
+\item {\bf XMPP interface} ---
   the game should be accessible via a chat client using text based orders.
 \item {\bf SMTP interface} ---
   the game should be accessible via sending of emails using text based orders.
@@ -86,7 +86,7 @@ too interesting too resist focusing on it.
 \subsection{Websockets}
 Websockets are a tcp-like connection between a browser and a webserver.
 They can be used to send javascript that updates only parts of the client page
-instead of reloading a page and are a great tool to shift computing to the 
+instead of reloading a page and are a great tool to shift computing to the
 client side.
 
 The websockets feature was mostly an issue because of the tool support (or lack
@@ -114,7 +114,7 @@ performance characteristics and leaving the AI players for future work.
  \label{fig:arch}
 \end{figure}
 
-Our Architecture is divided in three main blocks, the {\em frontends}, the 
+Our Architecture is divided in three main blocks, the {\em frontends}, the
 {\em controller}, and the {\em backends}. In Fig.~\ref{fig:arch} a running
 cluster as it could be configured is shown. {\em Machine 1} shows a full
 configuration as it includes all three frontends, a backend and riak. The
@@ -167,7 +167,7 @@ Not until the end of the project has a protocol (RFC 6455) been released that
 has been proposed to be the official standard, we did not have the resources
 to update our system whenever a new version was released. Instead, a decision
 on what version to support had to be made in the beginning of the project, so we
-could focus developing our product. 
+could focus developing our product.
 It would influence what webserver to use and which web browser to support. We
 chose hybi-10, that is what the yaws server that is running, and Chromium 14
 which we developed for, supports.\todo{JD: correct if inaccurate or fix if yaws is updated}
@@ -177,7 +177,27 @@ Using ejabberd as XMPP server was an obvious choice since ejabberd is widely
 regarded as the standard solution for XMPP servers and ejabberd is implemented
 in Erlang which led us to hope that it would play well with our code. \todo{People involved: tell a story}
 \subsubsection{SMTP}
-\todo{Lin: explain}
+SMTP, together with POP and IMAP are the three most prevalent protocols for today's email servers.
+And SMTP itself is used for sending email from client to server while POP or IMAP
+are used for retrieving email from server to client.
+For our email server, we found three quilified candidates: Erlmail, gen\_smtp and erlang-smtp.
+At first sight, Erlmail seemed to be the most competitive one since it supports all these three
+protocols when others support only one or two of them.
+But since our SMTP frontend doesn't directly talk to email clients, we figured out
+that there's no need for email retrieving mechanism for our servers. Therefore,
+we picked gen\_smtp server as our SMTP frontend since all of its modules are only focused
+on SMTP. In our system architecture, the SMTP frontend is the bridge between client side and the backend
+(see Fig.~\ref{fig:smtp_arch}).
+Once the SMTP frontend receives an email from the client side, it will extract the
+email content and pass it to the backend controller. The controller will interpret and execute
+the valid orders carried by the email content, then respond to client side through the SMTP frontend again.
+
+\begin{figure}[h]
+ \centering
+ \includegraphics[width=5cm]{./graphics/smtp_arch.pdf}
+ \caption{Communication between client side and backend}
+ \label{fig:smtp_arch}
+\end{figure}
 
 \subsection{Controller}
 The main characteristic distinguishing requests is whether they belong to a session or not.
@@ -238,7 +258,7 @@ it.
 \subsubsection{Search}
 Our search module provides the functionality to search, for instance, for games,
 based on their properties (like all game parameters). For the implementation of
-search, we relied on the riak extension {\tt riak\_search}. 
+search, we relied on the riak extension {\tt riak\_search}.
 
 Riak search is a search engine that is tightly coupled with the Riak datastore.
 We add a precommit hook to the properties of the bucket whose data is to be
@@ -261,8 +281,8 @@ database. The implementation is quite short and should contain few surprises.
 
 \subsection{Riak}
 The choice of riak as database was a careful one: we evaluated riak, couchDB
-and mnesia but riak was our favourite in the end --- it's scalability features
-are very simple to use and it's potential for scalability is what we needed.
+and mnesia but riak was our favourite in the end --- its scalability features
+are very simple to use and its potential for scalability is what we needed.
 Due to consistency issues, we had to resort to using mnesia for sessions and
 the game joining processes, as it provides transactions.
 
@@ -449,7 +469,7 @@ EUnit.
 Our integration tests tried to cover everything from the frontends down to the
 database. It showed, that the xmpp frontend was the easiest to be tested, so
 our tests for smtp- and web-frontend are only testing the basics --- ``it's
-there and it reacts'' --- while the xmpp tests send orders, register to the 
+there and it reacts'' --- while the xmpp tests send orders, register to the
 system, log in, log off, and so on.
 
 \section{Load Tests}
@@ -457,7 +477,7 @@ In sprint 4, we started to work on load testing our system. We found it very
 hard to get meaningful data from our testruns but even the first, quite informal
 load tests resulted in very valuable information.
 
-Load testing was never ran fully automated. Although that would be very useful, 
+Load testing was never ran fully automated. Although that would be very useful,
 this would have been impossible for us since we would have needed a seperate
 cluster to do that and just could not get that amount of hardware.
 A smaller automated test on one dedicated machine would have probably helped
