@@ -260,7 +260,7 @@ backend; its purpose is to create, update, read, delete users in or from the
 database. The implementation is quite short and should contain few surprises.
 
 \subsection{Riak}
-The choice of riak as database was a carefule one: we evaluated riak, couchDB
+The choice of riak as database was a careful one: we evaluated riak, couchDB
 and mnesia but riak was our favourite in the end --- it's scalability features
 are very simple to use and it's potential for scalability is what we needed.
 Due to consistency issues, we had to resort to using mnesia for sessions and
@@ -373,8 +373,8 @@ display a simple form for him to fill out. After the user is registered, he is
 able to log in using the login textfields on the landing page.
 
 After logging in, the user is shown an overview page (see Fig.~\ref{fig:overview})
- where he is able to search, look at the games he is playing in (if any) and chat
-with other users in-game or off-game.
+ where he is able to search for games, look at the games he is playing in (if any) and
+chat with other users in-game or off-game.
 
 \begin{figure}[h]
  \centering
@@ -384,7 +384,7 @@ with other users in-game or off-game.
 \end{figure}
 
 The web frontend has several key advantages over the two purely text based
-frontends:\\
+frontends:
 \begin{itemize}
 \item the user does not need to remember his session id
 \item the user sees a graphical map (generated using a HTML5 canvas!),
@@ -406,7 +406,6 @@ frontends:\\
  \caption{the orders drop-down lists}
  \label{fig:orders}
 \end{figure}
-
 
 \subsection{XMPP}
 \todo{Rahim: explain}
@@ -474,7 +473,14 @@ spent very well, since it ensured that performance drops because of single
 commits were noticed in several instances --- and their cause analyzed.
 \todo{include last minute results}
 \section{Failure Tests}
-\todo{jdb: summarize your slides?}
+Our failure tolerance test starts up a cluster of two backends A and B and starts
+a game.
+Since we do not know on which backend the game has been started, we halt
+backend~A. If fault tolerance works, we can now be sure that the game is on backend~B
+(either it was there in the first place or it got restarted there).
+We start the backend~A again and then halt backend~B. Now the game gets moved to
+backend~A. This way, we can be sure that the game was moved at least once.
+If the game continues to run, the test was successful.
 
 \chapter{Related Work}
 %\hi{Similarities with existing products/systems. How are you similar and how are you different? What do you do better? What can you learn from what's already out there?
@@ -510,9 +516,10 @@ a world map). We have the code to handle new maps, but we don't have the map
 data. Creating those would be easy but involve a lot of typing.
 
 Our rules are not perfect yet, they are still a bit rough around the edges but
-in probably one or two person weeks would work completely satisfying.
+in probably one or two person weeks would work satisfyingly well.
 When it comes to load, we see no problem in handling all web diplomacy
-players worldwide (email- and browser-based) with one backend-machine and maybe more extra frontend machines.
+players worldwide (email- and browser-based) with one backend-machine and maybe
+more extra frontend machines.
 
 So, in short: to fully catch up with the alternatives, we would need to invest
 in bug fixing and user interaction.
