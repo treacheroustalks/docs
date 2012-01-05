@@ -231,7 +231,7 @@ Chromium 14 implement.
 \subsubsection{XMPP}
 Using ejabberd as XMPP server was an obvious choice since ejabberd is the
 standard solution for XMPP servers and ejabberd is implemented
-in Erlang which led us to hope that it would play well with our code.\todo{People involved: tell a story}
+in Erlang which led us to hope that it would play well with our code.
 
 There are three ways to implement integration with ejabberd.
 
@@ -427,10 +427,9 @@ games, based on their properties (like all game parameters). For the
 implementation of search, we relied on the riak extension {\tt riak\_search}.
 
 Riak search is a search engine that is tightly coupled with the Riak datastore.
-We add a precommit hook to the properties of the bucket whose data is to be
-searched along with search schema which specifies how the object is to be indexed. \todo{``Bucket'': either explain or don't use}
-Whenever a new object is added or an old one updated, the object is indexed
-(tokenization with standard Lucene analyzers) and saved.
+We add a precommit hook so that whenever a new object is added or an old one
+updated, the object is indexed (tokenization with standard Lucene analyzers)
+and saved.
 It provides a rich query language consisting of term searches, field searches,
 boolean operators and wildcards to fetch matching objects ordered by relevance.
 
