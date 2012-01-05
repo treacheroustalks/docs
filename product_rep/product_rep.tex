@@ -132,6 +132,7 @@ transform the input into messages which are sent to the controller.
 The controller filters out illegal messages according to the session database
 and the user privileges before handing them off to the backends --- which will
 respond with an answer.
+
 \subsubsection{Modularity --- and its Relation to Scalability}
 One thing that is not immediately visible in our architecture is the fact that
 the individual modules are very independent of each other. Even though the
@@ -147,7 +148,8 @@ Our architecture, therefore, inherently supports scaling out very well.
 Since the frontends are not depending on each other at all, we did not spend
 resources on load testing them --- we needed that
 time to benchmark and load test our backends and riak nodes.
-\subsubsection*{Process groups}
+
+\subsubsection{Process groups}
 \label{sec:process_groups}
 The system uses process groups to provide load balancing by distributing work
 across nodes.
@@ -159,6 +161,34 @@ Work is then distributed across the running nodes and prevents one node from
 receiving all calls. But, as it is done randomly it does not guarantee equal
 distribution, but during load testing we didn't see that the random selection
 caused any bottlenecks.
+
+\subsubsection{Stateless design}
+One of the ways to scale a system is to use a shared nothing (SN) architecture
+where every node is self-sufficient and the system has no single bottleneck.
+This allows for a distributed system that is both scalable and fault tolerant.
+The implementation of a SN architecuture adds a constraint that individual
+nodes can only have state that could be lost or must be stateless.
+
+With this in mind, our architecture was designed to allow applications to
+be distributed across the physical machines in various configurations
+(see Fig.~\ref{fig:arch}). All the system state is moved to the database
+and some nodes that have state can be restored from the database, in
+the event of failure.
+
+We did have to use state in certain parts of the system due to the
+distributed nature of the application. Briefly, the parts of the system
+with state and the reasoning behing them are,
+
+\begin{itemize}
+\item Game timer --- A game has various events associated with it and
+tracking these events with time needs a process with a certain amount
+of state.
+\item Game join process --- Requests from multiple users joining the same
+game needs to be serialized to avoid concurrency issues.
+\item User session --- Multiple requests from the same user needs to be
+ordered since without the ordering the requests can arrive at the backend
+at different times creating inconsistent data.
+\end{itemize}
 
 \subsection{Frontends}
 \label{sec:frontends}
