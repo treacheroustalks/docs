@@ -111,8 +111,6 @@ performance characteristics and leaving the AI players for future work.
 \subsection{Overview}
 \todo{How modules communicate with each other}
 % http://redmine.pcs/projects/dip/wiki/Communication
-\todo{Supervision tree}
-% http://redmine.pcs/projects/dip/wiki/Supervision_tree
 
 \begin{figure}[h]
  \centering
@@ -313,9 +311,7 @@ other users.
 
 \subsection{Riak}
 \label{sec:riak}
-\todo{more details on how riak works}
 \todo{reference to explain CAP controls}
-\todo{explain, what a node is}
 The choice of riak as database was a careful one: we evaluated riak, couchDB
 and mnesia but riak was our favourite in the end --- its scalability features
 are very simple to use and its potential for scalability is what we needed.
@@ -326,11 +322,25 @@ Riak proved to be a good choice for us since its performance parameters (called
 ``CAP controls'' in riak-lingo) are very easy to tune and it is quite well
 documented how riak behaves under load. The scalability problems we had
 came from using the search module too much.
+
+Riak is a distributed key/value store that connects an arbitrary number of
+{\em nodes} to form a cluster. All of these nodes can --- but don't have to ---
+run on different machines (and do so in our standard setup). As soon as one
+node receives a write for one key/value pair, the node will make sure that the
+data is written on a certain number of nodes. That number can be chosen from
+$[1 \ldots N]$ where $N$ is the number of nodes.
+No node in a riak cluster is privileged, they all have exactly the same
+responsibilities which makes the architecture simpler.
+The ease of adding nodes to a running riak cluster is one of its main
+advantages, data are redistributed in order to achieve fair distribution after
+one node is added. This can, of course, have performance implications but they
+were not measured by us.
+
 \subsubsection{eleveldb}
-Another problem was riak's storage backend. Riak has the feature to switch the
+Riak's storage backend was a problem. Riak has the feature to switch the
 storage backend --- the way, key/value pairs are stored on a node.
 We initially used {\tt eleveldb} because it supported secondary indices, a
-feature we wanted have. {\tt eleveldb} however showed degrading performance
+feature we wanted. However, {\tt eleveldb} showed degrading performance
 in our context: the throughput of database operations was decreasing linearly
 over time, down to zero. We could not pinpoint the problem, so we had to switch
 the storage backend to {\tt bitcask}, riak's standard storage backend.
@@ -344,7 +354,7 @@ concurrency issues. We dealt with them by making sure that the user
 can use only one frontend at a time.
 
 Another issue was that multiple orders sent by the same user can arrive at the
-backend in a different sequence creating inconsistent data. This was
+backend in a different sequence, thereby creating inconsistent data. This was
 fixed by serializing the user's commands.
 
 The implementation of the above two solutions is not possible using Riak since
