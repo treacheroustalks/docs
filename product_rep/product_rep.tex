@@ -150,6 +150,7 @@ Since the frontends are not depending on each other at all, we did not spend
 resources on load testing them --- we needed that
 time to benchmark and load test our backends and riak nodes.
 \subsubsection*{Process groups}
+\label{sec:process_groups}
 The system uses process groups to provide load balancing by distributing work
 across nodes.
 This is done by each process in the backend joininng the process group for its
@@ -217,7 +218,7 @@ ejabberd doesn’t handle the scaling of rosters very well
 (known to fail for clients > 40k).
 \item Component - A component is a trusted piece of an XMPP server that can send and receive arbitrary stanzas. 
 In other words, we can add a module to ejabberd and define a virtual domain to
-get all messages that are sent to this domian.  
+get all messages that are sent to this domain.  
 Because the name of a component is a domain (example: tt.localhost), a
 component can pretend to be many users. 
 Any stanza addressed to service@tt.localhost will be delivered to
@@ -586,6 +587,45 @@ Additional notes on the code,
 \item The public API of all the modules has specs and edocs.
 \end{itemize}
 
+\newpage
+\section{Supervision}
+A supervisor in Erlang is a process that supervises processes it has spawned.
+The supervisor can spawn new child processes and if one of them would die, it
+can act according to its configured restart-policy, for example, it could be
+configured to never restart children or alway restart them, independent of the
+``cause of death''.\\
+
+Each application (that is not only a library) in our backend and also the
+controller have a supervision tree structure that enables an operator to fine
+tune the number of workers of each application, it also makes it possible
+to inspect the status of applications on each server.
+
+As seen in Fig.~\ref{fig:service_app}, there is one process group
+(see \ref{sec:process_groups}) for the application workers, and a ``management''
+group. The processes in the worker group are the ones doing the heavy work in an
+appllication. The ``manager'' of each application in each node makes it
+possible to change the number of workers, it also makes it possible to traverse
+the group of managers to be able to get the status of each application on every
+node it is running on. The supervisors will always restart its workers if they
+die unexpectedly.
+\begin{figure}[h]
+ \centering
+ \includegraphics[width=8cm]{./graphics/Service_Application.png}
+ \caption{General supervision structure for applications, double-rings are supervisors}
+ \label{fig:service_app}
+\end{figure}
+
+The game application's supervision tree is slightly different, as it also has a
+number of game timers, which don't belong to a process group as seen in
+Fig.~\ref{fig:game_app}. The game timer processes have have their own supervisor
+which will restart the processes in case the process would die in an unnatural
+way, that is if the game has not yet finished nor been stopped by an operator.
+\begin{figure}[h]
+ \centering
+ \includegraphics[width=10cm]{./graphics/game_Application.png}
+ \caption{Supervision tree for the game application}
+ \label{fig:game_app}
+\end{figure}
 
 \chapter{Treacherous Talks}
 \section{The Three Interfaces}
