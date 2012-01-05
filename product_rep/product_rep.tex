@@ -1,5 +1,6 @@
 \documentclass[11pt,a4paper]{report}
 \usepackage[utf8]{inputenc}
+\usepackage[numbers]{natbib}
 \usepackage{hyperref}
 \usepackage{graphicx}
 \usepackage{datetime}
@@ -36,7 +37,7 @@ To conclude, some of our relative weaknesses are mentioned.
 }
 
 \chapter{Introduction}
-Diplomacy is a board game, invented in the 1950s where the goal is to try to
+Diplomacy\cite{diplomacy} is a board game, invented in the 1950s where the goal is to try to
 conquer Europe just before WW I. You come close to this goal by talking to the
 other players --- by diplomacy --- and making them your allies. And you achieve
 it by attack them when they do not expect it.
@@ -80,7 +81,10 @@ web~interface). Those interfaces are:\\
 \end{enumerate}
 
 \subsection{Scalability}
-The system should be scalable. Scalability in this context refers to horizontal scaling where the system should be able to handle more load by simply adding more nodes. No further explanations were provided regarding this feature, but since we saw it as a challenge we invested a lot of work into it.
+The system should be scalable. Scalability in this context refers to horizontal
+scaling where the system should be able to handle more load by simply adding more
+nodes. No further explanations were provided regarding this feature, but since we
+saw it as a challenge we invested a lot of work into it.
 
 \subsection{Fail-Safety}
 The system should be highly available. We interpreted this by assuming that we
@@ -89,7 +93,8 @@ might have been able to get away with less work but this feature as well was
 too interesting too resist focusing on it.
 
 \subsection{Websockets}
-Websockets are a tcp-like connection between a browser and a webserver.
+Websockets\cite{websockets} are a tcp-like connection between a browser and a
+webserver.
 Their novelty is that they are not implemented by polling which makes them quite
 fast.
 They can be used to send javascript that updates only parts of the client page
@@ -122,7 +127,7 @@ performance characteristics and leaving the AI players for future work.
 Our Architecture is divided in three main blocks, the {\em frontends}, the
 {\em controller}, and the {\em backends}. In Fig.~\ref{fig:arch} a running
 cluster as it could be configured is shown. {\em server 1} shows a full
-configuration as it includes all three frontends, a backend and riak. Riak, our
+configuration as it includes all three frontends, a backend and Riak. Riak, our
 database is explained in sec.~\ref{sec:riak}.
 The operator, however, is free to choose to only run a specific selection of
 these and can combine them freely.
@@ -143,16 +148,16 @@ web~frontend is the bottleneck, we could add more servers to the cluster that
 run only a web~frontend (see Fig.~\ref{fig:arch}, ``Server n-1'').
 A controller, however is mandatory, since in our implementation, the controller
 is responsible for starting the other applications.
-We can do the same with each frontend types, with backends and with riak nodes.
+We can do the same with each frontend types, with backends and with Riak nodes.
 Our architecture, therefore, inherently supports scaling out very well.
 Since the frontends are not depending on each other at all, we did not spend
 resources on load testing them --- we needed that
-time to benchmark and load test our backends and riak nodes.
+time to benchmark and load test our backends and Riak nodes.
 
 \subsubsection{Process groups}
 \label{sec:process_groups}
-The system uses process groups to provide load balancing by distributing work
-across nodes.
+The system uses process groups\cite{process_groups} to provide load balancing by
+distributing work across nodes.
 This is done by each process in the backend joininng the process group for its
 application. A calling process can then use the process groups to find a
 process to call. The selection is done semi-randomly, if there is not a local
@@ -163,7 +168,8 @@ distribution, but during load testing we didn't see that the random selection
 caused any bottlenecks.
 
 \subsubsection{Stateless design}
-One of the ways to scale a system is to use a shared nothing (SN) architecture
+One of the ways to scale a system is to use a shared nothing (SN) 
+architecture \cite{sn_arch}
 where every node is self-sufficient and the system has no single bottleneck.
 This allows for a distributed system that is both scalable and fault tolerant.
 The implementation of a SN architecuture adds a constraint that individual
@@ -201,10 +207,19 @@ After deciding to use nitrogen as a web framework, we had to drop nitrogen
 because of the websockets requirement for reasons detailed below.
 Yaws is configured as a ``/" application module (appmod) so that we can have a
 single entry point for handling all the requests. Server side includes (ssi) are
-also used to load static content via ajax.
+also used to load static content via AJAX.
 
-The web frontend relies heavily on javascript since it contains a good part of the application logic handling user interactions, requests, responses and game functionalities. We also use the toolkit Bootstrap\cite{bootstrap} for the user interface which allows us to quickly develop clean pages.\\
-\todo{Karl: ``what are clean pages?''}
+The web frontend relies heavily on javascript since it contains a good part
+of the application logic handling user interactions, requests, responses
+and game functionalities. We use the javascript library jQuery\cite{jquery}
+to update the DOM
+elements and make AJAX requests.
+
+We use the toolkit Bootstrap\cite{bootstrap} for the user interface which
+allows us to quickly develop web pages. It includes base CSS and HTML for
+typography, forms, buttons, tables, grids, navigation, and more. Using it
+reduced the time needed for web development, allowing us to focus on the
+backend.
 
 We had the option to extend Nitrogen to support websockets, but after spending
 some time investigating the possibility and walking through the code to
@@ -306,7 +321,8 @@ Those responsible for requests with a session and those for requests without.
  \label{fig:controller:session_proc}
 \end{figure}
 
-The simple ones without sessions are completely stateless and can handle requests from any user.
+The simple ones without sessions are completely stateless and can handle requests
+from any user.
 A fixed number of them is spawned on startup and will handle requests on
 arrival.
 Their main responsibilities are registration, login and the like.
@@ -339,16 +355,16 @@ other users.
 
 \subsection{Riak}
 \label{sec:riak}
-\todo{reference to explain CAP controls}
-The choice of riak as database was a careful one: we evaluated riak, couchDB
-and mnesia but riak was our favourite in the end --- its scalability features
+The choice of Riak as database was a careful one: we evaluated Riak, couchDB
+and mnesia but Riak was our favourite in the end --- its scalability features
 are very simple to use and its potential for scalability is what we needed.
 Due to consistency issues, we had to resort to using mnesia for sessions and
 the game joining processes, as it provides transactions.
 
 Riak proved to be a good choice for us since its performance parameters (called
-``CAP controls'' in riak-lingo) are very easy to tune and it is quite well
-documented how riak behaves under load. The scalability problems we had
+``CAP controls''\cite{cap_controls} in riak-lingo) are very easy to tune and it is
+quite well
+documented how Riak behaves under load. The scalability problems we had
 came from using the search module too much.
 
 Riak is a distributed key/value store that connects an arbitrary number of
@@ -357,9 +373,9 @@ run on different machines (and do so in our standard setup). As soon as one
 node receives a write for one key/value pair, the node will make sure that the
 data is written on a certain number of nodes. That number can be chosen from
 $[1 \ldots N]$ where $N$ is the number of nodes.
-No node in a riak cluster is privileged, they all have exactly the same
+No node in a Riak cluster is privileged, they all have exactly the same
 responsibilities which makes the architecture simpler.
-The ease of adding nodes to a running riak cluster is one of its main
+The ease of adding nodes to a running Riak cluster is one of its main
 advantages, data are redistributed in order to achieve fair distribution after
 one node is added. This can, of course, have performance implications but they
 were not measured by us.
@@ -371,7 +387,7 @@ We initially used {\tt eleveldb} because it supported secondary indices, a
 feature we wanted. However, {\tt eleveldb} showed degrading performance
 in our context: the throughput of database operations was decreasing linearly
 over time, down to zero. We could not pinpoint the problem, so we had to switch
-the storage backend to {\tt bitcask}, riak's standard storage backend.
+the storage backend to {\tt bitcask}, Riak's standard storage backend.
 Bitcask does not support secondary indices, and because of that it was
 necessary to use {\tt riak\_search} more --- which led to scalability
 issues\ldots
@@ -422,20 +438,22 @@ about it.
 \subsubsection{Search}
 Our search module provides the functionality to search, for instance, for
 games, based on their properties (like all game parameters). For the
-implementation of search, we relied on the riak extension {\tt riak\_search}.
+implementation of search, we relied on the Riak extension {\tt riak\_search}.
 
 Riak search is a search engine that is tightly coupled with the Riak datastore.
 We add a precommit hook so that whenever a new object is added or an old one
 updated, the object is indexed (tokenization with standard Lucene analyzers)
 and saved.
+
 It provides a rich query language consisting of term searches, field searches,
 boolean operators and wildcards to fetch matching objects ordered by relevance.
 
 This feature comes with a price though and should be used with caution.
 During load testing we discovered, that it should be avoided for often updated data.
-As it has to re-index all fields of an object on every write it can kill the performance.
+As it has to re-index all fields of an object on every write it can kill the
+performance.
 Therefore we tried minimizing writes on search indexed data and if possible not
-to use the riak search feature at all.
+to use the Riak search feature at all.
 
 \subsubsection{User Management}
 The user management module's purpose is to create, update, read, delete users
@@ -510,7 +528,7 @@ and each user is only allowed to be logged in once at a time.
 To ensure only one active session the login has to consider concurrency as well.
 Figure \ref{fig:concurrency:login} shows how the login works.
 Any old session needs be terminated before we can start a new one.
-Also we use mnesia instead of riak to store session information,
+Also we use mnesia instead of Riak to store session information,
 as it supports transactions.
 
 Unfortunately this still leaves one case.
@@ -537,14 +555,16 @@ Multi user concurrency involves the data that can be written by multiple users,
 like joining or updating a game.
 In general we tried to  design our database schema to avoid shared writable data
 as much as possible.
-For example the game orders for a certain phase could be stored as one value in riak,
+For example the game orders for a certain phase could be stored as one value in Riak,
 instead we keep one value for each player.
 This leads to seven reads on phase change, but order writing does not have conflicts.
 
 Nevertheless, we could not avoid it completely.
 Multiple users might try to join the same game.
-There might be a conflict, if they want to play the same country or only one spot is left.
-Besides the creator of the game is no longer allowed to update the game once a player has joined.
+There might be a conflict, if they want to play the same country or only one spot
+is left.
+Besides the creator of the game is no longer allowed to update the game once a
+player has joined.
 Therefore we have a game joining process for every game that has not started yet.
 All join and update requests go through that process, thus ensuring consistency.
 To ensure only one such process per game we use mnesia due to its transactions.
@@ -648,7 +668,8 @@ die unexpectedly.
 \begin{figure}[h]
  \centering
  \includegraphics[width=8cm]{./graphics/Service_Application.png}
- \caption{General supervision structure for applications, double-rings are supervisors}
+ \caption{General supervision structure for applications, double-rings are
+supervisors}
  \label{fig:service_app}
 \end{figure}
 
@@ -672,7 +693,8 @@ display a simple form for him to fill out. After the user is registered, he is
 able to log in using the login textfields on the landing page.
 
 After logging in, the user is shown a dashboard page (see Fig.~\ref{fig:dashboard})
- where he is able to search for games, look at the games he is playing in (if any) and
+where he is able to search for games, look at the games he is playing in (if any)
+and
 chat with other users in-game or off-game.
 
 \begin{figure}[h]
@@ -1235,5 +1257,9 @@ army ven -> tri
 army tyr support a ven -> tri
 END
 \end{verbatim}
+
+\renewcommand\bibname{References}
+\bibliographystyle{unsrtnat}
+\bibliography{product_rep}
 
 \end{document}
