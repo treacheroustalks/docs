@@ -987,6 +987,7 @@ tarball that contains everything needed to run the system. By executing {\tt
 of everything inside that directory with {\tt make tar\_release}. The resulting
 tarball is outputted to the {\tt system-release} directory.
 \section{Installing from a release tarball}
+\label{sec:installing}
 The resulting tarball from the build step is self-contained and can be freely
 moved to other computers running the same version of the operating system. To
 install the system, simply extract the tarball to a location of your choice. As
@@ -1077,8 +1078,9 @@ description of the more common ones follow.
 
 By using the {\tt --setconfig} switch, the Cluster Manager will try to connect
 to all specified System Managers and give them the configuration they should
-apply. Note that this does automatically apply the configuration to a running
-system. To be able to use the new configuration, the system must be restarted.
+apply. Note that this does not automatically apply the configuration to a
+running system. To be able to use the new configuration, the system must be
+restarted.
 
 The {\tt --join} switch is intended to be used whenever a Riak node is added to
 the cluster. It will make any new Riak nodes join the already present
@@ -1095,9 +1097,99 @@ was extracted and then execute {\tt system-release/tt/bin/cluster\_manager}. You
 also need to supply the name of the configuration file to use and the action to
 perform.
 \end{sloppypar}
-\chapter{Maintenance Instructions}
-\todo{Erik}
+\mbox{}\\
+Here is an example run of the Cluster Manager:
+\begin{verbatim}
+$ ./bin/cluster_manager --setconfig --start etc/example.config
+update_config on "127.0.0.1" was ok
+start_release riak on "127.0.0.1" was ok
+start_release backend on "127.0.0.1" was ok
+start_release web_frontend on "127.0.0.1" was ok
+start_release xmpp_frontend on "127.0.0.1" was ok
+start_release smtp_frontend on "127.0.0.1" was ok
+informing 'backend@127.0.0.1', result was: ok
+$
+\end{verbatim}
+\section{Running on a non-bundled Riak installation}
+There are a few additional things to consider if you want to run Treacherous
+Talks on top of an already running Riak installation instead of using the
+bundled one.
 
+Some parts of Treacherous Talks are dependent on Riak Search and special search
+schemas. These schemas need to be installed on each Riak node in a cluster
+before starting the Treacherous Talks system. This is done automatically when
+using the bundled Riak instance and configuring it via the Cluster Manager.
+
+When using a non-bundled Riak installation you need to do this yourself. Each
+schema in the {\tt system-release/tt/riak} directory must be installed in each
+Riak node. Please consult the Riak manual for the exact steps you need to
+perform to accomplish this.
+\todo{Add proper reference to http://wiki.basho.com/Riak-Search---Schema.html}
+
+You can still use the Cluster Manager for configuring backends and frontends in
+this scenario. Remove the riak tuple from the example configuration and ensure
+that the db application in the backend knows how to connect to an already
+installed Riak node. Ensure that Riak is started before the rest of the system
+is started.
+\chapter{Maintenance Instructions}
+\section{Adding a host to a running cluster}
+Sometimes the need arise to add another server to an already running
+cluster. This is a rather simple operation when using the Cluster Manager.
+
+First, ensure that the system has been properly installed (see section
+~\ref{sec:installing}) on the new node. Start the System Manager if not already
+started on that node. Then add the configuration of the new node to the
+system-wide configuration file.
+
+Finally, run the Cluster Manager with the {\tt --setconfig} and {\tt --start}
+switches. The result will be that all releases defined in the configuration file
+will be started, included any new ones. If a release is already running nothing
+will be done to it and it will be reported by the Cluster Manager as {\tt
+  \{error, release\_is\_already\_started\}}. This is a harmless message
+indicating that nothing was done for that release.
+\section{Removing a host from a running cluster}
+Removing a server from a running cluster is normally a straightforward
+procedure, but a bit more complicated than adding a server. You cannot simply
+remove its entries from the system-wide configuration file and then expect the
+Cluster Manager to stop it for you since the configuration declares what
+\emph{should} be running on the cluster, not the current state of the cluster.
+
+You have three choices for removing a host:
+\begin{enumerate}
+  \item Restarting the whole cluster.
+  \item Stopping the system manually on the specific host.
+  \item Creating a special configuration file for stopping a specific host.
+\end{enumerate}
+
+The first solution is simple: just remove the host from the configuration file,
+stop and start the cluster using the Cluster Manager. Of course, this has the
+disadvantage of making the system unavailable for some time.
+
+\begin{sloppypar}
+The second solution, stopping the system manually, is a more attractive
+solution. To do this, go to the installation directory on the host you want to
+remove. For each release running on the host, run the corresponding executable
+with the argument {\tt stop}. Example: {\tt system-release/tt/bin/backend
+  stop}.
+\end{sloppypar}
+
+The third solution is probably the best one, but requires some effort. Copy your
+old configuration file before removing the entry describing the host you want to
+remove. Remove everything else in the copied configuration file except for the
+host you want to remove from the cluster. Now use this configuration when
+running Cluster Manager with the {\tt --stop} switch. Only the host you want to
+remove has now been stopped.
+
+Nothing else needs to be done for the Treacherous Talks system when removing a
+host. Any games running on the now stopped backend will be automatically moved
+to other backends.
+
+If you want to remove a Riak node permanently, you should tell the Riak cluster
+about it so that it can redistribute the data on that node onto other nodes in
+the cluster. Please see the Riak manual for more information.
+\todo{Add proper reference to http://wiki.basho.com/Adding-and-Removing-Nodes.html}
+\section{System Operator Interface}
+\todo{Fill in what the Op interface can do}
 \chapter{Text based commands}
 \label{sec:textbasedcommands}
 
