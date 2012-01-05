@@ -715,13 +715,11 @@ If user sends  ``HELP'' or any unknown command to our component, it will return
 the list of all valid commands. All commands can be found in appendix
 \ref{sec:textbasedcmd}.
 Each command starts with the command keyword and must end with ``END'' tag.
-All commands and keywords should be entered in capital letters e.g
-see appendix \ref{sec:examplecmd}. If the user enters some text before the
-command keyword or after the end keyword, they are simply ignored. Users can get
-the list of all mandatory fields for each command by sending the command name
-and ``END''.
+If the user enters some text before the command keyword or after the end
+keyword, they are simply ignored. Users can get the list of all mandatory fields
+for each command by sending the command name and ``END''.
 
-The user will get a unique session ID after logging in. The session ID should be 
+The user will get a unique session ID after logging in. The session ID should be
 stored, because it is necessary for all the future commands.
 
 \subsection{SMTP}
@@ -1203,7 +1201,8 @@ END
 \end{verbatim}
 
 where \verb|FIELD| is the name of the field and \verb|<data>| is the
-input from the user.
+input from the user, \emph{all commands and fieldnames must be in capital
+letters}.
 
 
 \subsection*{Example commands}
