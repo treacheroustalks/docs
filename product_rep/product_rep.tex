@@ -114,15 +114,6 @@ performance characteristics and leaving the AI players for future work.
 
 \section{Architecture}
 \subsection{Overview}
-\todo{How modules communicate with each other}
-% http://redmine.pcs/projects/dip/wiki/Communication
-
-\begin{figure}[h]
- \centering
- \includegraphics[width=13cm]{./graphics/arch.pdf}
- \caption{A possible cluster.}
- \label{fig:arch}
-\end{figure}
 
 Our Architecture is divided in three main blocks, the {\em frontends}, the
 {\em controller}, and the {\em backends}. In Fig.~\ref{fig:arch} a running
@@ -132,11 +123,47 @@ database is explained in sec.~\ref{sec:riak}.
 The operator, however, is free to choose to only run a specific selection of
 these and can combine them freely.
 
+\begin{figure}[h]
+ \centering
+ \includegraphics[width=13cm]{./graphics/arch.pdf}
+ \caption{A possible cluster.}
+ \label{fig:arch}
+\end{figure}
+
 The responsibilities are not surprising: the frontends receive user input and
 transform the input into messages which are sent to the controller.
 The controller filters out illegal messages according to the session database
 and the user privileges before handing them off to the backends --- which will
 respond with an answer.
+
+\subsubsection{Communication between modules}
+We follow the MVC\cite{mvc} (Model~View~Controller) Pattern.
+The View contains all the supported User Interfaces (Web, SMTP, XMPP). The
+controller is an application that talks to the Model. In the Model there
+are backend services (Game, Messaging, User Management) and the database.
+Some of the backend services talk to each other, while others work completely
+independent. Each box in Fig.~\ref{fig:mod_conn} is an OTP application, and
+each of them can be distributed onto multiple nodes and work simultaneously.
+The system is database-driven, that is, the backend services are stateless
+(see ~\ref{sec:stateless}), and any request can be handled
+by any node. The communication between the modules is shown in the
+Fig.~\ref{fig:mod_conn}
+
+\begin{figure}[h]
+ \centering
+ \includegraphics[width=10cm]{./graphics/Modules_Communication.png}
+ \caption{Communication between modules}
+ \label{fig:mod_conn}
+\end{figure}
+
+Arrows in the Fig.~\ref{fig:mod_conn} represent messages, where one application
+sends a message to another one. It calls a function in the API library
+which sends a message to a worker process in the target application. The worker
+process is chosen from the process group for workers
+(see Fig.~\ref{fig:service_app}) in that service application. In the
+Fig.~\ref{fig:mod_conn} you can see two databases. The one in the bottom, Riak
+(see ~\ref{sec:riak}), is the main database. The other one, Session
+(see Mnesia ~\ref{sec:mnesia}), is part of the controller and stores sessions.
 
 \subsubsection{Modularity --- and its Relation to Scalability}
 One thing that is not immediately visible in our architecture is the fact that
@@ -162,13 +189,14 @@ This is done by each process in the backend joininng the process group for its
 application. A calling process can then use the process groups to find a
 process to call. The selection is done semi-randomly, if there is not a local
 process to call, a random process is used out of that group.
-Work is then distributed across the running nodes and prevents one node from 
+Work is then distributed across the running nodes and prevents one node from
 receiving all calls. But, as it is done randomly it does not guarantee equal
 distribution, but during load testing we didn't see that the random selection
 caused any bottlenecks.
 
 \subsubsection{Stateless design}
-One of the ways to scale a system is to use a shared nothing (SN) 
+\label{sec:stateless}
+One of the ways to scale a system is to use a shared nothing (SN)
 architecture \cite{sn_arch}
 where every node is self-sufficient and the system has no single bottleneck.
 This allows for a distributed system that is both scalable and fault tolerant.
@@ -203,7 +231,7 @@ implementation of front-end logic very generic.
 
 \subsubsection{Web}
 The web frontend is running Yaws as a web server.
-After deciding to use nitrogen as a web framework, we had to drop nitrogen 
+After deciding to use nitrogen as a web framework, we had to drop nitrogen
 because of the websockets requirement for reasons detailed below.
 Yaws is configured as a ``/" application module (appmod) so that we can have a
 single entry point for handling all the requests. Server side includes (ssi) are
@@ -240,7 +268,7 @@ on what version to support had to be made in the beginning of the project, so we
 could focus developing our product.
 It would influence what webserver to use and which web browser to support. We
 chose the ``hybi-10'' version of the protocol --- this is the version, Yaws and
-Chromium 14 implement. 
+Chromium 14 implement.
 \todo{JD: correct if inaccurate or fix if Yaws is updated}
 
 \subsubsection{XMPP}
@@ -287,7 +315,7 @@ SMTP is used for sending emails from clients to servers while POP or IMAP
 are used for retrieving email from servers to clients.
 For our email server, we found three quilified candidates: Erlmail, gen\_smtp
 and erlang-smtp.
-At first sight, Erlmail seemed to be the most competitive one since it 
+At first sight, Erlmail seemed to be the most competitive one since it
 supports all these three protocols when others support only one or two of them.
 However, since our SMTP frontend doesn't directly talk to email clients, we
 figured out that there's no need for email retrieving mechanism for our
@@ -393,6 +421,7 @@ necessary to use {\tt riak\_search} more --- which led to scalability
 issues\ldots
 
 \subsubsection{Mnesia}
+\label{sec:mnesia}
 A user can access our system from multiple frontends resulting in
 concurrency issues. We dealt with them by making sure that the user
 can use only one frontend at a time.
@@ -729,9 +758,9 @@ frontends:
 \end{figure}
 
 \subsection{XMPP}
-Users who log into our XMPP server, will get the address of the component that 
-commands should be sent to. If user has an account on any other XMPP servers, 
-the commands should be sent to ``service@tt.localhost''. 
+Users who log into our XMPP server, will get the address of the component that
+commands should be sent to. If user has an account on any other XMPP servers,
+the commands should be sent to ``service@tt.localhost''.
 
 If user sends  ``HELP'' or any unknown command to our component, it will return
 the list of all valid commands. All commands can be found in appendix
