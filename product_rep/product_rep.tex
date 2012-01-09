@@ -1193,7 +1193,36 @@ about it so that it can redistribute the data on that node onto other nodes in
 the cluster. Please see the Riak manual for more information.
 \todo{Add proper reference to http://wiki.basho.com/Adding-and-Removing-Nodes.html}
 \section{System Operator Interface}
-\todo{Fill in what the Op interface can do}
+Being a system operator opens up a few special features, some are available as
+text based commands but all are available in the web interface of the operator:
+\begin{itemize}
+\item Adding or removing moderators (web only)
+\item Stop games (web only)
+\item Overview games including moves and messaging (web only)
+\item Blacklist or whitelist players
+\item Receive reports about issues from players (web only)
+\item Send messages to players in any game
+\item View the status of the system (web only)
+\item View the status of Riak
+\end{itemize}
+
+The status of the system gives information about which applications are running
+on which nodes, the number of workers they have and information about their
+message queue lengths. This can be used to determine the health of the system
+and see if an application needs to be started on another node or perhaps if it
+could be fixed by increasing/decreasing the number of workers.
+
+\subsection{Moderators}
+A moderator is a priviledged user which can access a moderator page in the web
+interface.\\
+
+The following features are available for moderators:
+\begin{itemize}
+\item Blacklist or whitelist players
+\item Send messages to players in any game
+\item Receive reports from players reporting other players (web only)
+\end{itemize}
+
 \chapter{Text based commands}
 \label{sec:textbasedcommands}
 
@@ -1330,6 +1359,20 @@ required: SESSION, CONTENT
 
 REPORTISSUE
 required: SESSION, CONTENT
+
+
+MODERATOR and OPERATOR only commands:
+
+POWERMESSAGE
+required: SESSION, GAMEID, CONTENT
+optional: TO
+
+BLACKLIST
+required: SESSION, NICKNAME
+
+WHITELIST
+required: SESSION, NICKNAME
+
 \end{verbatim}
 
 
