@@ -219,13 +219,16 @@ choose to run some modules alone. \\
 If we would, for example, find out that our system is slow because the
 web~frontend is the bottleneck, we could add more servers to the cluster that
 run only a web~frontend (see Fig.~\ref{fig:arch}, ``Server n-1'').
-A controller, however is mandatory, since in our implementation, the controller
-is responsible for starting the other applications.
-We can do the same with each frontend types, with backends and with Riak nodes.
+We can do the same with each of the frontend types, with backends and with Riak nodes.
 Our architecture, therefore, inherently supports scaling out very well.
-Since the frontends are not depending on each other at all, we did not spend
-resources on load testing them --- we needed that
-time to benchmark and load test our backends and Riak nodes.
+
+The controller application can be on any physical machine and any node. We
+decided to run it on each backend node. That distributes session management work
+evenly between backend nodes and has not given performance concerns.
+
+Since the frontends are independent from each other, we did not expect issues
+scaling with additional frontends. We therefore focused on testing the performance
+of our backends and Riak nodes, as shown in Section \ref{load_tests}.
 
 \subsubsection{Process groups}
 \label{sec:process_groups}
@@ -878,7 +881,7 @@ our tests for SMTP- and web-frontend are only testing the basics --- ``it's
 there and it reacts'' --- while the XMPP tests send orders, register to the
 system, log in, log off, and so on.
 
-\section{Load Tests}
+\section{Load Tests}\label{load_tests}
 In sprint 4, we started to work on load testing our system. We found it very
 hard to get meaningful data from our testruns but even the first, quite informal
 load tests resulted in very valuable information.
@@ -898,16 +901,22 @@ them and did the actual load generation. But: the time spent on this was time
 spent very well, since it ensured that performance drops because of single
 commits were noticed in several instances --- and their cause analyzed.
 \todo{include last minute results}
+
 \section{Failure Tests}
 Our failure tolerance test starts up a cluster of two backends A and B and
-starts a game.
+starts a game. The basic backend test interacts only via the Web Frontend
+for realism but simulates unexpected node or hardware failure by calling
+{\tt erlang:halt()} on the relevant backend node.
+
 Since we do not know on which backend the game has been started, we halt
 backend~A. If fault tolerance works, we can now be sure that the game is on
-backend~B
-(either it was there in the first place or it got restarted there).
+backend~B (either it was there in the first place or it got restarted there).
+
 We start the backend~A again and then halt backend~B. Now the game gets moved to
 backend~A. This way, we can be sure that the game was moved at least once.
 If the game continues to run, the test was successful.
+
+Instructions for running this test are in Section~\ref{run_fault_tolerance}.
 
 \chapter{Related Work}
 %\hi{Similarities with existing products/systems. How are you similar and how are you different? What do you do better? What can you learn from what's already out there?
@@ -1042,6 +1051,24 @@ tarball that contains everything needed to run the system. By executing {\tt
   system-release} directory alongside Riak. After this step, we create a tarball
 of everything inside that directory with {\tt make tar\_release}. The resulting
 tarball is outputted to the {\tt system-release} directory.
+
+\section{Testing}
+
+\subsection{Node Failure Tolerance Tests}\label{run_fault_tolerance}
+
+An escript\cite{escript} {\tt fault\_tolerance} is generated when building a full release. This
+allows the tests in {\tt ext\_test/fault\_folerance} to be run from the command
+line e.g.
+
+\begin{Verbatim}
+./system-release/tt/bin/fault_tolerance   tt.config
+\end{Verbatim}
+
+where {\tt tt.config} is a cluster configuration file. This requires the same
+setup as the Cluster Manager needs for starting a cluster. The
+{\tt fault\_tolerance} escript will exit with a non-zero exit status if any tests
+failed and outputs debugging information to the console.
+
 \section{Installing from a release tarball}
 \label{sec:installing}
 The resulting tarball from the build step is self-contained and can be freely
