@@ -10,3 +10,11 @@
 *.snm
 *.pdf
 *.toc
+*.log
+*.fls
+# Special makefiles
+*.make
+*.d
+# Bibtex
+*.bbl
+*.blg
