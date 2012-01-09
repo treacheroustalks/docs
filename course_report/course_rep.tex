@@ -41,12 +41,12 @@
 % ------------------------------------------------------------------------------
 % Metadata
 % ------------------------------------------------------------------------------
-\title{    \normalsize \textsc{``Treacherous Talks''}   % Subtitle of the document
-             \\[2.0cm]                                  % 2cm spacing
-            \HRule{0.5pt} \\                            % Upper rule
-            \LARGE \textbf{\uppercase{Course Report}}   % Title
-            \HRule{2pt} \\ [0.5cm]                      % Lower rule + 0.5cm spacing
-            \normalsize \today                          % Todays date
+\title{    \normalsize \textsc{``Treacherous Talks''} % Subtitle of the document
+             \\[2.0cm]                                % 2cm spacing
+            \HRule{0.5pt} \\                          % Upper rule
+            \LARGE \textbf{\uppercase{Course Report}} % Title
+            \HRule{2pt} \\ [0.5cm]                    % Lower rule + 5mm spacing
+            \normalsize \today                        % Todays date
         }
 
 \author{Dilshod Aliev\\
@@ -101,8 +101,8 @@ engineering.
 
 \chapter{Resources}
 \section{Team}
-Since we decided to arrange our workplaces in a triangular shape
-(see Fig.~\ref{fig:office}), we gave our team the name ``Team Bermuda Triangle''.
+Since we decided to arrange our workplaces in a triangular shape (see
+Fig.~\ref{fig:office}), we gave our team the name ``Team Bermuda Triangle''.
 This is only one example for how quickly we had formed a well functioning
 team. \\
 \begin{figure}[h]
@@ -147,10 +147,10 @@ Our office room was equipped with several white boards that proved to be
 very valuable, especially in times where much design and architecture was done.
 \section{Tools}
 \subsection{Issue Tracking}
-All projects need a system for tracking issues and planning. We opted to use
-one of the more popular open-source solutions called Redmine\cite{redmine}, a web-based issue
-tracker and project management system. Redmine was useful to us for several
-reasons:
+All projects need a system for tracking issues and planning. We opted to use one
+of the more popular open-source solutions called Redmine\cite{redmine}, a
+web-based issue tracker and project management system. Redmine was useful to us
+for several reasons:
 \begin{itemize}
 \item Built-in wiki \\
   We used the wiki as a basis for high level documentation of things such as our
@@ -313,24 +313,23 @@ and performance bottlenecks.
 \chapter{Project Methodology and Organization}
 
 \section{The Customer}
-Our customer was Jan Henry Nyström from Erlang Solutions\cite{erlsol}. Henry's job according to
-Scrum was to prioritize the tasks at hand and be at the planning meeting.
-What Henry did instead was to act more like a teacher which led to confusion on
-our side at the beginning of the project. Once we got accustomed to that,
-we were able to work very efficiently for and with him.
+Our customer was Jan Henry Nyström from Erlang Solutions\cite{erlsol}. Henry's
+job according to Scrum was to prioritize the tasks at hand and be at the
+planning meeting. What Henry did instead was to act more like a teacher which
+led to confusion on our side at the beginning of the project. Once we got
+accustomed to that, we were able to work very efficiently for and with him.
 Henry's experience in developing Erlang systems was extremely useful and we hope
 that he learned a little bit through this project as well since some of our
 tools were not known to him (in practice) before.
 \section{Erlang User Conference!}
-We were invited to present our project in poster form at the
-Erlang User Conference in Stockholm\cite{euc2011}. The attendance was free of charge for us
-thanks to Erlang Solutions. \\
-In Stockholm many people asked about the project, most questions were on a high
-level, though. We did not get direct feedback that changed the project after the
-EUC but the talks there were quite relevent to our project and therefore a big
-help. \\
-It was as well a very fortunate place for us to be as some companies that were
-there are actively trying to hire young developers with Erlang experience.
+We were invited to present our project in poster form at the Erlang User
+Conference in Stockholm\cite{euc2011}. The attendance was free of charge for us
+thanks to Erlang Solutions. \\ In Stockholm many people asked about the project,
+most questions were on a high level, though. We did not get direct feedback that
+changed the project after the EUC but the talks there were quite relevent to our
+project and therefore a big help. \\ It was as well a very fortunate place for
+us to be as some companies that were there are actively trying to hire young
+developers with Erlang experience.
 \section{Scrum}
 For managing our project we used Scrum as in~\cite{kniberg}.
 We tried hard to start up a well functioning software process and believe that
@@ -447,10 +446,10 @@ and there but there still were plenty of negative reviews.
 
 \subsection*{Testing}
 We took testing very seriously and the considerable time we invested payed off.
-A counting on december 7$^{th}$, 2011 showed that 47\% of code lines were testing
-code. This big suite of tests made it incredibly easy to verify that a change
-didn't break anything. If developers are secured by a solid test suite, it is
-also easier to start working on code that is not so well known because one
+A counting on december 7$^{th}$, 2011 showed that 47\% of code lines were
+testing code. This big suite of tests made it incredibly easy to verify that a
+change didn't break anything. If developers are secured by a solid test suite,
+it is also easier to start working on code that is not so well known because one
 always has a regression test suite that immediately highlights errors.
 
 \section{Timeline}
@@ -515,7 +514,7 @@ ensure that it `works'. The results where not extremely surprising and therefore
 we continued to rely on riak.
 
 \subsubsection{Interfaces}
-We laid the foundations for our interfaces: http (Websockets), XMPP, SMTP.
+We laid the foundations for our interfaces: http (WebSocket), XMPP, SMTP.
 The DoD was to have them answer a `ping' with a `pong' or anything comparable.
 
 \subsubsection{Registering, Login, \ldots}
@@ -567,105 +566,113 @@ message while she is offline, the message should be delivered upon login).
 
 \subsubsection{Fault tolerance testing}
 We needed a (semi-) automatic way of testing fault tolerance, since distributed
-functionality like that is not possible to test with EUnit and can be quite tedious.
-So we installed some VM containers on one of our servers, that could be used to run
-multiple instances of the system on one machine.
-The goal for this story was to provide the testing framework, not the fault tolerance itself,
-as this would have been too much.
-Our system- and cluster managers are a byproduct of this.
-They simplify the setup and start of a cluster by a great deal.
+functionality like that is not possible to test with EUnit and can be quite
+tedious. So we installed some VM containers on one of our servers, that could be
+used to run multiple instances of the system on one machine. The goal for this
+story was to provide the testing framework, not the fault tolerance itself, as
+this would have been too much. Our system- and cluster managers are a byproduct
+of this. They simplify the setup and start of a cluster by a great deal.
 
 \subsection*{Sprint 5 --- Play game \& Operator is watching}
 \subsubsection{Review 2}
-Each team had to present their results, including a short demo.
-Both teams, the teachers and the customers were present at those presentations.
-Additionally some reviewers from the university and other master students were invited.
+Each team had to present their results, including a short demo. Both teams, the
+teachers and the customers were present at those presentations. Additionally
+some reviewers from the university and other master students were invited.
 
-This was, like the EUC poster, very time consuming.
-Since we did not just prepare the demo and the presentation, but we also had a test run,
-where Henry Nyström and the teachers were present to give us feedback on the presentation.
+This was, like the EUC poster, very time consuming. Since we did not just
+prepare the demo and the presentation, but we also had a test run, where Henry
+Nyström and the teachers were present to give us feedback on the presentation.
 
-We kept it quite non-technical, so that the end presentation could be mostly the same.
+We kept it quite non-technical, so that the end presentation could be mostly the
+same.
 
 \subsubsection{Tune performance}
-After load testing in Sprint 4 we discovered that the performance of our system was degrading over time.
-The DoD for this story was quite vaguely, as you are never done tuning - and it's just fun!
-So we decided to solve the degradation and if there is time left to tune performance,
-but not to spend more than 20 man days on that story.
+After load testing in Sprint 4 we discovered that the performance of our system
+was degrading over time. The DoD for this story was quite vaguely, as you are
+never done tuning - and it's just fun! So we decided to solve the degradation
+and if there is time left to tune performance, but not to spend more than 20 man
+days on that story.
 
-Our riak storage backend was eleveldb, because it is the only one supporting secondary indices.
-The assumption was that eleveldb, was responsible for the degradation.
-The reason for that assumption was that riak in general does not show such a degradation pattern,
-and the default and well-tested storage backend is bitcask.
-After replacing all uses of riak's secondary indices with riak search we could switch our backend back to bitcask.
-This solved the degradation problem.
+Our riak storage backend was eleveldb, because it is the only one supporting
+secondary indices. The assumption was that eleveldb, was responsible for the
+degradation. The reason for that assumption was that riak in general does not
+show such a degradation pattern, and the default and well-tested storage backend
+is bitcask. After replacing all uses of riak's secondary indices with riak
+search we could switch our backend back to bitcask.  This solved the degradation
+problem.
 
 Further performance tuning involved adapting the riak write parameters.
-Reducing these for the non-crucial writes, like message logging, was a simple optimization.
+Reducing these for the non-crucial writes, like message logging, was a simple
+optimization.
 
-The last change regarding the performance was regarding another not so well-tested riak feature.
-On the \#riak IRC room on irc.freenode.net we have been advised to trying it without riak search.
-So we tried to remove it from as many places as possible, and use riak key filtering instead.
-Load tests showed this was indeed an improvement in performance.
+The last change regarding the performance was regarding another not so
+well-tested riak feature. On the \#riak IRC room on irc.freenode.net we have
+been advised to trying it without riak search. So we tried to remove it from as
+many places as possible, and use riak key filtering instead.  Load tests showed
+this was indeed an improvement in performance.
 
-Worth mentioning about the continuous load tests is that we discovered a drastic performance drop
-due to some code changes.
-After a little while we could even tell which commit was responsible and why.
-As it turns out it once again increased the use of riak search.
+Worth mentioning about the continuous load tests is that we discovered a drastic
+performance drop due to some code changes. After a little while we could even
+tell which commit was responsible and why. As it turns out it once again
+increased the use of riak search.
 
 \subsubsection{Handle loss of servers}
-We implemented the fault tolerance in the fifth sprint after providing the testing framework for it in the previous one.
-This was achieved by our necromancer module.
-Its responsibility was to watch nodes and react once a node goes down.
-The nodes watched each other in circular manner, so that each would be watched by one other node.
-Processes with state would simply write important data to the database,
-and another node could then resurrect it with that data.
+We implemented the fault tolerance in the fifth sprint after providing the
+testing framework for it in the previous one. This was achieved by our
+necromancer module. Its responsibility was to watch nodes and react once a node
+goes down. The nodes watched each other in circular manner, so that each would
+be watched by one other node. Processes with state would simply write important
+data to the database, and another node could then resurrect it with that data.
 
 \subsubsection{Operator/Moderator functionality}
-Many of our requirements were finished by sprint 5 and the majority of the backlog consisted of
-operator/moderator functionality.
-So we introduced these user roles and implemented an access control list together with some
-functionality requiring privileged access, like inspecting servers and games or blacklisting users.
+Many of our requirements were finished by sprint 5 and the majority of the
+backlog consisted of operator/moderator functionality. So we introduced these
+user roles and implemented an access control list together with some
+functionality requiring privileged access, like inspecting servers and games or
+blacklisting users.
 
 \subsubsection{Graphical map}
-A rather small, but to us very important, feature of that sprint was the graphical map for the web interface.
-The game was not really playable with just the textual representation of the map.
-We decided to do this only for the web interface, since the other interface are purely text based anyway,
-and this was a good task for html5 canvas.
+A rather small, but to us very important, feature of that sprint was the
+graphical map for the web interface. The game was not really playable with just
+the textual representation of the map. We decided to do this only for the web
+interface, since the other interface are purely text based anyway, and this was
+a good task for html5 canvas.
 
 \subsection*{Sprint 6}
-The last sprint was very short and was just about finishing up - we did not even have a real planning meeting.
-We wrote all required reports (including this one), published our project on Github,
-and fixed some bugs.
-We did not introduce any new features whatsoever.
+The last sprint was very short and was just about finishing up - we did not even
+have a real planning meeting. We wrote all required reports (including this
+one), published our project on Github, and fixed some bugs. We did not
+introduce any new features whatsoever.
 
 \chapter{Conclusion}
 \section*{To Future Students}
 \begin{itemize}
-\item  Investing in code quality pays off. Do never, ever, say things like:
-``commit this now, we can make it pretty later''. Because you won't!
-Do it, it's now or never.
+\item Investing in code quality pays off. Do never, ever, say things like:
+  ``commit this now, we can make it pretty later''. Because you won't!  Do it,
+  it's now or never.
 \item Think `product': everything you do is in order to make the product better.
-You write high quality code because it makes you more productive, not because
-it's cast in stone.
+  You write high quality code because it makes you more productive, not because
+  it's cast in stone.
 \item Make everyone understand what you are talking about and take your time to
-do that.
+  do that.
 \item Create an environment where it's ok not to know something so that people
-ask instead of trying to cover their problems. Help each other out where you
-can.
+  ask instead of trying to cover their problems. Help each other out where you
+  can.
 \item Planning is boring, but still: take your time to do it! It is incredibly
-motivating to see that a sprint goal was met after three weeks of hard work.
+  motivating to see that a sprint goal was met after three weeks of hard work.
 \item Work transparent: let everyone know what you are doing and why. This way,
-you get a lot more valuable feedback and no one can tell you later that what you
-did was wrong --- because they knew what you did.
+  you get a lot more valuable feedback and no one can tell you later that what
+  you did was wrong --- because they knew what you did.
 \item Apply Scrum completely. Don't feel bad for saying ``no'' to TA/customer if
-you are running out of time and you didn't commit to something.
+  you are running out of time and you didn't commit to something.
 \item If your customer cannot be present during the whole sprint planning day,
-try to do the prioritisation while he/she is attending, as this is probably the
-most valuable thing for the customer during planning. This will also prevent you
-from guessing what the customer might want, and prioritising takes time!
-\item Document early, document often. While this is not the most interesting aspect
-of coding, it definitely pays. Invest in your project's future by adding documentation.
+  try to do the prioritization while he/she is attending, as this is probably
+  the most valuable thing for the customer during planning. This will also
+  prevent you from guessing what the customer might want, and prioritizing takes
+  time!
+\item Document early, document often. While this is not the most interesting
+  aspect of coding, it definitely pays. Invest in your project's future by
+  adding documentation.
 \item Automate as much as possible. It always saves time in the long run.
 \item Testing is your best friend!
       It saved us several times and makes people less reluctant to refactor
@@ -700,19 +707,20 @@ language Erlang and the project methodology Scrum, we also learned to
 use new tools and the importance of testing.\\
 
 In a team like this, with students from different backgrounds in many regards,
-from cultural to academical, it is important to respect each other and be humble.
-We really benefited from learning to know each other better through fika and
-changing who we were working with on different tasks. We didn't enforce
+from cultural to academical, it is important to respect each other and be
+humble.  We really benefited from learning to know each other better through
+fika and changing who we were working with on different tasks. We didn't enforce
 pair programming, but those who felt more comfortable doing that had the
 possibility to do it. In our working agreements we recommended team members to
 eat lunch in the lunchroom, so we could have a casual chat.\\
 
 Although, it has not been a breeze all the time. The project introduced
-challenges in many regards, as there would be in any project.
-But we had basically the same experience with Erlang, and we were more or less
-on the same level in regards to that. Tools like Git and Gerrit were something
-new to parts of the team, so there was a learning curve to many things. But in
-the end, we all have something new to put in our bag of knowledge and experience.
+challenges in many regards, as there would be in any project. But we had
+basically the same experience with Erlang, and we were more or less on the same
+level in regards to that. Tools like Git and Gerrit were something new to parts
+of the team, so there was a learning curve to many things. But in the end, we
+all have something new to put in our bag of knowledge and experience.
+
 \appendix
 
 \chapter{Team Statements}
@@ -767,12 +775,13 @@ and Dilshod, and experimented with a custom WebSocket implementation.
 In Sprint 2 I took part in developing our second architecture and high level
 design. I made it as easy as possible to develop and run our code with ejabberd
 using our automated build and test tools, despite our inability to build and
-release it using rebar. At the end of this sprint I gave up the Scrum Master role
-to focus more on development.
+release it using Rebar. At the end of this sprint I gave up the Scrum Master
+role to focus more on development.
 
-In Sprint 3 I worked with Andre to guarantee consistency for some core operations
-and implemented the solution for game joining in particular. I did some further
-work on building ejabberd and improved our XMPP integration test client.
+In Sprint 3 I worked with Andre to guarantee consistency for some core
+operations and implemented the solution for game joining in particular. I did
+some further work on building ejabberd and improved our XMPP integration test
+client.
 
 I worked with Dilshod to set up SMTP integration tests and add them to our
 automated test runs at the beginning of Sprint 4. Then Erik and I designed and
@@ -781,10 +790,10 @@ distributed cluster of Treacherous Talks servers. I also implemented an Erlang
 WebSocket client for our fault tolerance tests based on Yaws WebSocket code.
 
 In Sprint 5 I implemented an automated test to check that games continue running
-despite node or hardware failures. I presented this, and helped Rahim demonstrate
-the working system at the Review 2 presentation. I then extended the automated
-test to ensure all issues we had found with game resurrection were fixed by
-Stephan and Tiina's refactoring.
+despite node or hardware failures. I presented this, and helped Rahim
+demonstrate the working system at the Review 2 presentation. I then extended the
+automated test to ensure all issues we had found with game resurrection were
+fixed by Stephan and Tiina's refactoring.
 
 I was home ill and unable to work for the first week of Sprint 6 and am very
 thankful to the team for all their work on this and the Product Report.
@@ -793,12 +802,12 @@ thankful to the team for all their work on this and the Product Report.
 I was the spokesperson of the team from the beginning. As spokesperson,
 I saw it as my job to shield the team from distractions as much as possible.
 
-In the beginning, I was doing the survey on zotonic which looked great but too
+In the beginning, I was doing the survey on Zotonic which looked great but too
 big for us. Then, I also was part of the architecture team for the initial
 draft.
 
-My main topic in sprint 2 was riak. I set up a cluster and was working with the
-first benchmark of riak, together with mostly Sukumar.
+My main topic in sprint 2 was Riak. I set up a cluster and was working with the
+first benchmark of Riak, together with mostly Sukumar.
 I committed the initial version of our DB-wrapper module as well.
 
 In sprint 3, I was working on one task only: the rule engine, our implementation
@@ -816,86 +825,93 @@ much time on tasks that do not contribute to the product (I estimate that the
 presentation preparation took roughly 3 person weeks).
 
 \section{Andre Hilsendeger}
-In the first sprint I was looking into Erlang Web as part of the tools-/library survey.
-It turned out to be too basic and we did not use it.
-Additionally I was part of the team that created the initial architecture draft.
+In the first sprint I was looking into Erlang Web as part of the tools-/library
+survey. It turned out to be too basic and we did not use it. Additionally I was
+part of the team that created the initial architecture draft.
 
-As expected the initial draft of the architecture was not enough and needed more specifics.
-In the second sprint I was once again part of the architecture/design team.
-We defined in more detail what the processes are and how they are supervised.
-As part of our testing school I also took a look into meck, and gave the team a short introduction
-on how to use it.
-Since by design most of our backend apps had a similar structure I created a template for those
-and created the initial user management app.
+As expected the initial draft of the architecture was not enough and needed more
+specifics. In the second sprint I was once again part of the architecture/design
+team. We defined in more detail what the processes are and how they are
+supervised. As part of our testing school I also took a look into Meck, and gave
+the team a short introduction on how to use it. Since by design most of our
+backend apps had a similar structure I created a template for those and created
+the initial user management app.
 
-From the third sprint on I have been the scrum master.
-We noticed quite some code duplications and similarities between our frontends,
-so I refactored the logic away from the SMTP and XMPP frontends into the controller.
-Due to our database-drive design in combination with riak as our storage backend
-we had to figure out how to maintain consistency.
-We identified the problems and tried to solve them, adapting the controller to have a
-session process for every user was part of that.
+From the third sprint on I have been the Scrum Master. We noticed quite some
+code duplications and similarities between our frontends, so I refactored the
+logic away from the SMTP and XMPP frontends into the controller. Due to our
+database-drive design in combination with Riak as our storage backend we had to
+figure out how to maintain consistency. We identified the problems and tried to
+solve them, adapting the controller to have a session process for every user was
+part of that.
 
-During the fourth sprint I implemented the event pushing to online users in the controller,
-so that other apps, like the message-app, could push messages to online users.
-After that I started my biggest and longest task, load testing.
-A big part of that was to automatically setup multiple machines and run load test on them,
-while Sukumar and Tiina wrote the actual load tests.
+During the fourth sprint I implemented the event pushing to online users in the
+controller, so that other apps, like the message-app, could push messages to
+online users. After that I started my biggest and longest task, load testing. A
+big part of that was to automatically setup multiple machines and run load test
+on them, while Sukumar and Tiina wrote the actual load tests.
 
-The results from the load test were not very satisfactory, so my task in the fifth, and last real,
-sprint was to improve the performance.
-For that Rahim and I replaced secondary indices with riak search, so that we could switch back to the bitcask storage backend.
-But as it turned out riak search had serious performance problems with often updated data.
-So I replaces riak search by key filtering for parts of the system that did not really need the search feature,
+The results from the load test were not very satisfactory, so my task in the
+fifth, and last real, sprint was to improve the performance. For that Rahim and
+I replaced secondary indices with Riak Search, so that we could switch back to
+the Bitcask storage backend. But as it turned out Riak search had serious
+performance problems with often updated data.  So I replaces Riak search by key
+filtering for parts of the system that did not really need the search feature,
 like messaging.
 
 \section{Rahim Kadkhodamohammadi}
-In the beginning, I was doing some review on Erlang tools for SMTP and XMPP.
-In this sprint Lin and me listed Erlang tools for SMTP and XMPP. I did some experiments with Mnesia database as well.
+In the beginning, I was doing some review on Erlang tools for SMTP and XMPP. In
+this sprint Lin and me listed Erlang tools for SMTP and XMPP. I did some
+experiments with the Mnesia database as well.
 
-In the second sprint, I continued to do some experiments with ejabberd,
-the only Erlang based XMPP server. I designed and developed an ejabberd component
-that is able to exchange messages with users. Since EXMPP is the
-only Erlang based XMPP client and we need integration tests, I developed the first
-draft of an application with EXMPP to do integration tests through the IM client.
-I was also part of the architecture team.
+In the second sprint, I continued to do some experiments with ejabberd, the only
+Erlang based XMPP server. I designed and developed an ejabberd component that is
+able to exchange messages with users. Since EXMPP is the only Erlang based XMPP
+client and we needed integration tests, I developed the first draft of an
+application with EXMPP to do integration tests through the IM client. I was also
+part of the architecture team.
 
-Sprint 3 was the sprint where we provided functionalities that allow users to play games.
-During this sprint I mainly worked on the command parser, the controller and the game application.
-I could say that it was a great sprint that I worked on most part of the system.
+Sprint 3 was the sprint where we provided functionality that allow users to play
+games. During this sprint I mainly worked on the command parser, the controller
+and the game application. I could say that it was a great sprint - I worked on
+most parts of the system.
 
-In sprint 4, I created our first draft of the message application which provides functionality
-to send messages between users. Then I added the ACL (access control list) to our controller.
-I also extended our web frontend to show some system stats to
-operators and provide functionality to add/remove moderators.
+In sprint 4, I created our first draft of the message application which provides
+functionality to send messages between users. Then I added the ACL (access
+control list) to our controller. I also extended our web frontend to show some
+system statistics to Operators and provide functionality to add/remove
+Moderators.
 
-In sprint 5, I was part of the presentation team. I was responsible
-to prepare a demo to show during the presentation. I spent some time to
- prepare the demo and fix some bugs which I encountered when played with our system.
- I also extended our game and message applications to support black-listed users.
+In sprint 5, I was part of the presentation team. I was responsible to prepare a
+demo to show during the presentation. I spent some time to prepare the demo and
+fix some bugs which I encountered when played with our system. I also extended
+our game and message applications to support black-listed users.
 
 \section{Xinze Lin}
-In the first sprint, I was surveying and experimenting Erlang based SMTP servers for our project's need.
-Thanks to Erik's Git school and tool support, I learned to use Git to commit my code to our repository.
+In the first sprint, I was surveying and experimenting with Erlang-based SMTP
+servers for our project's need. Thanks to Erik's Git school and tool support, I
+learned to use Git to commit my code to our repository.
 
-In Sprint 2, I wrote the first version of our SMTP-frontend server,
-which enables Email clients to communicate with the backend to register or update users.
-The parser of SMTP server was later being refactored by Andre to support both SMTP and XMPP frontend at the same time.
-Besides, with the help of JD and Sukumar, I've also done our code review checklist.
-And thanks to Stephan, I learned the benefits of writing testing code.
+In Sprint 2, I wrote the first version of our SMTP frontend server, which
+enables email clients to communicate with the backend to register or update
+users. The parser of the SMTP server was later refactored by Andre to support
+both the SMTP and XMPP frontends at the same time. Beside that, with the help of
+JD and Sukumar, I also created our code review checklist. And thanks to Stephan,
+I learned the benefits of writing testing code.
 
-During Sprint 3, I worked with Rahim on extending parser and controller to support more user features.
-In addition, I extended the parser to support Diplomacy game orders,
-which interprets the player orders from plaintext to our rule engine compatible format.
-Great thanks to Sukumar's Unix school,
-it made life much easier to work with Linux since I've never truly used it before.
+During Sprint 3, I worked with Rahim on extending the parser and the controller
+to support more user features. In addition, I extended the parser to support
+Diplomacy game orders, which interprets the player orders from plain text to a
+format compatible with our rule engine. Sukumar's Unix school made my life much
+easier since I've never truly used Linux before.
 
-Sprint 4, I extended web-interface and backend to support in-game messaging.
-I've also done the operator web-interface for inspecting DB status.
-With some help from Sukumar, I've polished the web-interface a bit.
+In Sprint 4, I extended the web interface and backend to support in-game
+messaging. I also did the operator web interface for inspecting database
+status. With some help from Sukumar, I polished the web-interface a bit.
 
-In Sprint 5, I created the operator-interface for inspecting details of a game.
-Also, I worked with Dilshod to make the game map usable on our web-interface.
+In Sprint 5, I created the Operator interface for inspecting the details of a
+game. Also, I worked with Dilshod to make the game map usable on our web
+interface.
 \section{Tiina Loukusa}
 In the first sprint, we were supposed to find out what tools and existing
 open source software to use, I had a look at the web servers Chicago Boss and
@@ -964,168 +980,230 @@ days on bug fixing our build-test-release cycle since we were hitting all kinds
 of weird bugs during testing. I also spent a few days on trying to fix problems
 found by Dialyzer in our codebase as part of the general clean-up.
 \section{Sukumar Yethadka}
-Building large scale internet systems and its challenges are very interesting to me, which is why, this project along with its requirement of ``Erlang for everything" was an ideal fit.
+Building large scale Internet systems and its challenges are very interesting to
+me, which is why, this project along with its requirement of ``Erlang for
+everything" was an ideal fit.
 
-During the initial survey sprint, I looked at various open source applications (Yaws, ejabberd, Chicago boss) and tested to check if it worked with the kind of usage we had in mind. I created slides for the Unix school with help from Andre. I also helped create the coding guidelines and code review checklist.
+During the initial survey sprint, I looked at various open source applications
+(Yaws, ejabberd, Chicago boss) and tested to check if it worked with the kind of
+usage we had in mind. I created slides for the Unix school with help from
+Andre. I also helped create the coding guidelines and code review checklist.
 
-Sprint 2 mostly involved working with the database. I did some basic read up on Riak, learing how to use it efficiently. Then, I created the data model for the system, updating it as per team feedback. I tested the data model with basho bench thus making sure that Riak was a good starting point as the database. I also provided feedback and suggested improvements to the initial version of the architecture.
+Sprint 2 mostly involved working with the database. I did some basic read up on
+Riak, learning how to use it efficiently. Then, I created the data model for the
+system, updating it as per team feedback. I tested the data model with basho
+bench thus making sure that Riak was a good starting point as the database. I
+also provided feedback and suggested improvements to the initial version of the
+architecture.
 
-During sprint 3, I worked on the web frontend. After holding the Unix school, I refactored the web frontend making it more modular, consistent and eaisily extendible. It could have been better if we had used a traditional MVC framework, but we decided to keep it simple making it javascript heavy.
+During sprint 3, I worked on the web frontend. After holding the Unix school, I
+refactored the web frontend making it more modular, consistent and easily
+extendible. It could have been better if we had used a traditional MVC
+framework, but we decided to keep it simple making it javascript heavy.
 
-I worked on Riak search and load testing during sprint 4. I setup Riak search and setup the search schema for the buckets. I also got it to work with the web frontend. During the later half of the sprint, I worked on defining and creating load tests along with Tiina and also created good visuals for the load test results, using a open source project - highcharts.
+I worked on Riak search and load testing during sprint 4. I setup Riak search
+and setup the search schema for the buckets. I also got it to work with the web
+frontend. During the later half of the sprint, I worked on defining and creating
+load tests along with Tiina and also created good visuals for the load test
+results, using a open source project - highcharts.
 
-With most of the core features completed, I worked on adding the less important features, fixing bugs, cleaning code and fixing the documentation during sprint 5.
+With most of the core features completed, I worked on adding the less important
+features, fixing bugs, cleaning code and fixing the documentation during sprint
+5.
 
-Overall, this project was a unique and memorable experience for me and is definitely a recommendation for future students.
-
+Overall, this project was a unique and memorable experience for me and is
+definitely a recommendation for future students.
 \chapter{Survey}
-After a brief survey in the early stages of the project, we chose a few projects to look at in more detail, to be able to make a fair decision on what might be suitable for the Diplomacy server. As a reminder, all the below projects are based on Erlang.
+After a brief survey in the early stages of the project, we chose a few projects
+to look at in more detail, to be able to make a fair decision on what might be
+suitable for the Diplomacy server. As a reminder, all the projects mentioned
+below are based on Erlang.
 
 \section{Web Frameworks}
 \subsection{Zotonic}
-Zotonic\cite{zotonic} is a CMS based on Erlang. It has a powerful control interface, has
-quite a number of modules available such as authentication and chat and it
-achieves modularity by following OTP-principles. Zotonic has support for
-Websockets, and when Websockets are not supported by the browser, it will use
-Comet instead. Zotonic has been insprired by Nitrogen and it can only be run
+Zotonic\cite{zotonic} is a CMS based on Erlang. It has a powerful control
+interface, has quite a number of modules available such as authentication and
+chat and it achieves modularity by following OTP principles. Zotonic has support
+for WebSocket and when WebSocket is not supported by the browser, it will
+use Comet instead. Zotonic has been inspired by Nitrogen and it can only be run
 on a MochiWeb server.
 
 \subsection{Erlang Web}
-Erlang Web\cite{erlangweb} is quite simplistic, it has support for multiple web servers and
-distribution. It does not have any extras like a chat nor does it have support
-for Websockets. Erlang Web can be run on INETS and Yaws web servers.
+Erlang Web\cite{erlangweb} is quite simplistic, it has support for multiple web
+servers and distribution. It does not have any extras like a chat nor does it
+have support for WebSocket. Erlang Web can be run on INETS and Yaws web
+servers.
 
 \subsection{Nitrogen}
-Nitrogen\cite{nitrogen} uses an event-driven model and offers hot code swapping, stability
-and scalability. It includes a simple, yet powerful, template system and is
-well documented which is important for us as developers. Nitrogen can run on
-several web servers; MochiWeb, Yaws and INETS.
+Nitrogen\cite{nitrogen} uses an event-driven model and offers hot code swapping,
+stability and scalability. It includes a simple, yet powerful, template system
+and is well documented which is important for us as developers. Nitrogen can run
+on several web servers; MochiWeb, Yaws and INETS.
 
 \subsection{Chicago Boss}
 Chicago Boss\cite{chicagoboss} is a new web framework, which has not yet reached
 a stable state. Even though it hasn't reached 1.0, it still offers some nice
 features, as it supports multiple databases, hot code swapping and e-mail among
-other things. It is well documented but it does not support Websockets nor
+other things. It is well documented but it does not support WebSocket nor
 distributed systems.
 
 \subsection{Results and discussion}
 When we tried to decide on what web framework to use, we wanted simplicity, as
 we had already decided on not to focus on the look and feel and we didn't want
 to spend a lot of time on learning a specific web framework.
-The project required the use of Websockets and if the framework didn't
+The project required the use of WebSocket and if the framework didn't
 provide that up front, we would need to implement it ourselves.\\
 
 Chicago Boss was too immature to be an option, as we want something stable that
 we won't need to patch up too much and Erlang Web was very basic and didn't
 provide many features that we could use, compared to the other ones.
 
-The only web framework that had support for Websockets was Zotonic, but it was
+The only web framework that had support for WebSocket was Zotonic, but it was
 quite complex to learn to use it, and it didn't provide the kind of simplicity
 we were looking for. We came to the conclusion that it would be of more use to
-us to use a web framework that was easy to use and implement Websocket support,
+us to use a web framework that was easy to use and implement WebSocket support,
 rather than learning how to create new modules for Zotonic.\\
 
 We initially decided to use Nitrogen, because we found that it was one of the
 more mature and well used web frameworks out of those we looked at. It could
 work with both of the web servers we were choosing among, it was easy to use and
-it provided some nice and useful features. It didn't have Websocket support but
+it provided some nice and useful features. It didn't have WebSocket support but
 we thought we would be able to implement that.
 
-Unfortunately, we came to the conclusion that implementing Websocket support
+Unfortunately, we came to the conclusion that implementing WebSocket support
 into Nitrogen is a project on its own, and we decided to not use a web
 framework at all. We ended up using only Javascript, which was sufficient for
 our use.
 
 \section{Web Servers}
 \subsection{MochiWeb}
-Mochiweb\cite{mochiweb} claims to provide a lightweight and lightning fast webserver.
-Several sources say that it has been used by Facebook for their chat\cite{fb_chat}\cite{fb_pres},
-due to these properties. It is easy to set up and get running. It was really
-hard to find any documentation, because there is almost no documentation online,
-only the API that can be generated by edocs which in retrospective should be
-quite intuitive. A big drawback for this project was that it doesn't have
-support for Websockets.
+Mochiweb\cite{mochiweb} claims to provide a lightweight and lightning fast
+web server. Several sources say that it has been used by Facebook for their
+chat\cite{fb_chat}\cite{fb_pres}, due to these properties. It is easy to set up
+and get running. It was really hard to find any documentation, because there is
+almost no documentation online, only the API that can be generated by edocs
+which in retrospective should be quite intuitive. A big drawback for this
+project was that it doesn't have support for WebSocket.
 
 \subsection{Yaws}
 Yaws\cite{yaws} is a high performance web server, which has a large and active
 community and is thus regularly updated. It can be run in two different modes;
-as a standalone application or as an embedded application. Their webpage
+as a standalone application or as an embedded application. Their web page
 provides a large number of example use cases and it is well documented, which
 might be a reason to its large user base. Something that really appealed to us
-was the fact that it actually had Websocket support!
+was the fact that it actually had WebSocket support!
 
 \subsection{Results and discussion}
-Both contenders were good webservers and we chose to look into these two more
+Both contenders were good web servers and we chose to look into these two more
 closely because Nitrogen, which was the web framework we chose to use,
 supported both. We had to choose one, and the lack of documentation and support
-for Websockets in MochiWeb made us choose Yaws. Websocket support was definitely
+for WebSocket in MochiWeb made us choose Yaws. WebSocket support was definitelty
 the deciding factor.\\
 
-As the Websocket protocol kept changing under the course of the project, we were
-lucky enough to have JD in the team, who found Websockets to be very interesting
-and cool. He updated the Websocket implementation in Yaws, and these changes for
-Websocket RFC 6455 are now included in the release of Yaws 1.92.\\
+As the WebSocket protocol kept changing under the course of the project, we were
+lucky enough to have JD in the team, who found WebSocket to be very interesting
+and cool. He updated the WebSocket implementation in Yaws, and these changes for
+WebSocket RFC 6455 are now included in the release of Yaws 1.92.\\
 
 
-Yaws seems to have been a fairly good choise, but during the EUC we became
-aware of another web server, Cowboy\cite{cowboy_pres}, which in retrospective,
+Yaws seems to have been a fairly good choice, but during the EUC we became aware
+of another web server, Cowboy\cite{cowboy_pres}, which in retrospective,
 probably would have been an even better decision as the developer for Cowboy is
-very keen on having the latest Websocket version at all times. Why we didn't
+very keen on having the latest WebSocket version at all times. Why we didn't
 even consider it an option was because it was very new and it had just entered
-early beta when we did the survey when we had more mature options to choose from.
+early beta when we did the survey when we had more mature options to choose
+from.
 
 \section{SMTP Servers}
 \subsection{Erlmail}
 Erlmail is a complete email solution written in Erlang. It contains OTP
 compliant SMTP, IMAP and POP clients and servers. According to our observation
-of its source code, it didn't support encryption.
+of its source code, it didn't support encryption. In general, it seemed like a
+complex piece of software.
 
 \subsection{gen\_smtp}
-Gen\_smtp is written in OTP style, it inlcudes only SMTP client and server,
-which means it doesn't involve any email retrieval mechanism like IMAP or POP,
-and this makes it look simple. Besides, it supports SMTP SSL/TLS-encryption.
+Gen\_smtp is a SMTP server framework that can be extended in an OTP style
+fashion. It includes only a SMTP client and server, which means it doesn't
+include any email retrieval mechanisms like IMAP or POP. This makes it simple to
+interact with. Besides, gen\_smtp supports SMTP SSL/TLS-encryption.
 
 \subsection{erlang-smtp}
-Erlang-smtp contains client and server for SMTP and POP3.
+Erlang-smtp contains a client and a server for SMTP and POP3.
 According to its author, it does not yet support encryption.
 
 \subsection{Results and discussion}
 Considering the fact that we only need a simple server to send and receive
-emails, we didn't need any feature other than SMTP. Therefore,
-our architecture team voted for gen\_smtp for its simplicity.
+emails, we didn't need much features except for SMTP protocol
+support. Therefore, our architecture team voted for gen\_smtp for its
+simplicity.
 
 \section{XMPP}
 \subsection{ejabberd server}
-ejabberd is a distributed Jabber/XMPP instant messaging server. It has modular architecture, web administrator interface and simple configuration. It supports the addition of Erlang modules using hooks which can be added allowing it to control the server programtically. It also supports more advanced features such as components and server to server (S2S) protocol.
+ejabberd is a distributed Jabber/XMPP instant messaging server. It has a modular
+architecture, a web administrator interface and simple configuration. It
+supports the addition of Erlang modules using hooks which can be added allowing
+it to control the server in a programmatic way. It also supports more advanced
+features such as components and a server to server (S2S) protocol.
 
 \subsection{EXMPP client}
-EXMPP is a XMPP client with SSL support. It provides a lot of functionality to deal with XML and supports several XML parsers. However, its documentation is sparse.
+EXMPP is a XMPP client with SSL support. It provides a lot of functionality to
+deal with XML and supports several XML parsers. However, its documentation is
+sparse.
 
 \subsection{Results and discussion}
-We didn't really have any options here and we had to go with ejabberd as our XMPP server.
+We didn't really have any options here and we had to go with ejabberd as our
+XMPP server.
 
-We did have choices as to how we connect to the XMPP server from our application - via ejabberd module, component or the EXMPP client. We ended up using the ejabberd module for its tight integration and simplicity.
+We did have choices as to how we connect to the XMPP server from our application
+- via ejabberd module, component or the EXMPP client. We ended up using the
+ejabberd module for its tight integration and simplicity.
+\todo{Explain and/or give reference - what is an ejabberd module/component?}
 
-However, we did use EXMPP later in the project for integration testing the IM server.
+However, we did use the EXMPP client later in the project for integration
+testing since it is easy to script test cases using the IM interface.
 
 \section{Databases}
 \subsection{Mnesia}
-Mnesia is a distributed relational database designed for telecom systems and is a part of Erlang/OTP distribution. It is a well documented, fault tolerant, ACID\cite{ACID} compliant database that supports dynamic reconfiguration as well as transactions. However, it has a storage limit of 4 gigabytes and has a learning curve of its own custom query language.
+Mnesia is a distributed relational database designed for telecom systems and is
+a part of the Erlang/OTP distribution. It is a well documented, fault tolerant,
+ACID\cite{ACID} compliant database that supports dynamic reconfiguration as well
+as transactions. However, it has a storage limit of 4 gigabytes and has a
+learning curve of its own custom query language.
 
 \subsection{Riak}
-Riak is a distributed key value database based on CAP theorem\cite{cap_theorem} and Amazon's dynamo paper\cite{dynamo}. It provides features such as RESTful interface, protocol buffers interface, ability to tune CAP values at the bucket level, map reduce queries, link walking, secondary indicies and search. All the data is replicated across the nodes based on the configuration without the usage of a master node. It is fault tolerant and built with horizontal scaling in mind. Riak, by design, is eventually consistent.
+Riak is a distributed key value database based on the CAP
+theorem\cite{cap_theorem} and Amazon's dynamo paper\cite{dynamo}. It provides
+features such as RESTful interface, protocol buffers interface, ability to tune
+CAP values at the bucket level, map reduce queries, link walking, secondary
+indicies and search. All the data is replicated across the nodes based on the
+configuration without the usage of a master node. It is fault tolerant and built
+with horizontal scaling in mind. Riak, by design, is eventually consistent.
 
 \subsection{CouchDB}
-CouchDB is a distributed document oriented database and is quite similar to Riak in terms of its feature set. Its differentiating factors are that the document is stored as a JSON object, it is ACID compliant, uses Multi-Version Concurrency Control (MVCC) and has indexed views providing fast queries. Also unlike Riak, each node of CouchDB stores the entire dataset and it has the concept of a master node.
+CouchDB is a distributed document oriented database and is quite similar to Riak
+in terms of its feature set. Its differentiating factors are that the document
+is stored as a JSON object, it is ACID compliant, uses Multi-Version Concurrency
+Control (MVCC) and has indexed views providing fast queries. Also unlike Riak,
+each node of CouchDB stores the entire dataset and it has the concept of a
+master node.
 
 \subsection{Results and discussion}
-The initial thought we had when starting off with the project is that in order to make our system scalable and fault tolerant, we need to reduce the state of our backend as much as possbile. This resulted in a database driven architecture, making our choices more specific.
+The initial thought we had when starting off with the project was that in order
+to make our system scalable and fault tolerant, we need to reduce the amount of
+state in our backend as much as possible. This resulted in a database driven
+architecture, making our choices more specific.
 
-While Mnesia was a good option, it was not linearly scalable due to its transactions. In order to keep the data consistent, Mnesia uses transactions that lock up the data until all the copies in all the nodes are updated.
+While Mnesia was a good option, it was not linearly scalable due to its
+transactions. In order to keep the data consistent, Mnesia uses transactions
+that lock up the data until all the copies in all the nodes are updated.
 
-CouchDB was also a good option, but because it stored all the data in all the nodes and had a single point of failure - the master, we couldn't use it.
+CouchDB was also a good option, but because it stored all the data in all the
+nodes and had a single point of failure - the master, we couldn't use it.
 
-Riak, with all its features and documentation, seemed like a perfect fit for us. The main selling point for us was its advertised linear scaling and fault tolerance. Basho releasing a stable 1.0 version during the survey helped as well.
+Riak, with all its features and documentation, seemed like a perfect fit for
+us. The main selling point for us was its advertised linear scaling and fault
+tolerance. Basho releasing a stable 1.0 version during the survey helped as
+well.
 
 \renewcommand\bibname{References}
 \bibliographystyle{unsrtnat}
