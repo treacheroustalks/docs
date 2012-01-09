@@ -1010,7 +1010,7 @@ architecture.
 During sprint 3, I worked on the web frontend. After holding the Unix school, I
 refactored the web frontend making it more modular, consistent and easily
 extendible. It could have been better if we had used a traditional MVC
-framework, but we decided to keep it simple making it javascript heavy.
+framework, but we decided to keep it simple making it Javascript heavy.
 
 I worked on Riak search and load testing during sprint 4. I setup Riak search
 and setup the search schema for the buckets. I also got it to work with the web
@@ -1063,7 +1063,7 @@ When we tried to decide on what web framework to use, we wanted simplicity, as
 we had already decided on not to focus on the look and feel and we didn't want
 to spend a lot of time on learning a specific web framework.
 The project required the use of WebSocket and if the framework didn't
-provide that up front, we would need to implement it ourselves.\\
+provide that up front, we would need to implement it ourselves.
 
 Chicago Boss was too immature to be an option, as we want something stable that
 we won't need to patch up too much and Erlang Web was very basic and didn't
@@ -1073,7 +1073,7 @@ The only web framework that had support for WebSocket was Zotonic, but it was
 quite complex to learn to use it, and it didn't provide the kind of simplicity
 we were looking for. We came to the conclusion that it would be of more use to
 us to use a web framework that was easy to use and implement WebSocket support,
-rather than learning how to create new modules for Zotonic.\\
+rather than learning how to create new modules for Zotonic.
 
 We initially decided to use Nitrogen, because we found that it was one of the
 more mature and well used web frameworks out of those we looked at. It could
@@ -1108,14 +1108,13 @@ was the fact that it actually had WebSocket support!
 Both contenders were good web servers and we chose to look into these two more
 closely because Nitrogen, which was the web framework we chose to use,
 supported both. We had to choose one, and the lack of documentation and support
-for WebSocket in MochiWeb made us choose Yaws. WebSocket support was definitelty
-the deciding factor.\\
+for WebSocket in MochiWeb made us choose Yaws. WebSocket support was definitely
+the deciding factor.
 
 As the WebSocket protocol kept changing under the course of the project, we were
 lucky enough to have JD in the team, who found WebSocket to be very interesting
 and cool. He updated the WebSocket implementation in Yaws, and these changes for
-WebSocket RFC 6455 are now included in the release of Yaws 1.92.\\
-
+WebSocket RFC 6455 are now included in the release of Yaws 1.92.
 
 Yaws seems to have been a fairly good choice, but during the EUC we became aware
 of another web server, Cowboy\cite{cowboy_pres}, which in retrospective,
