@@ -112,6 +112,24 @@ engineering.
 
 \section{Requirements}
 
+\subsection{Diplomacy server}
+The requirements specified that the system should consist of
+a server/backend with the following components.
+
+\begin{itemize}
+\item Authentication --- Only registered users should have access.
+\item Game master --- To moderate games.
+\item Rule engine --- The rule engine should evaluate orders and determine
+      the results.
+\item Database --- For storing game and user data
+\item AI --- Artificial intelligence based player for testing and playing games
+      when real players are unavailable.
+\end{itemize}
+
+The authentication, rule engine and database features were directly
+implemented. The game master role morphed into two roles --- the operator and
+the moderator. The AI feature is detailed further below in this section.
+
 \subsection{Three Interfaces}
 The requirement stated that we have to provide three interfaces that expose
 the same functionality to the user (the operator is forced to use the
@@ -171,7 +189,7 @@ these and can combine them freely.
 
 \begin{figure}[h]
  \centering
- \includegraphics[width=13cm]{./graphics/arch.pdf}
+ \includegraphics[width=\textwidth]{./graphics/arch.pdf}
  \caption{A possible cluster.}
  \label{fig:arch}
 \end{figure}
@@ -197,7 +215,7 @@ Fig.~\ref{fig:mod_conn}
 
 \begin{figure}[h]
  \centering
- \includegraphics[width=10cm]{./graphics/Modules_Communication.png}
+ \includegraphics[width=12cm]{./graphics/Modules_Communication.png}
  \caption{Communication between modules}
  \label{fig:mod_conn}
 \end{figure}
@@ -327,14 +345,14 @@ in Erlang which led us to hope that it would play well with our code.
 There are three ways to implement integration with ejabberd.
 
 \begin{itemize}
-\item Client - A bot that uses an Erlang client such as exmpp can be used to
+\item Client --- A bot that uses an Erlang client such as exmpp can be used to
 connect to the server.
 All users send messages to the bot via the ejabberd server. e.g. bot@example.com.
 An issue the jabber client has, is that it doesn’t scale. Using a single bot
 will mean all the users will have to be in the bot’s roster (user list).
 ejabberd doesn’t handle the scaling of rosters very well (known to fail for
-clients >40k).
-\item Component - A component is a trusted piece of an XMPP server that can send
+clients $>$ 40k).
+\item Component --- A component is a trusted piece of an XMPP server that can send
 and receive arbitrary stanzas.
 In other words, we can add a module to ejabberd and define a virtual domain to
 get all messages that are sent to this domain.
@@ -342,7 +360,7 @@ Because the name of a component is a domain (example: tt.localhost), a component
 can pretend to be many users.
 Any stanza addressed to service@tt.localhost will be delivered to tt.localhost
 no matter what the value is of 'service'.
-\item S2S(server to server) - This is the next step for those who need very
+\item S2S(server to server) --- This is the next step for those who need very
 large scale. This was not suitable for us since it requires us to learn a new
 protocol and is most possibly not necessary for our needs.
 \end{itemize}
@@ -379,7 +397,7 @@ respond to client side through the SMTP frontend again.
 
 \begin{figure}[h]
  \centering
- \includegraphics[width=5cm]{./graphics/smtp_arch.pdf}
+ \includegraphics[width=8cm]{./graphics/smtp_arch.pdf}
  \caption{Communication between client side and backend.}
  \label{fig:smtp_arch}
 \end{figure}
@@ -392,7 +410,7 @@ Those responsible for requests with a session and those for requests without.
 
 \begin{figure}[h]
  \centering
- \includegraphics[width=10cm, angle=-90]{./graphics/Concurrency_-_session_proc.pdf}
+ \includegraphics[width=13cm, angle=-90]{./graphics/Concurrency_-_session_proc.pdf}
  \vspace{-1cm}
  \caption{Controller flow of a request with/without session.}
  \label{fig:controller:session_proc}
@@ -554,7 +572,7 @@ and execute the tasks out of order.
 Fig. \ref{fig:concurrency:problem_expl} illustrates this.
 \begin{figure}[htbp!]
  \centering
- \includegraphics[width=8cm, angle=-90]{./graphics/Concurrency_-_Earlier_session_write_replace_later_session_write.pdf}
+ \includegraphics[width=10cm, angle=-90]{./graphics/Concurrency_-_Earlier_session_write_replace_later_session_write.pdf}
  \vspace{-1cm}
  \caption{First request written after second one, leading to inconsistency.}
  \label{fig:concurrency:problem_expl}
@@ -599,7 +617,7 @@ In order to serialize these there is one process for each session,
 and each user is only allowed to be logged in once at a time.
 \begin{figure}[htbp!]
   \centering
- \includegraphics[width=8cm, angle=-90]{./graphics/Concurrency_-_Login.pdf}
+ \includegraphics[width=11cm, angle=-90]{./graphics/Concurrency_-_Login.pdf}
  \vspace{-1cm}
  \caption{User login.}
  \label{fig:concurrency:login}
@@ -619,7 +637,7 @@ quickly.
 However it still needs to be handled.
 \begin{figure}[htbp!]
   \centering
- \includegraphics[width=9cm]{./graphics/Concurrency_-_Conflict_resolution_using_session_history.pdf}
+ \includegraphics[width=13cm]{./graphics/Concurrency_-_Conflict_resolution_using_session_history.pdf}
  \vspace{-1cm}
  \caption{Siblings resolutions using session history.}
  \label{fig:concurrency:history}
@@ -749,7 +767,7 @@ node it is running on. The supervisors will always restart its workers if they
 die unexpectedly.
 \begin{figure}[h]
  \centering
- \includegraphics[width=8cm]{./graphics/Service_Application.png}
+ \includegraphics[width=\textwidth]{./graphics/Service_Application.png}
  \caption{General supervision structure for applications, double-rings are
 supervisors}
  \label{fig:service_app}
@@ -762,7 +780,7 @@ which will restart the processes in case the process would die in an unnatural
 way, that is if the game has not yet finished nor been stopped by an operator.
 \begin{figure}[h]
  \centering
- \includegraphics[width=10cm]{./graphics/game_Application.png}
+ \includegraphics[width=\textwidth]{./graphics/game_Application.png}
  \caption{Supervision tree for the game application}
  \label{fig:game_app}
 \end{figure}
@@ -797,14 +815,14 @@ frontends:
 
 \begin{figure}[h]
  \centering
- \includegraphics[width=10cm]{./graphics/graphicalmap.png}
+ \includegraphics[width=\textwidth]{./graphics/graphicalmap.png}
  \caption{The graphical map.}
  \label{fig:map}
 \end{figure}
 
 \begin{figure}[h]
  \centering
- \includegraphics[width=10cm]{./graphics/orderssmall.png}
+ \includegraphics[width=\textwidth]{./graphics/orderssmall.png}
  \caption{The orders drop-down lists.}
  \label{fig:orders}
 \end{figure}
