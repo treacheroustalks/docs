@@ -78,7 +78,7 @@ Treacherous Talks is an implementation of a board game (``Diplomacy'') as a web
 service.
 
 We developed the service completely in Erlang while spending lots of time on
-optimizing performance and scalability. The project was mostly self organized
+optimising performance and scalability. The project was mostly self organised
 by an international team of 9 students and developed using Scrum.
 }
 \chapter{Introduction}
@@ -142,7 +142,8 @@ hardware to giving us tips and feedback. Thank you!
 We had nine development PCs (HP made) supplied by the university, as
 well as three more PCs as servers (Git, Redmine, Gerrit, Buildbot),
 a meeting/presentation workstation, a fault tolerance testing PC,
-and one PC as load generator for load testing. \\
+and one PC as load generator for load testing.
+
 Our office room was equipped with several white boards that proved to be
 very valuable, especially in times where much design and architecture was done.
 \section{Tools}
@@ -310,26 +311,29 @@ the load tests and get some results, which we then could compare to other
 configurations and analyze. During load testing we were able to find both bugs
 and performance bottlenecks.
 
-\chapter{Project Methodology and Organization}
+\chapter{Project Methodology and Organisation}
 
 \section{The Customer}
 Our customer was Jan Henry Nyström from Erlang Solutions\cite{erlsol}. Henry's
-job according to Scrum was to prioritize the tasks at hand and be at the
+job according to Scrum was to prioritise the tasks at hand and be at the
 planning meeting. What Henry did instead was to act more like a teacher which
 led to confusion on our side at the beginning of the project. Once we got
 accustomed to that, we were able to work very efficiently for and with him.
 Henry's experience in developing Erlang systems was extremely useful and we hope
 that he learned a little bit through this project as well since some of our
 tools were not known to him (in practice) before.
-\section{Erlang User Conference!}
+\section{Erlang User Conference}
 We were invited to present our project in poster form at the Erlang User
 Conference in Stockholm\cite{euc2011}. The attendance was free of charge for us
-thanks to Erlang Solutions. \\ In Stockholm many people asked about the project,
-most questions were on a high level, though. We did not get direct feedback that
-changed the project after the EUC but the talks there were quite relevent to our
-project and therefore a big help. \\ It was as well a very fortunate place for
-us to be as some companies that were there are actively trying to hire young
-developers with Erlang experience.
+thanks to Erlang Solutions.
+
+In Stockholm many people asked about the project, most questions were on a high
+level, though. We did not get direct feedback that changed the project after the
+EUC but the talks there were quite relevant to our project and therefore a big
+help.
+
+It was as well a very fortunate place for us to be as some companies that were
+there are actively trying to hire young developers with Erlang experience.
 \section{Scrum}
 For managing our project we used Scrum as in~\cite{kniberg}.
 We tried hard to start up a well functioning software process and believe that
@@ -351,7 +355,8 @@ short overview of his/her last day and of the plan for this day: ``Yesterday, I
 did \ldots, I had problems with \ldots; today, I am going to \ldots''.
 The positive effects of this are quite subtle and it might be easy to think that
 such a meeting is not really necessary, especially when everyone is in the same
-room:\\
+room:
+
 \begin{itemize}
 \item it encourages people to talk about their problems!
   Problems are not something one should hide. Many easy solutions for seemingly
@@ -365,21 +370,21 @@ room:\\
   up people who don't really know what they should work on.
 \end{itemize}
 \subsection{Fika}
-The swedish tradition of having Fika was something that has been practiced by
+The Swedish tradition of having Fika was something that has been practiced by
 several teams on this course before us and we unanimously voted to have weekly
-Fika, too. Every monday, one member of the team would bring cake or pastry and
+Fika, too. Every Monday, one member of the team would bring cake or pastry and
 we would eat together and have coffee or tea. This was a delicious way to get to
-know the team better. \\
+know the team better.
+
 In order to make people punctual (or: in order to have more Fika!), we decided
 that each time someone is late for the standup meeting, that person has to
 bring one extra Fika (or ``punishment Fika'', as we called it).
-
 \subsection{Planning}
 Planning was our least favourite task but nonetheless a very important one.
 Our typical planning day looked as follows:
 \begin{itemize}
 \item 9.00--9.45: {\bf estimation of available person-days,
-  prioritizing of backlog stories}\\
+  prioritising of backlog stories}\\
   Who will be missing? What else is coming up (presentations, EUC, etc.)?
   What do we want to accomplish in this sprint?
   What is most important to the customer? The customer was missing that task
@@ -393,7 +398,7 @@ Our typical planning day looked as follows:
   Guessing how long each story would take with the additional information from
   task breakdown and DoDs.
 \item 14.30--15.00: {\bf committing to sprint}\\
-  Taking the prioritized, estimated stories and committing to as many as the
+  Taking the prioritised, estimated stories and committing to as many as the
   available person days allowed.
 \item 15.00--16.00: Fika
 \end{itemize}
@@ -409,20 +414,21 @@ product than worried.
 \subsection{Retrospectives}
 The retrospective was the absolutely last thing of a sprint --- in a team
 meeting we talked about what we liked about the last sprint, what we disliked,
-and what we would like to do differently in the next sprint. \\
+and what we would like to do differently in the next sprint.
+
 It was very important to focus on getting negative feedback at first, people
 were generally reluctant to give it because they did not want to seem rude or
-be critizised themselves. This is, why we had the rule in the first one or two
+be criticised themselves. This is, why we had the rule in the first one or two
 retrospectives, that everyone {\em has\/} to come up with at least one of each
 category. This worked quite well and in the end, even negative feedback was
-coming quite easily, although personal criticism was very rare if occuring at
-all. \\
-After we collected feedback (we collected it in form of post-its on a
+coming quite easily, although personal criticism was very rare if occurring at
+all.
+
+After we had collected the feedback (we collected it in form of post-its on a
 whiteboard), we ``dot-voted'' --- everyone gets three or four votes and can
 distribute them in the form of a dot over the negative items on the board.
 Giving multiple dots to one item is allowed. We took the three items with the
 most points and tried to fix them in the course of the next sprint.
-
 \section{Quality Management}
 \subsection*{Coding Conventions}
 Our coding conventions were agreed on in sprint 1 and we enforced them through
@@ -434,7 +440,8 @@ trailing white space) as well as Erlang specifics (eg.\ how to use {\tt catch}).
 Reviews were done mostly by whoever had time. A good time for a developer to do
 reviews was while Buildbot was testing her newest change. Sometimes, though,
 reviews were requested or even traded: ``I'll review your change, if you'll
-review mine''. \\
+review mine''.
+
 At first it was annoying to have to wait for some time before a change was
 actually merged. After a while, though, we got used to the fact that nothing is
 merged immediately and continued to work on the next task while our old one was
@@ -443,10 +450,9 @@ awaiting review.
 Reviews were generally well meaning but that does not mean that we accepted bad
 code quality. People tended to look away when a function was not documented here
 and there but there still were plenty of negative reviews.
-
 \subsection*{Testing}
 We took testing very seriously and the considerable time we invested payed off.
-A counting on december 7$^{th}$, 2011 showed that 47\% of code lines were
+A counting on December 7$^{th}$, 2011 showed that 47\% of code lines were
 testing code. This big suite of tests made it incredibly easy to verify that a
 change didn't break anything. If developers are secured by a solid test suite,
 it is also easier to start working on code that is not so well known because one
@@ -469,11 +475,11 @@ Ubuntu 11.04 & operating system                                   \\
 Git          & version control                                    \\
 Gerrit       & code reviews                                       \\
 Riak         & database                                           \\
-Nitrogen     & web-framework                                      \\
+Nitrogen     & web framework                                      \\
 Yaws         & web server                                         \\
 ejabberd     & XMPP server                                        \\
-gen\_smtp    & emailing                                           \\
-Chromium 14  & web browser with Websocket\cite{websocket} support \\
+gen\_smtp    & email server library                               \\
+Chromium 14  & web browser with WebSocket\cite{websocket} support \\
 Buildbot     & continuous integration server
 \end{tabular}
 \subsubsection{Git-School}
@@ -481,19 +487,20 @@ Since almost everyone was new to Git, Erik talked to some slides about Git and
 we all did a couple assignments with Git afterwards.
 The other team was invited as well.
 \subsubsection{Requirements}
-We worked on the requirements a lot: we clarified them, prioritized them and had
+We worked on the requirements a lot: we clarified them, prioritised them and had
 our customer sign off the outcome of this process. It was crucial, that the
 customer was happy with the result since we knew that this result would shape
 the rest of our project.
 \subsubsection{Preliminary Architecture}
 We opted for a reviewed architecture process and would highly recommend it to
-future teams as well: \\
+future teams as well:
+
 A group of people was working on an architecture proposal for a couple of days.
 Then one person of that group walked a review~group through the result. The
 review~group then took the requirements and tried to run them through the
-architecture. This proved to be very effective but of course work-intensive. \\
-Given the importance of the architecture, the amount of work was acceptable.
+architecture. This proved to be very effective but of course work-intensive.
 
+Given the importance of the architecture, the amount of work was acceptable.
 \subsection*{Sprint 2 --- Sprint Goal: ``CRU Users''}
 \subsubsection{Continuous Integration}
 We set up Buildbot. Making our build process compatible with Buildbot was a lot
@@ -508,13 +515,13 @@ had experience in writing tests in Erlang. Therefore we chose to hold a
 {\em testing school\/} much like sprint 1's Git school.
 
 \subsubsection{Load Test Riak}
-Since our first design drafts showed that riak would be very central to our
-performance, we decided that a quick load test of riak was in order just to
+Since our first design drafts showed that Riak would be very central to our
+performance, we decided that a quick load test of Riak was in order just to
 ensure that it `works'. The results where not extremely surprising and therefore
-we continued to rely on riak.
+we continued to rely on Riak.
 
 \subsubsection{Interfaces}
-We laid the foundations for our interfaces: http (WebSocket), XMPP, SMTP.
+We laid the foundations for our interfaces: HTTP (WebSocket), XMPP, SMTP.
 The DoD was to have them answer a `ping' with a `pong' or anything comparable.
 
 \subsubsection{Registering, Login, \ldots}
@@ -540,7 +547,7 @@ Attending the EUC'11 was on our agenda. For that we had to make a
 poster, which had to pass several stages of reviews. This proved to be very
 time~consuming.
 \subsubsection{Refactor UIs}
-Since the input channels (http, XMPP, SMTP) had been developed in parallel in
+Since the input channels (HTTP, XMPP, SMTP) had been developed in parallel in
 the last sprint, they were full of code duplication. We changed that and as well
 extended them greatly.
 \subsubsection{Game Application}
@@ -551,26 +558,25 @@ changing their phases according to a timer to implementing the game rules.
 \subsection*{Sprint 4 --- Sprint Goal: ``Find the Limits of Real Games''}
 \subsubsection{Load Testing}
 We applied high load to our system and measured where the limits are (and how
-they look like). The load tests showed us severe but easily fixable bugs that
-we had in our system; we would not have found them otherwise. The scalability
-was quite satisfactory for a first try, the raw performance however was
-degrading over time until after $\approx$1h the backends crashed. We fixed this
-easily by a riak-reconfiguration but did not figure out where the problem came
-from exactly.
-
+they look like). The load tests showed us severe but easily fixable bugs that we
+had in our system; we would not have found them otherwise. The scalability was
+quite satisfactory for a first try, the raw performance however was degrading
+over time until after $\approx$1h the backends crashed. We fixed this easily by
+a reconfiguration of Riak but did not figure out exactly where the problem came
+from.
 \subsubsection{Messaging}
 The messaging-part explains the word ``Real'' in the sprint goal since one
-cannot play a good diplomacy game without communicating.\\
+cannot play a good diplomacy game without communicating.
+
 The messaging system needed to support offline messages (when a user receives a
 message while she is offline, the message should be delivered upon login).
-
 \subsubsection{Fault tolerance testing}
 We needed a (semi-) automatic way of testing fault tolerance, since distributed
 functionality like that is not possible to test with EUnit and can be quite
 tedious. So we installed some VM containers on one of our servers, that could be
 used to run multiple instances of the system on one machine. The goal for this
 story was to provide the testing framework, not the fault tolerance itself, as
-this would have been too much. Our system- and cluster managers are a byproduct
+this would have been too much. Our System- and Cluster Managers are a byproduct
 of this. They simplify the setup and start of a cluster by a great deal.
 
 \subsection*{Sprint 5 --- Play game \& Operator is watching}
@@ -593,28 +599,28 @@ never done tuning - and it's just fun! So we decided to solve the degradation
 and if there is time left to tune performance, but not to spend more than 20 man
 days on that story.
 
-Our riak storage backend was eleveldb, because it is the only one supporting
+Our Riak storage backend was eleveldb, because it is the only one supporting
 secondary indices. The assumption was that eleveldb, was responsible for the
-degradation. The reason for that assumption was that riak in general does not
+degradation. The reason for that assumption was that Riak in general does not
 show such a degradation pattern, and the default and well-tested storage backend
-is bitcask. After replacing all uses of riak's secondary indices with riak
-search we could switch our backend back to bitcask.  This solved the degradation
+is bitcask. After replacing all uses of Riak's secondary indices with Riak
+Search we could switch our backend back to bitcask.  This solved the degradation
 problem.
 
-Further performance tuning involved adapting the riak write parameters.
+Further performance tuning involved adapting the Riak write parameters.
 Reducing these for the non-crucial writes, like message logging, was a simple
-optimization.
+optimisation.
 
 The last change regarding the performance was regarding another not so
-well-tested riak feature. On the \#riak IRC room on irc.freenode.net we have
-been advised to trying it without riak search. So we tried to remove it from as
-many places as possible, and use riak key filtering instead.  Load tests showed
+well-tested Riak feature. On the \#riak IRC room on irc.freenode.net we got
+the advice to try it without Riak Search. So we tried to remove it from as
+many places as possible, and use Riak key filtering instead.  Load tests showed
 this was indeed an improvement in performance.
 
 Worth mentioning about the continuous load tests is that we discovered a drastic
 performance drop due to some code changes. After a little while we could even
 tell which commit was responsible and why. As it turns out it once again
-increased the use of riak search.
+increased the use of Riak search.
 
 \subsubsection{Handle loss of servers}
 We implemented the fault tolerance in the fifth sprint after providing the
@@ -626,7 +632,7 @@ data to the database, and another node could then resurrect it with that data.
 
 \subsubsection{Operator/Moderator functionality}
 Many of our requirements were finished by sprint 5 and the majority of the
-backlog consisted of operator/moderator functionality. So we introduced these
+backlog consisted of Operator/Moderator functionality. So we introduced these
 user roles and implemented an access control list together with some
 functionality requiring privileged access, like inspecting servers and games or
 blacklisting users.
@@ -636,8 +642,8 @@ A rather small, but to us very important, feature of that sprint was the
 graphical map for the web interface. The game was not really playable with just
 the textual representation of the map. We decided to do this only for the web
 interface, since the other interface are purely text based anyway, and this was
-a good task for html5 canvas.
-
+a good task for HTML5 canvas.
+\todo{Explain/link HTML5 canvas}
 \subsection*{Sprint 6}
 The last sprint was very short and was just about finishing up - we did not even
 have a real planning meeting. We wrote all required reports (including this
@@ -664,16 +670,16 @@ introduce any new features whatsoever.
   you get a lot more valuable feedback and no one can tell you later that what
   you did was wrong --- because they knew what you did.
 \item Apply Scrum completely and take the time to read the material on Scrum and
-learn how to apply it properly. Don't feel bad for saying ``no'' to TA/customer
-if you are running out of time and you didn't commit to something.
+  learn how to apply it properly. Don't feel bad for saying ``no'' to
+  TA/customer if you are running out of time and you didn't commit to something.
 \item It is good to have the same Scrum Master during several sprints, as he/she
-will get more comfortable in the role, but it is a team effort and if everyone
-knows what to do, the ``job'' gets easier. This is particularly important
-during the planning day, as the Scrum Master is leading the planning.
+  will get more comfortable in the role, but it is a team effort and if everyone
+  knows what to do, the ``job'' gets easier. This is particularly important
+  during the planning day, as the Scrum Master is leading the planning.
 \item If your customer cannot be present during the whole sprint planning day,
-  try to do the prioritization while he/she is attending, as this is probably
+  try to do the prioritisation while he/she is attending, as this is probably
   the most valuable thing for the customer during planning. This will also
-  prevent you from guessing what the customer might want, and prioritizing takes
+  prevent you from guessing what the customer might want, and prioritising takes
   time!
 \item Document early, document often. While this is not the most interesting
   aspect of coding, it definitely pays. Invest in your project's future by
@@ -709,7 +715,7 @@ the option of English keyboards would be really helpful.
 This was a very fun, exciting and challenging course. We have gained new
 knowledge in many areas, and something that was new to us all was the
 language Erlang and the project methodology Scrum, we also learned to
-use new tools and the importance of testing.\\
+use new tools and the importance of testing.
 
 In a team like this, with students from different backgrounds in many regards,
 from cultural to academical, it is important to respect each other and be
@@ -717,7 +723,7 @@ humble.  We really benefited from learning to know each other better through
 fika and changing who we were working with on different tasks. We didn't enforce
 pair programming, but those who felt more comfortable doing that had the
 possibility to do it. In our working agreements we recommended team members to
-eat lunch in the lunchroom, so we could have a casual chat.\\
+eat lunch in the lunchroom, so we could have a casual chat.
 
 Although, it has not been a breeze all the time. The project introduced
 challenges in many regards, as there would be in any project. But we had
