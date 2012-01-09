@@ -5,9 +5,21 @@
 \usepackage{graphicx}
 \usepackage{datetime}
 \usepackage{color}
-\usepackage{url}
 \usepackage{fancyvrb}
 \usepackage{microtype}
+
+%% Nicely format and linebreak URLs in the bibliography (and elsewhere).
+\usepackage{url}
+%% Define a new 'leo' style for the package that will use a smaller font.
+\makeatletter
+\def\url@leostyle{%
+  \@ifundefined{selectfont}{\def\UrlFont{\sf}}{\def\UrlFont{\small\ttfamily}}}
+\makeatother
+%% Now actually use the newly defined style.
+\urlstyle{leo}
+
+%% Nicer formatting of figure captions.
+\usepackage[font=small,format=plain,labelfont=bf,up,textfont=it,up]{caption}
 
 \newcommand{\hi}[1]{{\color{red}\em #1\/}\\}
 \newcommand{\todo}[1]{\footnote{{\color{red} {\bf TODO:} #1}}}
@@ -16,14 +28,54 @@
 \setcounter{secnumdepth}{3}
 \newcommand{\subsubsubsection}[1]{\paragraph{#1}\mbox{}\\}
 
+% ------------------------------------------------------------------------------
+% Title definitions
+% ------------------------------------------------------------------------------
+\newcommand{\HRule}[1]{\rule{\linewidth}{#1}}     % Horizontal rule
+
+\makeatletter                                     % Title
+\def\printtitle{
+    {\centering \@title\par}}
+\makeatother
+
+\makeatletter                                     % Author
+\def\printauthor{
+    {\centering \large \@author}}
+\makeatother
+
+% ------------------------------------------------------------------------------
+% Metadata
+% ------------------------------------------------------------------------------
+\title{    \normalsize \textsc{``Treacherous Talks''}   % Subtitle of the document
+             \\[2.0cm]                                  % 2cm spacing
+            \HRule{0.5pt} \\                            % Upper rule
+            \LARGE \textbf{\uppercase{Product Report}}   % Title
+            \HRule{2pt} \\ [0.5cm]                      % Lower rule + 0.5cm spacing
+            \normalsize \today                          % Todays date
+        }
+
+\author{Dilshod Aliev\\
+        Jan Daniel Bothma\\
+        Stephan Brandauer\\
+        Andre Hilsendeger\\
+        Rahim Kadkhodamohammadi\\
+        Xinze Lin\\
+        Tiina Loukusa\\
+        Erik Timan\\
+        Sukumar Yethadka\\
+        }
+
 \begin{document}
-\title{Product Report \\
-  ``Treacherous Talks''}
-\date{\today\ @ \currenttime}
-\author{Dilshod Aliev, Jan Daniel Bothma, Stephan Brandauer,\\
- Andre Hilsendeger, Rahim Kadkhodamohammadi, Xinze Lin,\\
-Tiina Loukusa, Erik Timan, Sukumar Yethadka}
-\maketitle
+
+% ------------------------------------------------------------------------------
+% Maketitle
+% ------------------------------------------------------------------------------
+\thispagestyle{empty}                % Remove page numbering on this page
+
+\printtitle
+\vfill
+\printauthor
+
 \tableofcontents
 
 \abstract{

@@ -7,24 +7,77 @@
 \usepackage{color}
 \usepackage{microtype}
 
+%% Nicely format and linebreak URLs in the bibliography (and elsewhere).
+\usepackage{url}
+%% Define a new 'leo' style for the package that will use a smaller font.
+\makeatletter
+\def\url@leostyle{%
+  \@ifundefined{selectfont}{\def\UrlFont{\sf}}{\def\UrlFont{\small\ttfamily}}}
+\makeatother
+%% Now actually use the newly defined style.
+\urlstyle{leo}
+
+%% Nicer formatting of figure captions.
+\usepackage[font=small,format=plain,labelfont=bf,up,textfont=it,up]{caption}
+
 \newcommand{\hi}[1]{{\color{red}\tiny \em #1\/}\\}
 \newcommand{\todo}[1]{\footnote{{\color{red} {\bf TODO:} #1}}}
 
+% ------------------------------------------------------------------------------
+% Title definitions
+% ------------------------------------------------------------------------------
+\newcommand{\HRule}[1]{\rule{\linewidth}{#1}}     % Horizontal rule
+
+\makeatletter                                     % Title
+\def\printtitle{
+    {\centering \@title\par}}
+\makeatother
+
+\makeatletter                                     % Author
+\def\printauthor{
+    {\centering \large \@author}}
+\makeatother
+
+% ------------------------------------------------------------------------------
+% Metadata
+% ------------------------------------------------------------------------------
+\title{    \normalsize \textsc{``Treacherous Talks''}   % Subtitle of the document
+             \\[2.0cm]                                  % 2cm spacing
+            \HRule{0.5pt} \\                            % Upper rule
+            \LARGE \textbf{\uppercase{Course Report}}   % Title
+            \HRule{2pt} \\ [0.5cm]                      % Lower rule + 0.5cm spacing
+            \normalsize \today                          % Todays date
+        }
+
+\author{Dilshod Aliev\\
+        Jan Daniel Bothma\\
+        Stephan Brandauer\\
+        Andre Hilsendeger\\
+        Rahim Kadkhodamohammadi\\
+        Xinze Lin\\
+        Tiina Loukusa\\
+        Erik Timan\\
+        Sukumar Yethadka\\
+        }
+
 \begin{document}
-\title{Course Report \\
-  ``Treacherous Talks''}
-\date{\today\ @ \currenttime}
-\author{Dilshod Aliev, Jan Daniel Bothma, Stephan Brandauer,\\
- Andre Hilsendeger, Rahim Kadkhodamohammadi, Xinze Lin,\\
-Tiina Loukusa, Erik Timan, Sukumar Yethadka}
-\maketitle
+
+% ------------------------------------------------------------------------------
+% Maketitle
+% ------------------------------------------------------------------------------
+\thispagestyle{empty}                % Remove page numbering on this page
+
+\printtitle
+\vfill
+\printauthor
+
 \tableofcontents
 
 \abstract{
 Treacherous Talks is an implementation of a board game (``Diplomacy'') as a web
 service.
 
-We developed the service completely in erlang while spending lots of time on
+We developed the service completely in Erlang while spending lots of time on
 optimizing performance and scalability. The project was mostly self organized
 by an international team of 9 students and developed using Scrum.
 }
@@ -54,7 +107,7 @@ This is only one example for how quickly we had formed a well functioning
 team. \\
 \begin{figure}[h]
  \centering
- \includegraphics[width=7cm]{../presentation/images/diplomacy/DSCF6548.jpg}
+ \includegraphics[width=12cm]{../presentation/images/diplomacy/DSCF6548.jpg}
  % DSCF6548.jpg: 3296x2472 pixel, 72dpi, 116.28x87.21 cm, bb=0 0 3296 2472
  \caption{Our Office}
  \label{fig:office}
@@ -87,7 +140,7 @@ hardware to giving us tips and feedback. Thank you!
 
 \section{Equipment}
 We had nine development PCs (HP made) supplied by the university, as
-well as three more PCs as servers (git, redmine, gerrit, buildbot),
+well as three more PCs as servers (Git, Redmine, Gerrit, Buildbot),
 a meeting/presentation workstation, a fault tolerance testing PC,
 and one PC as load generator for load testing. \\
 Our office room was equipped with several white boards that proved to be
@@ -95,7 +148,7 @@ very valuable, especially in times where much design and architecture was done.
 \section{Tools}
 \subsection{Issue Tracking}
 All projects need a system for tracking issues and planning. We opted to use
-one of the more popular open-source solutions called Redmine, a web-based issue
+one of the more popular open-source solutions called Redmine\cite{redmine}, a web-based issue
 tracker and project management system. Redmine was useful to us for several
 reasons:
 \begin{itemize}
@@ -113,15 +166,15 @@ reasons:
   We used it for discussions during the initial sprints.
 \item Version control integration \\
   We used the version control integration mostly for connecting tickets in
-  Redmine to the associated commits in our git repository.
+  Redmine to the associated commits in our Git repository.
 \end{itemize}
 \subsection{Version Control}
 Perhaps even more vital to a software development project is a good version
 control system. There are several out there, but the most common open-source
-ones are Subversion and git. They are fundamentally different and we chose git
+ones are Subversion and Git. They are fundamentally different and we chose Git
 since it has very good tool support and handles branching and merging very well.
 
-Another plus for git is Github, an online repository hosting service. Most
+Another plus for Git is Github, an online repository hosting service. Most
 open-source software written in Erlang (including Erlang/OTP itself) is hosted
 on Github. This makes the process of making modifications to upstream code a lot
 easier since it is trivial to fork (create your own hosted copy of another
@@ -154,7 +207,7 @@ review in some fashion or another, we wanted to try a more formal approach to
 see if it could help us improve our code quality.
 
 We quickly settled on using the code review system Gerrit. It was by far the
-easiest code review system to setup for git. The idea was to combine continuous
+easiest code review system to setup for Git. The idea was to combine continuous
 integration with the code review system to ensure that developers pay attention
 to the results from Buildbot and that the master branch always is buildable and
 releasable. It works like this:
@@ -260,24 +313,24 @@ and performance bottlenecks.
 \chapter{Project Methodology and Organization}
 
 \section{The Customer}
-Our customer was Jan Henry Nyström from Erlang Solutions. Henry's job according to
+Our customer was Jan Henry Nyström from Erlang Solutions\cite{erlsol}. Henry's job according to
 Scrum was to prioritize the tasks at hand and be at the planning meeting.
 What Henry did instead was to act more like a teacher which led to confusion on
 our side at the beginning of the project. Once we got accustomed to that,
 we were able to work very efficiently for and with him.
-Henry's experience in developing erlang systems was extremely useful and we hope
+Henry's experience in developing Erlang systems was extremely useful and we hope
 that he learned a little bit through this project as well since some of our
 tools were not known to him (in practice) before.
 \section{Erlang User Conference!}
 We were invited to present our project in poster form at the
-Erlang User Conference in Stockholm. The attendance was free of charge for us
+Erlang User Conference in Stockholm\cite{euc2011}. The attendance was free of charge for us
 thanks to Erlang Solutions. \\
 In Stockholm many people asked about the project, most questions were on a high
 level, though. We did not get direct feedback that changed the project after the
 EUC but the talks there were quite relevent to our project and therefore a big
 help. \\
 It was as well a very fortunate place for us to be as some companies that were
-there are actively trying to hire young developers with erlang experience.
+there are actively trying to hire young developers with Erlang experience.
 \section{Scrum}
 For managing our project we used Scrum as in~\cite{kniberg}.
 We tried hard to start up a well functioning software process and believe that
@@ -343,7 +396,7 @@ Our typical planning day looked as follows:
 \item 14.30--15.00: {\bf committing to sprint}\\
   Taking the prioritized, estimated stories and committing to as many as the
   available person days allowed.
-\item 15.00--16.00: FIKA
+\item 15.00--16.00: Fika
 \end{itemize}
 
 \subsection{Demo}
@@ -377,10 +430,10 @@ Our coding conventions were agreed on in sprint 1 and we enforced them through
 code reviews. Obviously some things were overlooked but the code quality
 doubtlessly profited a lot from that practice.
 The coding conventions governed coding style (eg.\ max-80-char-lines, no
-trailing white space) as well as erlang specifics (eg.\ how to use {\tt catch}).
+trailing white space) as well as Erlang specifics (eg.\ how to use {\tt catch}).
 \subsection*{Reviews}
 Reviews were done mostly by whoever had time. A good time for a developer to do
-reviews was while buildbot was testing her newest change. Sometimes, though,
+reviews was while Buildbot was testing her newest change. Sometimes, though,
 reviews were requested or even traded: ``I'll review your change, if you'll
 review mine''. \\
 At first it was annoying to have to wait for some time before a change was
@@ -403,7 +456,7 @@ always has a regression test suite that immediately highlights errors.
 \section{Timeline}
 \subsection*{Sprint 1 --- Sprint Goal: ``Getting Ready to Code''}
 \subsubsection{Servers}
-We set up a git- and a redmine-server, buildbot was not
+We set up a Git-server and a Redmine-server, Buildbot was not
 a task in this sprint. We started off with JD as scrum master and Stephan as
 spokesperson. Scrum was done on a whiteboard with post-its.
 As we all were new to the process, it took us a little while to figure out how
@@ -413,18 +466,20 @@ We tried out some tools/libraries and evaluated how they would fit
 our project. The end result of that process was (see Appendix B for details): \\
 \\
 \begin{tabular}{r|l}
-Ubuntu 11.04 & operating system \\
-Git          & version control  \\
-Gerrit       & code reviews     \\
-Riak         & database         \\
-Nitrogen     & webframework     \\
-Ejabberd     & XMPP server      \\
-gen\_smtp    & emailing         \\
+Ubuntu 11.04 & operating system                                   \\
+Git          & version control                                    \\
+Gerrit       & code reviews                                       \\
+Riak         & database                                           \\
+Nitrogen     & web-framework                                      \\
+Yaws         & web server                                         \\
+ejabberd     & XMPP server                                        \\
+gen\_smtp    & emailing                                           \\
+Chromium 14  & web browser with Websocket\cite{websocket} support \\
 Buildbot     & continuous integration server
 \end{tabular}
 \subsubsection{Git-School}
-Since almost everyone was new to git, Erik talked to some slides about git and
-we all did a couple assignments with git afterwards.
+Since almost everyone was new to Git, Erik talked to some slides about Git and
+we all did a couple assignments with Git afterwards.
 The other team was invited as well.
 \subsubsection{Requirements}
 We worked on the requirements a lot: we clarified them, prioritized them and had
@@ -442,7 +497,7 @@ Given the importance of the architecture, the amount of work was acceptable.
 
 \subsection*{Sprint 2 --- Sprint Goal: ``CRU Users''}
 \subsubsection{Continuous Integration}
-We set up buildbot. Making our build process compatible with buildbot was a lot
+We set up Buildbot. Making our build process compatible with Buildbot was a lot
 of work and maintaining the build process was a task in all future sprints.
 
 Even though Continuous Integration was a lot of work to get up and running, the
@@ -450,8 +505,8 @@ productivity bonus it gave us more than made up for it in the long run.
 
 \subsubsection{Testing Competency}
 Some team members had not much or no real experience in writing tests, no one
-had experience in writing tests in erlang. Therefore we chose to hold a
-{\em testing school\/} much like sprint 1's git school.
+had experience in writing tests in Erlang. Therefore we chose to hold a
+{\em testing school\/} much like sprint 1's Git school.
 
 \subsubsection{Load Test Riak}
 Since our first design drafts showed that riak would be very central to our
@@ -460,7 +515,7 @@ ensure that it `works'. The results where not extremely surprising and therefore
 we continued to rely on riak.
 
 \subsubsection{Interfaces}
-We laid the foundations for our interfaces: http (websockets), xmpp, smtp.
+We laid the foundations for our interfaces: http (Websockets), XMPP, SMTP.
 The DoD was to have them answer a `ping' with a `pong' or anything comparable.
 
 \subsubsection{Registering, Login, \ldots}
@@ -486,7 +541,7 @@ Attending the EUC'11 was on our agenda. For that we had to make a
 poster, which had to pass several stages of reviews. This proved to be very
 time~consuming.
 \subsubsection{Refactor UIs}
-Since the input channels (http, xmpp, smtp) had been developed in parallel in
+Since the input channels (http, XMPP, SMTP) had been developed in parallel in
 the last sprint, they were full of code duplication. We changed that and as well
 extended them greatly.
 \subsubsection{Game Application}
@@ -512,7 +567,7 @@ message while she is offline, the message should be delivered upon login).
 
 \subsubsection{Fault tolerance testing}
 We needed a (semi-) automatic way of testing fault tolerance, since distributed
-functionality like that is not possible to test with eunit and can be quite tedious.
+functionality like that is not possible to test with EUnit and can be quite tedious.
 So we installed some VM containers on one of our servers, that could be used to run
 multiple instances of the system on one machine.
 The goal for this story was to provide the testing framework, not the fault tolerance itself,
@@ -580,7 +635,7 @@ and this was a good task for html5 canvas.
 
 \subsection*{Sprint 6}
 The last sprint was very short and was just about finishing up - we did not even have a real planning meeting.
-We wrote all required reports (including this one), published our project on github,
+We wrote all required reports (including this one), published our project on Github,
 and fixed some bugs.
 We did not introduce any new features whatsoever.
 
@@ -589,7 +644,7 @@ We did not introduce any new features whatsoever.
 \begin{itemize}
 \item  Investing in code quality pays off. Do never, ever, say things like:
 ``commit this now, we can make it pretty later''. Because you won't!
-Do it now or never.
+Do it, it's now or never.
 \item Think `product': everything you do is in order to make the product better.
 You write high quality code because it makes you more productive, not because
 it's cast in stone.
@@ -628,12 +683,13 @@ of coding, it definitely pays. Invest in your project's future by adding documen
 \section*{To Teachers/TA}
 \begin{itemize}
 \item We enjoy your visits and feedback!
-\item It is great that you give the teams so much freedom
-\item The organisation of the course went very well, you were always helpful
+\item It is great that you give the teams so much freedom.
+\item The organisation of the course went very well, you were always helpful.
 \item A little less report writing / poster making / presentation holding would
-  make the product better and the course more fun
-\item Talks from industry experts would be very much appreciated
-\item English keyboards please!
+  make the product better and the course more fun.
+\item Talks from industry experts would be very much appreciated.
+\item It was hard for some of us to program using Swedish keyboards. Having
+the option of English keyboards would be really helpful.
 \end{itemize}
 
 
@@ -654,7 +710,7 @@ eat lunch in the lunchroom, so we could have a casual chat.\\
 Although, it has not been a breeze all the time. The project introduced
 challenges in many regards, as there would be in any project.
 But we had basically the same experience with Erlang, and we were more or less
-on the same level in regards to that. Tools like git and gerrit were something
+on the same level in regards to that. Tools like Git and Gerrit were something
 new to parts of the team, so there was a learning curve to many things. But in
 the end, we all have something new to put in our bag of knowledge and experience.
 \appendix
@@ -820,7 +876,7 @@ to prepare a demo to show during the presentation. I spent some time to
 
 \section{Xinze Lin}
 In the first sprint, I was surveying and experimenting Erlang based SMTP servers for our project's need.
-Thanks to Erik's git school and tool support, I learned to use git to commit my code to our repository.
+Thanks to Erik's Git school and tool support, I learned to use Git to commit my code to our repository.
 
 In Sprint 2, I wrote the first version of our SMTP-frontend server,
 which enables Email clients to communicate with the backend to register or update users.
@@ -873,7 +929,7 @@ the beginning such as installing the needed software on our servers. The team
 opted to use Redmine for issue tracking and planning, Gerrit for code review and
 Buildbot for continuous integration. It took me a while to get everything up and
 running and I needed to hack some of the tools to support our workflow better. I
-also held schools on git and Redmine which took me a while to prepare.
+also held schools on Git and Redmine which took me a while to prepare.
 
 I started working on the actual codebase during sprint 2. I took charge of
 creating scripts for building and testing our system. Since we needed to
@@ -930,14 +986,14 @@ After a brief survey in the early stages of the project, we chose a few projects
 Zotonic\cite{zotonic} is a CMS based on Erlang. It has a powerful control interface, has
 quite a number of modules available such as authentication and chat and it
 achieves modularity by following OTP-principles. Zotonic has support for
-websockets, and when websockets are not supported by the browser, it will use
+Websockets, and when Websockets are not supported by the browser, it will use
 Comet instead. Zotonic has been insprired by Nitrogen and it can only be run
 on a MochiWeb server.
 
 \subsection{Erlang Web}
 Erlang Web\cite{erlangweb} is quite simplistic, it has support for multiple web servers and
 distribution. It does not have any extras like a chat nor does it have support
-for websockets. Erlang Web can be run on INETS and Yaws web servers.
+for Websockets. Erlang Web can be run on INETS and Yaws web servers.
 
 \subsection{Nitrogen}
 Nitrogen\cite{nitrogen} uses an event-driven model and offers hot code swapping, stability
@@ -949,33 +1005,33 @@ several web servers; MochiWeb, Yaws and INETS.
 Chicago Boss\cite{chicagoboss} is a new web framework, which has not yet reached
 a stable state. Even though it hasn't reached 1.0, it still offers some nice
 features, as it supports multiple databases, hot code swapping and e-mail among
-other things. It is well documented but it does not support websockets nor
+other things. It is well documented but it does not support Websockets nor
 distributed systems.
 
 \subsection{Results and discussion}
 When we tried to decide on what web framework to use, we wanted simplicity, as
 we had already decided on not to focus on the look and feel and we didn't want
 to spend a lot of time on learning a specific web framework.
-The project required the use of websockets and if the framework didn't
+The project required the use of Websockets and if the framework didn't
 provide that up front, we would need to implement it ourselves.\\
 
 Chicago Boss was too immature to be an option, as we want something stable that
 we won't need to patch up too much and Erlang Web was very basic and didn't
 provide many features that we could use, compared to the other ones.
 
-The only web framework that had support for websockets was Zotonic, but it was
+The only web framework that had support for Websockets was Zotonic, but it was
 quite complex to learn to use it, and it didn't provide the kind of simplicity
 we were looking for. We came to the conclusion that it would be of more use to
-us to use a web framework that was easy to use and implement websocket support,
+us to use a web framework that was easy to use and implement Websocket support,
 rather than learning how to create new modules for Zotonic.\\
 
 We initially decided to use Nitrogen, because we found that it was one of the
 more mature and well used web frameworks out of those we looked at. It could
 work with both of the web servers we were choosing among, it was easy to use and
-it provided some nice and useful features. It didn't have websocket support but
+it provided some nice and useful features. It didn't have Websocket support but
 we thought we would be able to implement that.
 
-Unfortunately, we came to the conclusion that implementing websocket support
+Unfortunately, we came to the conclusion that implementing Websocket support
 into Nitrogen is a project on its own, and we decided to not use a web
 framework at all. We ended up using only Javascript, which was sufficient for
 our use.
@@ -988,7 +1044,7 @@ due to these properties. It is easy to set up and get running. It was really
 hard to find any documentation, because there is almost no documentation online,
 only the API that can be generated by edocs which in retrospective should be
 quite intuitive. A big drawback for this project was that it doesn't have
-support for websockets.
+support for Websockets.
 
 \subsection{Yaws}
 Yaws\cite{yaws} is a high performance web server, which has a large and active
@@ -996,25 +1052,25 @@ community and is thus regularly updated. It can be run in two different modes;
 as a standalone application or as an embedded application. Their webpage
 provides a large number of example use cases and it is well documented, which
 might be a reason to its large user base. Something that really appealed to us
-was the fact that it actually had websocket support!
+was the fact that it actually had Websocket support!
 
 \subsection{Results and discussion}
 Both contenders were good webservers and we chose to look into these two more
 closely because Nitrogen, which was the web framework we chose to use,
 supported both. We had to choose one, and the lack of documentation and support
-for websockets in MochiWeb made us choose Yaws. Websocket support was definitely
+for Websockets in MochiWeb made us choose Yaws. Websocket support was definitely
 the deciding factor.\\
 
-As the websocket protocol kept changing under the course of the project, we were
-lucky enough to have JD in the team, who found websockets to be very interesting
-and cool. He updated the websocket implementation in Yaws, and these changes for
+As the Websocket protocol kept changing under the course of the project, we were
+lucky enough to have JD in the team, who found Websockets to be very interesting
+and cool. He updated the Websocket implementation in Yaws, and these changes for
 Websocket RFC 6455 are now included in the release of Yaws 1.92.\\
 
 
 Yaws seems to have been a fairly good choise, but during the EUC we became
 aware of another web server, Cowboy\cite{cowboy_pres}, which in retrospective,
 probably would have been an even better decision as the developer for Cowboy is
-very keen on having the latest websocket version at all times. Why we didn't
+very keen on having the latest Websocket version at all times. Why we didn't
 even consider it an option was because it was very new and it had just entered
 early beta when we did the survey when we had more mature options to choose from.
 
