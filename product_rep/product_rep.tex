@@ -347,7 +347,7 @@ from any user.
 A fixed number of them is spawned on startup and will handle requests on
 arrival.
 Their main responsibilities are registration, login and the like.
-Figure~\ref{fig:controller:session_proc} illustrates this.
+Fig.~\ref{fig:controller:session_proc} illustrates this.
 
 \subsubsection{Session Management}
 The session management consists of a group of processes and a mnesia table.
@@ -495,7 +495,7 @@ Thus two requests involving an update on the same key-value pair can, and will,
 end up on different workers or even nodes.
 This can lead to inconsistency, because they might have different work load
 and execute the tasks out of order.
-Figure \ref{fig:concurrency:problem_expl} illustrates this.
+Fig. \ref{fig:concurrency:problem_expl} illustrates this.
 \begin{figure}[htbp!]
  \centering
  \includegraphics[width=8cm, angle=-90]{./graphics/Concurrency_-_Earlier_session_write_replace_later_session_write.pdf}
@@ -511,7 +511,7 @@ Figure \ref{fig:concurrency:problem_expl} illustrates this.
  \caption{Sibling creation.}
  \label{fig:concurrency:siblings}
 \end{figure}
-Another problem is shown in Figure \ref{fig:concurrency:siblings}.
+Another problem is shown in Fig. \ref{fig:concurrency:siblings}.
 Two different nodes might end up writing to the same key without even knowing
 there was a concurrent write.
 Riak's CAP control specifies how many Riak nodes should respond a positive write
@@ -548,7 +548,7 @@ and each user is only allowed to be logged in once at a time.
  \label{fig:concurrency:login}
 \end{figure}
 To ensure only one active session the login has to consider concurrency as well.
-Figure \ref{fig:concurrency:login} shows how the login works.
+Fig. \ref{fig:concurrency:login} shows how the login works.
 Any old session needs be terminated before we can start a new one.
 Also we use mnesia instead of Riak to store session information,
 as it supports transactions.
@@ -570,7 +570,7 @@ We use a session history to resolve siblings, which is updated during login.
 Additionally we store which session was responsible for the update.
 When the backend encounters siblings it then checks the session history which
 is the newer one and picks the corresponding value to be the correct one.
-Figure \ref{fig:concurrency:history} illustrates this.
+Fig. \ref{fig:concurrency:history} illustrates this.
 
 \subsubsubsection{Multi user concurrency}
 Multi user concurrency involves the data that can be written by multiple users,
@@ -781,7 +781,7 @@ are likely to receive replies more instantly in XMPP than in SMTP.
 \section{Messages}
 In the web frontend, the user is shown two chat boxes: one for off-game chat
 and one for in-game-chat (they can be seen --- minimized --- in
-fig.~\ref{fig:dashboard}. The user manually has to enter the recipient (in
+Fig.~\ref{fig:dashboard}. The user manually has to enter the recipient (in
 in-game chat the recipient-country and the game ID). If the recipient is not
 online when a message is sent, it will be stored and delivered by the message
 application after the recipient logs in the next time. \\
