@@ -37,10 +37,10 @@ To conclude, some of our relative weaknesses are mentioned.
 }
 
 \chapter{Introduction}
-Diplomacy\cite{diplomacy} is a board game, invented in the 1950s where the goal is to try to
-conquer Europe just before WW I. You come close to this goal by talking to the
-other players --- by diplomacy --- and making them your allies. And you achieve
-it by attack them when they do not expect it.
+Diplomacy\cite{diplomacy} is a board game, invented in the 1950s where the goal
+is to try to conquer Europe just before WW I. You come close to this goal by
+talking to the other players --- by diplomacy --- and making them your allies.
+And you achieve it by attack them when they do not expect it.
 
 The game is and was commonly played over distance --- starting with playing by
 mail, then email and nowadays over pretty web pages with full-blown map
@@ -75,15 +75,15 @@ web~interface). Those interfaces are:\\
 
 \subsection{Scalability}
 The system should be scalable. Scalability in this context refers to horizontal
-scaling where the system should be able to handle more load by simply adding more
-nodes. No further explanations were provided regarding this feature, but since we
-saw it as a challenge we invested a lot of work into it.
+scaling where the system should be able to handle more load by simply adding
+more nodes. No further explanations were provided regarding this feature, but
+since we saw it as a challenge we invested a lot of work into it.
 
 \subsection{Fail-Safety}
 The system should be highly available. We interpreted this by assuming that we
 should handle hardware failure of physical machines. As with scalability, we
 might have been able to get away with less work but this feature as well was
-too interesting too resist focusing on it.
+too interesting to resist focusing on it.
 
 \subsection{Websockets}
 Websockets\cite{websockets} are a tcp-like connection between a browser and a
@@ -94,10 +94,10 @@ They can be used to send javascript that updates only parts of the client page
 instead of reloading a page and are a great tool to shift computing to the
 client side.
 
-The websockets feature was mostly an issue because of the tool support (or lack
+The websocket feature was mostly an issue because of the tool support (or lack
 thereof) we were faced with. More is explained in Sec.~\ref{sec:frontends}.
-Otherwise, websockets are an amazing technology and as will have a great impact on
-web development in the future since tool support is increasing.
+Otherwise, websockets are an amazing technology and as will have a great impact
+on web development in the future since tool support is increasing.
 
 \subsection{AI}
 Writing a simple AI was a requirement which interested us as well. However, we
@@ -178,7 +178,7 @@ time to benchmark and load test our backends and Riak nodes.
 \label{sec:process_groups}
 The system uses process groups\cite{process_groups} to provide load balancing by
 distributing work across nodes.
-This is done by each process in the backend joininng the process group for its
+This is done by each process in the backend joining the process group for its
 application. A calling process can then use the process groups to find a
 process to call. The selection is done semi-randomly, if there is not a local
 process to call, a random process is used out of that group.
@@ -193,7 +193,7 @@ One of the ways to scale a system is to use a shared nothing (SN)
 architecture \cite{sn_arch}
 where every node is self-sufficient and the system has no single bottleneck.
 This allows for a distributed system that is both scalable and fault tolerant.
-The implementation of a SN architecuture adds a constraint that individual
+The implementation of a SN architecture adds a constraint that individual
 nodes can only have state that could be lost or must be stateless.
 
 With this in mind, our architecture was designed to allow applications to
@@ -204,7 +204,7 @@ the event of failure.
 
 We did have to use state in certain parts of the system due to the
 distributed nature of the application. Briefly, the parts of the system
-with state and the reasoning behing them are,
+with state and the reasoning behind them are,
 
 \begin{itemize}
 \item Game timer --- A game has various events associated with it and
@@ -224,7 +224,7 @@ implementation of front-end logic very generic.
 
 \subsubsection{Web}
 The web frontend is running Yaws as a web server.
-After deciding to use nitrogen as a web framework, we had to drop nitrogen
+After deciding to use Nitrogen as a web framework, we had to drop Nitrogen
 because of the websockets requirement for reasons detailed below.
 Yaws is configured as a ``/" application module (appmod) so that we can have a
 single entry point for handling all the requests. Server side includes (ssi) are
@@ -233,14 +233,13 @@ also used to load static content via AJAX.
 The web frontend relies heavily on javascript since it contains a good part
 of the application logic handling user interactions, requests, responses
 and game functionalities. We use the javascript library jQuery\cite{jquery}
-to update the DOM
-elements and make AJAX requests.
+to update the DOM elements and make AJAX requests.
 
 We use the toolkit Bootstrap\cite{bootstrap} for the user interface which
 allows us to quickly develop web pages. It includes base CSS and HTML for
 typography, forms, buttons, tables, grids, navigation, and more. Using it
 reduced the time needed for web development, allowing us to focus on the
-backend.
+backend.\\
 
 We had the option to extend Nitrogen to support websockets, but after spending
 some time investigating the possibility and walking through the code to
@@ -274,10 +273,11 @@ There are three ways to implement integration with ejabberd.
 \begin{itemize}
 \item Client - A bot that uses an Erlang client such as exmpp can be used to
 connect to the server.
-All users send messages to the bot via the ejabberd server. e.g. bot@example.com
-An issue jabber client is that it doesn’t scale. Using a single bot will mean
-all the users will have to be in the bot’s roster (user list). ejabberd doesn’t
-handle the scaling of rosters very well (known to fail for clients > 40k).
+All users send messages to the bot via the ejabberd server. e.g. bot@example.com.
+An issue the jabber client has, is that it doesn’t scale. Using a single bot
+will mean all the users will have to be in the bot’s roster (user list).
+ejabberd doesn’t handle the scaling of rosters very well (known to fail for
+clients >40k).
 \item Component - A component is a trusted piece of an XMPP server that can send
 and receive arbitrary stanzas.
 In other words, we can add a module to ejabberd and define a virtual domain to
@@ -306,12 +306,12 @@ SMTP, together with POP and IMAP are the three most prevalent protocols for
 today's email servers.
 SMTP is used for sending emails from clients to servers while POP or IMAP
 are used for retrieving email from servers to clients.
-For our email server, we found three quilified candidates: Erlmail, gen\_smtp
+For our email server, we found three qualified candidates: Erlmail, gen\_smtp
 and erlang-smtp.
 At first sight, Erlmail seemed to be the most competitive one since it
 supports all these three protocols when others support only one or two of them.
 However, since our SMTP frontend doesn't directly talk to email clients, we
-figured out that there's no need for email retrieving mechanism for our
+figured out that there's no need for an email retrieving mechanism for our
 servers. Therefore, we picked gen\_smtp server as our SMTP frontend since all
 of its modules are only focused on SMTP. In our system architecture, the
 SMTP~frontend is the bridge between client side and the backend
@@ -342,8 +342,8 @@ Those responsible for requests with a session and those for requests without.
  \label{fig:controller:session_proc}
 \end{figure}
 
-The simple ones without sessions are completely stateless and can handle requests
-from any user.
+The simple ones without sessions are completely stateless and can handle
+requests from any user.
 A fixed number of them is spawned on startup and will handle requests on
 arrival.
 Their main responsibilities are registration, login and the like.
@@ -383,10 +383,9 @@ Due to consistency issues, we had to resort to using mnesia for sessions and
 the game joining processes, as it provides transactions.
 
 Riak proved to be a good choice for us since its performance parameters (called
-``CAP controls''\cite{cap_controls} in riak-lingo) are very easy to tune and it is
-quite well
-documented how Riak behaves under load. The scalability problems we had
-came from using the search module too much.
+``CAP controls''\cite{cap_controls} in riak-lingo) are very easy to tune and it
+is quite well documented how Riak behaves under load. The scalability problems
+we had came from using the search module too much.
 
 Riak is a distributed key/value store that connects an arbitrary number of
 {\em nodes} to form a cluster. All of these nodes can --- but don't have to ---
@@ -463,7 +462,7 @@ games, based on their properties (like all game parameters). For the
 implementation of search, we relied on the Riak extension {\tt riak\_search}.
 
 Riak search is a search engine that is tightly coupled with the Riak datastore.
-We add a precommit hook so that whenever a new object is added or an old one
+We added a precommit hook so that whenever a new object is added or an old one
 updated, the object is indexed (tokenization with standard Lucene analyzers)
 and saved.
 
@@ -471,7 +470,8 @@ It provides a rich query language consisting of term searches, field searches,
 boolean operators and wildcards to fetch matching objects ordered by relevance.
 
 This feature comes with a price though and should be used with caution.
-During load testing we discovered, that it should be avoided for often updated data.
+During load testing we discovered, that it should be avoided for often updated
+data.
 As it has to re-index all fields of an object on every write it can kill the
 performance.
 Therefore we tried minimizing writes on search indexed data and if possible not
@@ -525,7 +525,8 @@ It is then up to the backend to resolve the conflict on the next read
 and write back the real value.
 
 \subsubsection{Solution}
-A common solution for this problem is to serialize requests/writes to the same key.
+A common solution for this problem is to serialize requests/writes to the same
+key.
 A sequential execution of tasks will always ensure the correct order and not
 create inconsistent data.
 In Erlang this is best done with processes.
@@ -557,7 +558,8 @@ Unfortunately this still leaves one case.
 For example a user might re-login while his requests to update the profile is
 being handled and then tries to update the profile again before the previous
 update has been written.
-This is very unlikely to happen, as the user needs to do the update very quickly.
+This is very unlikely to happen, as the user needs to do the update very
+quickly.
 However it still needs to be handled.
 \begin{figure}[htbp!]
   \centering
@@ -577,17 +579,19 @@ Multi user concurrency involves the data that can be written by multiple users,
 like joining or updating a game.
 In general we tried to  design our database schema to avoid shared writable data
 as much as possible.
-For example the game orders for a certain phase could be stored as one value in Riak,
-instead we keep one value for each player.
-This leads to seven reads on phase change, but order writing does not have conflicts.
+For example the game orders for a certain phase could be stored as one value in
+Riak, instead we keep one value for each player.
+This leads to seven reads on phase change, but order writing does not have
+conflicts.
 
 Nevertheless, we could not avoid it completely.
 Multiple users might try to join the same game.
-There might be a conflict, if they want to play the same country or only one spot
-is left.
+There might be a conflict, if they want to play the same country or only one
+spot is left.
 Besides the creator of the game is no longer allowed to update the game once a
 player has joined.
-Therefore we have a game joining process for every game that has not started yet.
+Therefore we have a game joining process for every game that has not started
+yet.
 All join and update requests go through that process, thus ensuring consistency.
 To ensure only one such process per game we use mnesia due to its transactions.
 
@@ -682,7 +686,7 @@ to inspect the status of applications on each server.
 As seen in Fig.~\ref{fig:service_app}, there is one process group
 (see \ref{sec:process_groups}) for the application workers, and a ``management''
 group. The processes in the worker group are the ones doing the heavy work in an
-appllication. The ``manager'' of each application in each node makes it
+application. The ``manager'' of each application in each node makes it
 possible to change the number of workers, it also makes it possible to traverse
 the group of managers to be able to get the status of each application on every
 node it is running on. The supervisors will always restart its workers if they
@@ -715,9 +719,8 @@ display a simple form for him to fill out. After the user is registered, he is
 able to log in using the login textfields on the landing page.
 
 After logging in, the user is shown a dashboard page (see Fig.~\ref{fig:dashboard})
-where he is able to search for games, look at the games he is playing in (if any)
-and
-chat with other users in-game or off-game.
+where he is able to search for games, look at the games he is playing in (if
+any) and chat with other users in-game or off-game.
 
 \begin{figure}[h]
  \centering
@@ -752,11 +755,11 @@ frontends:
 
 \subsection{XMPP}
 Users who log into our XMPP server, will get the address of the component that
-commands should be sent to. If user has an account on any other XMPP servers,
+commands should be sent to. If a user has an account on any other XMPP server,
 the commands should be sent to ``service@tt.localhost''.
 
-If user sends  ``HELP'' or any unknown command to our component, it will return
-the list of all valid commands. All commands can be found in appendix
+If a user sends  ``HELP'' or any unknown command to our component, it will
+return the list of all valid commands. All commands can be found in appendix
 \ref{sec:textbasedcmd}.
 Each command starts with the command keyword and must end with ``END'' tag.
 If the user enters some text before the command keyword or after the end
@@ -775,8 +778,8 @@ then send it as an operation request to the email-address of our SMTP frontend
 server. After the email is sent, the users will soon receive an email in reply
 to their previous request from our game server. To users, the required format
 of the email text content is exactly the same as what they use in the XMPP
-interface(see appendix \ref{sec:textbasedcmd}), but the difference is that users
-are likely to receive replies more instantly in XMPP than in SMTP.
+interface (see appendix \ref{sec:textbasedcmd}), but the difference is that
+users are likely to receive replies more instantly in XMPP than in SMTP.
 
 \section{Messages}
 In the web frontend, the user is shown two chat boxes: one for off-game chat
@@ -793,10 +796,8 @@ The web frontend generates drop down lists to make it easier for the user to
 enter move orders as shown in Fig.~\ref{fig:orders}. \\
 The other two frontends (XMPP and SMTP) take text based orders. Instead of
 clicking, the user has to type them and additionally is required to supply
-his session ID which he receives after logging in. A dialog between user and
-system via XMPP could look like this:
-
-A full list of how to make plays can be found in appendix
+his session ID which he receives after logging in.
+A full list of how to make text based plays can be found in appendix
 \ref{sec:textbasedcommands}.
 
 \chapter{Evaluation and Testing}
@@ -805,7 +806,7 @@ A full list of how to make plays can be found in appendix
 We approached testing very seriously from the start and are confident that this
 was one of the best decisions we made throughout the project. Unit tests are too
 low level to be covered here but they are of course there. We used EUnit for
-most of our testing and where generally happy with that choice except for one
+most of our testing and were generally happy with that choice except for one
 thing: EUnit declares a test as failed as soon as it runs for 5 seconds and
 there is no central way to change that behaviour. It's possible to do it for
 single tests, but the code duplication in that case is, of course, sub-optimal.
@@ -819,9 +820,9 @@ EUnit.
 
 \section{Integration Tests}
 Our integration tests tried to cover everything from the frontends down to the
-database. It showed, that the xmpp frontend was the easiest to be tested, so
-our tests for smtp- and web-frontend are only testing the basics --- ``it's
-there and it reacts'' --- while the xmpp tests send orders, register to the
+database. It showed, that the XMPP frontend was the easiest to be tested, so
+our tests for SMTP- and web-frontend are only testing the basics --- ``it's
+there and it reacts'' --- while the XMPP tests send orders, register to the
 system, log in, log off, and so on.
 
 \section{Load Tests}
@@ -830,7 +831,7 @@ hard to get meaningful data from our testruns but even the first, quite informal
 load tests resulted in very valuable information.
 
 Load testing was never ran fully automated. Although that would be very useful,
-this would have been impossible for us since we would have needed a seperate
+this would have been impossible for us since we would have needed a separate
 cluster to do that and just could not get that amount of hardware.
 A smaller automated test on one dedicated machine would have probably helped
 already but was not implemented due to time-constraints.
@@ -845,10 +846,11 @@ spent very well, since it ensured that performance drops because of single
 commits were noticed in several instances --- and their cause analyzed.
 \todo{include last minute results}
 \section{Failure Tests}
-Our failure tolerance test starts up a cluster of two backends A and B and starts
-a game.
+Our failure tolerance test starts up a cluster of two backends A and B and
+starts a game.
 Since we do not know on which backend the game has been started, we halt
-backend~A. If fault tolerance works, we can now be sure that the game is on backend~B
+backend~A. If fault tolerance works, we can now be sure that the game is on
+backend~B
 (either it was there in the first place or it got restarted there).
 We start the backend~A again and then halt backend~B. Now the game gets moved to
 backend~A. This way, we can be sure that the game was moved at least once.
@@ -872,8 +874,8 @@ Noteworthy browser based solutions are:\\
   \url{http://playdiplomacy.com/} & 6849
 \end{tabular}
 \\
-\\The alternative email solutions seem to have even lower user numbers but precise
-details are hard to be found. Please note that the numbers in
+\\The alternative email solutions seem to have even lower user numbers but
+precise details are hard to be found. Please note that the numbers in
 the table are about {\em registered\/} users, while our benchmarks are in terms
 of {\em active\/} users.
 
@@ -899,26 +901,27 @@ So, in short: to fully catch up with the alternatives, we would need to invest
 in bug fixing and user interaction.
 
 \chapter{Conclusions and Future Work}
-We are very happy with the work we have done and that the product is, even though
-the seemingly endless scope, quite close to being ``ready''.
+We are very happy with the work we have done and that the product is, even
+though the seemingly endless scope, quite close to being ``ready''.
 
 Despite all this, the work left to be done is considerable:
-An AI was in the original requirements but was not delivered due to time constraints.
-Bug fixing in the rule engine is necessary. Scalability could be improved by applying
-tracing to the cluster which would be lots of interesting work. as well as the
-interfaces polished.
+An AI was in the original requirements but was not delivered due to time
+constraints.
+Bug fixing in the rule engine is necessary. Scalability could be improved by
+applying tracing to the cluster which would be lots of interesting work as well
+as the interfaces polished.
 
-In order to make the game playable by the public, a better system to find and join
-games would probably be necessary in the web frontend --- and we would need to
-do lots of hallway testing and/or maybe publish an alpha version in order to collect
-feedback.
+In order to make the game playable by the public, a better system to find and
+join games would probably be necessary in the web frontend --- and we would
+need to do lots of hallway testing and/or maybe publish an alpha version in
+order to collect feedback.
 
-One more thing would be to think a lot about security --- not much thought has been
-spent on it yet.
+One more thing would be to think a lot about security --- not much thought has
+been spent on it yet.
 
-The rule engine does not support multi-fleet convoys yet but they are important for
-the game tactics (the classic Italian opening called ``lepanto~opening'' uses it, for
-instance). This could be done quite easily in the rule engine.
+The rule engine does not support multi-fleet convoys yet but they are important
+for the game tactics (the classic Italian opening called ``lepanto~opening''
+uses it, for instance). This could be done quite easily in the rule engine.
 
 \appendix
 \chapter{Installation Instructions}
