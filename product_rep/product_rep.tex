@@ -7,6 +7,7 @@
 \usepackage{color}
 \usepackage{url}
 \usepackage{fancyvrb}
+\usepackage{microtype}
 
 \newcommand{\hi}[1]{{\color{red}\em #1\/}\\}
 \newcommand{\todo}[1]{\footnote{{\color{red} {\bf TODO:} #1}}}
@@ -65,7 +66,7 @@ the same functionality to the user (the operator is forced to use the
 web~interface). Those interfaces are:\\
 \begin{enumerate}
 \item {\bf Web interface} ---
-  The game should be accessible via a modern webbrowser {\em and\/} it should
+  The game should be accessible via a modern web browser {\em and\/} it should
   use websockets to communicate with the browser.
 \item {\bf XMPP interface} ---
   The game should be accessible via a chat client using text based orders.
@@ -467,7 +468,7 @@ We add a precommit hook so that whenever a new object is added or an old one
 updated, the object is indexed (tokenization with standard Lucene analyzers)
 and saved.
 
-It provides a rich query language consisting of term searches, field searches,
+Riak provides a rich query language consisting of term searches, field searches,
 boolean operators and wildcards to fetch matching objects ordered by relevance.
 
 This feature comes with a price though and should be used with caution.
@@ -963,10 +964,10 @@ version in the package repository (in Ubuntu 11.04 {\tt VERSION} is 4.5). For
 some reason there are no generic packages any more in Ubuntu, so you need to
 specify the version.
 \section{Building}
-With all dependencies in place, building Treacherous Talks should be
-straightforward. First you need to get hold of the source code. The simplest way
-is probably to either clone it from Github using git or download a tagged tar
-file from the same place. Enter the source code directory.
+With all dependencies and required tools in place, building Treacherous Talks
+should be straightforward. First you need to get hold of the source code. The
+simplest way is probably to either clone it from Github using git or download a
+tagged tar file from the same place. Enter the source code directory.
 \todo{Add address to Github repo and tagged tar file}
 
 First we build Riak since we want to distribute it together with the Treacherous

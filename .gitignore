@@ -15,6 +15,7 @@
 # Special makefiles
 *.make
 *.d
+*.temp
 # Bibtex
 *.bbl
 *.blg
