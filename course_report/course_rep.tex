@@ -69,7 +69,7 @@ The team members were: \\
 
 \begin{tabular}{lcrl}
 Dilshod Aliev & Tajikistan & \flag{tajikistan.png} \\ \hline
-Jan Daniel Bothma & South Africa & \flag{south_africa.png} \\ \hline
+Jan Daniel (JD) Bothma & South Africa & \flag{south_africa.png} \\ \hline
 Stephan Brandauer & Austria & \flag{austria.jpg} \\ \hline
 Andre Hilsendeger & Germany & \flag{germany.jpg} \\ \hline
 Rahim Kadkhodamohammadi & Iran & \flag{iran.png} \\ \hline
@@ -320,7 +320,7 @@ know the team better. \\
 In order to make people punctual (or: in order to have more Fika!), we decided
 that each time someone is late for the standup meeting, that person has to
 bring one extra Fika (or ``punishment Fika'', as we called it).
-JD was the clear winner!
+
 \subsection{Planning}
 Planning was our least favourite task but nonetheless a very important one.
 Our typical planning day looked as follows:
@@ -682,7 +682,7 @@ and to write clean, good quality code. However in the end of the sprint I
 implemented some functionalities in SMTP client part. Furthermore I attended the
 Erlang User Conference in Stockholm likewise other teammates.
 
-During the first week of Sprint 4 Jan (JD) and me worked on setting up SMTP
+During the first week of Sprint 4 JD and me worked on setting up SMTP
 interface tests. Later I continued with implementing some functionalities like
 viewing current games and searching for games using IM and Mail clients.
 Moreover, I worked on the session and machine state so that the system operator
@@ -698,7 +698,40 @@ being friendly and helpful. In addition, I recommend this course to students
 who would like to experience a real project development in a team, and, once
 selected, to help each other throughout the project and to create a good
 teamwork environment.
+
 \section{Jan Daniel Bothma}
+During the first sprint I took on the role of Scrum Master, while also trying to
+work as a normal team member. This was my first experience of Scrum so I spent a
+lot of time learning about it and planning ahead to support the team as well as
+possible. The rest of the team supported me a lot in this role.
+I worked on grouping requirements from our Product Owner with Tiina
+and Dilshod, and experimented with a custom WebSocket implementation.
+
+In Sprint 2 I took part in developing our second architecture and high level
+design. I made it as easy as possible to develop and run our code with ejabberd
+using our automated build and test tools, despite our inability to build and
+release it using rebar. At the end of this sprint I gave up the Scrum Master role
+to focus more on development.
+
+In Sprint 3 I worked with Andre to guarantee consistency for some core operations
+and implemented the solution for game joining in particular. I did some further
+work on building ejabberd and improved our XMPP integration test client.
+
+I worked with Dilshod to set up SMTP integration tests and add them to our
+automated test runs at the beginning of Sprint 4. Then Erik and I designed and
+built the Cluster and System Manager applications to start up and stop a
+distributed cluster of Treacherous Talks servers. I also implemented an Erlang
+WebSocket client for our fault tolerance tests based on Yaws WebSocket code.
+
+In Sprint 5 I implemented an automated test to check that games continue running
+despite node or hardware failures. I presented this, and helped Rahim demonstrate
+the working system at the Review 2 presentation. I then extended the automated
+test to ensure all issues we had found with game resurrection were fixed by
+Stephan and Tiina's refactoring.
+
+I was home ill and unable to work for the first week of Sprint 6 and am very
+thankful to the team for all their work on this and the Product Report.
+
 \section{Stephan Brandauer}
 I was the spokesperson of the team from the beginning. As spokesperson,
 I saw it as my job to shield the team from distractions as much as possible.
@@ -859,7 +892,7 @@ For me, the fourth sprint was mostly about making our releases actually work,
 system configuration and fault tolerance testing. I created a proper staging
 environment using the configuration manager Puppet. This allowed us to have
 several light-weight virtual machines (containers) for fault tolerance testing
-in a very easy and automated way. I then worked with Jan Daniel on fault
+in a very easy and automated way. I then worked with JD on fault
 tolerance testing. We reached a point were we needed an easy way to configure a
 cluster of machines running various parts of our system. We created the cluster
 and system managers as the cure to those problems. By the end of the sprint we
