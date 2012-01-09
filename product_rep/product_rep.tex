@@ -918,7 +918,29 @@ distributed our releases across a varying number of nodes, started and connected
 them and did the actual load generation. But: the time spent on this was time
 spent very well, since it ensured that performance drops because of single
 commits were noticed in several instances --- and their cause analyzed.
-\todo{include last minute results}
+
+Fig. \ref{fig:load_test:scaling} is a scaling graph from one to four PCs (x-axis).
+\begin{figure}[htbp!]
+  \hspace{.5cm}
+ \includegraphics[width=14cm, angle=-90]{./graphics/Load_test-scaling.pdf}
+ \vspace{-6cm}
+ \caption{Scaling.}
+ \label{fig:load_test:scaling}
+\end{figure}
+The y-axis is the amount of model users the system can handle.
+Where a model user is assumed to performe about 20 requests a day and
+all users are distributed evenly throughout the day.
+The blue one is just for comparison and displays how perfect linear scaling would look like.
+The yellow graph shows the performance of the system right after we switched from
+riak search to key filtering.
+With one machine it can handle around 400k model users, and with 4 machines
+a bit more than double the amount.
+We ran this with up to four machines, which seems to scale.
+The green one is the system at the end of this project.
+We can see that performance dropped a lot.
+The cause for this is a single commit that introduced an increased usage of riak search again.
+Unfortunately there was no time left to get the system back to its previous performance.
+
 
 \section{Failure Tests}
 Our failure tolerance test starts up a cluster of two backends A and B and
