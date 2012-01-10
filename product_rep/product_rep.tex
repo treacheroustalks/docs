@@ -1103,6 +1103,16 @@ tarball is outputted to the {\tt system-release} directory.
 
 \section{Testing}
 
+\subsection{Unit and Integration Tests}
+
+After building, unit and integration tests can be run together using
+
+\begin{Verbatim}
+make test
+\end{Verbatim}
+
+This is similar to running {\tt make unittest inttest}.
+
 \subsection{Node Failure Tolerance Tests}\label{run_fault_tolerance}
 
 An escript\cite{escript} {\tt fault\_tolerance} is generated when building a full release. This
