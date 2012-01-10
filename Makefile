@@ -12,7 +12,10 @@ cd:
 	rm -rf cd
 	mkdir cd
 	cp -Lrf handin_cd/* cd
+	make -C ../main clean
 	cp -r ../main cd/project
+	make -C ../main docs
+	cp -r ../main/system-release/docs cd
 
 clean: $(makefiles)
 	@echo Cleaning via Makefile in $^
