@@ -818,8 +818,9 @@ frontends:
 \item The user does not need to remember his session id.
 \item The user sees a graphical map (generated using a HTML5 canvas),
   see Fig.~\ref{fig:map}.
-\item It is easier to enter move orders because possible orders are represented
-  as drop-down lists, see Fig.~\ref{fig:orders}.
+\item It allows users to have a better gaming experience since the graphical map
+is interactive. By simply clicking and dragging the pieces on the map,
+corresponding orders will be automatically generated, see Fig.~\ref{fig:orders}.
 \end{itemize}
 
 \begin{figure}[h]
@@ -832,7 +833,7 @@ frontends:
 \begin{figure}[h]
  \centering
  \includegraphics[width=\textwidth]{./graphics/orderssmall.png}
- \caption{The orders drop-down lists.}
+ \caption{The generated orders.}
  \label{fig:orders}
 \end{figure}
 
@@ -875,11 +876,12 @@ Appendix \ref{sec:textbasedcmd} contains more detailed information on
 interaction through the text based interfaces.
 
 \section{Playing}
-The web frontend generates drop down lists to make it easier for the user to
-enter move orders as shown in Fig.~\ref{fig:orders}. \\
-The other two frontends (XMPP and SMTP) take text based orders. Instead of
-clicking, the user has to type them and additionally is required to supply
-his session ID which he receives after logging in.
+For game play, as is mentioned in previous sections, the web frontend provides
+an interactive interface which is much more convenient than typing text orders
+for beginners. (Fig.~\ref{fig:orders}). \\
+On the contrary, the other two frontends (XMPP and SMTP) have to take text
+based orders. Instead of clicking, the user has to type them and additionally
+is required to supply his session ID which he receives after logging in.
 A full list of how to make text based plays can be found in appendix
 \ref{sec:textbasedcommands}.
 
