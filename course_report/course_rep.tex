@@ -97,7 +97,6 @@ Failure Tolerance were of high priority. \\
 Even though a board game is a fun thing to implement, we do think that the most
 interesting part of our project is the scalability- and fault tolerance-
 engineering.
-\todo{Make unique - product rep uses same introduction}
 
 \chapter{Resources}
 \section{Team}
@@ -1147,12 +1146,17 @@ support. Therefore, our architecture team voted for gen\_smtp for its
 simplicity.
 
 \section{XMPP}
+We needed an XMPP server for providing that interface to our application, and a
+client for testing it.
+
 \subsection{ejabberd server}
 ejabberd is a distributed Jabber/XMPP instant messaging server. It has a modular
 architecture, a web administrator interface and simple configuration. It
-supports the addition of Erlang modules using hooks which can be added allowing
-it to control the server in a programmatic way. It also supports more advanced
-features such as components and a server to server (S2S) protocol.
+supports extension via \emph{internal components} in the form of Erlang modules
+using hooks which can be added allowing it to control the server in a
+programmatic way\cite{ejabberd-plugin}. It also supports more advanced features
+such as the Jabber Component Protocol \cite{xmpp-component} and a server to
+server (S2S) protocol\cite{xmpp-s2s}.
 
 \subsection{EXMPP client}
 EXMPP is a XMPP client with SSL support. It provides a lot of functionality to
@@ -1160,15 +1164,13 @@ deal with XML and supports several XML parsers. However, its documentation is
 sparse.
 
 \subsection{Results and discussion}
-We didn't really have any options here and we had to go with ejabberd as our
-XMPP server.
+ejabberd was the only real option regarding XMPP server implemented in Erlang.
 
-We did have choices as to how we connect to the XMPP server from our application
-- via ejabberd module, component or the EXMPP client. We ended up using the
-ejabberd module for its tight integration and simplicity.
-\todo{Explain and/or give reference - what is an ejabberd module/component?}
+We had to choose how to interface our application with ejabberd, and decided
+to us the internal ejabberd component form for its tight integration and
+simplicity.
 
-However, we did use the EXMPP client later in the project for integration
+We used the EXMPP client later in the project for integration
 testing since it is easy to script test cases using the IM interface.
 
 \section{Databases}
