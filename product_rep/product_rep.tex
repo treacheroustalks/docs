@@ -360,7 +360,7 @@ All users send messages to the bot via the ejabberd server. e.g. bot@example.com
 An issue the jabber client has, is that it doesn’t scale. Using a single bot
 will mean all the users will have to be in the bot’s roster (user list).
 ejabberd doesn’t handle the scaling of rosters very well (known to fail for
-clients $>$ 40k).
+$>$ 40k clients \cite{40k-roster}).
 \item Component --- A component is a trusted piece of an XMPP server that can send
 and receive arbitrary stanzas.
 In other words, we can add a module to ejabberd and define a virtual domain to
@@ -730,7 +730,7 @@ Briefly describing the applications,
     gen\_moves & Generates moves that can be used for load testing \\ \hline
     load\_test & Code used for load testing \\ \hline
     message & Code used for handling messages \\ \hline
-    necromancer & Code used for resurrecting dead VMs \\ \hline
+    necromancer & Code used for resurrecting certain processes from dead VMs \\ \hline
     service &  OTP application library that provides functionality used by
     all service applications \\ \hline
     smtp\_frontend & Handles all the mail communication \\ \hline
@@ -839,8 +839,13 @@ corresponding orders will be automatically generated, see Fig.~\ref{fig:orders}.
 
 \subsection{XMPP}
 Users who log into our XMPP server, will get the address of the component that
-commands should be sent to. If a user has an account on any other XMPP server,
-the commands should be sent to ``service@tt.localhost''.
+commands should be sent to them in an instant message. If a user has an account
+on any other XMPP server, they can play the game by sending commands as instant
+messages to the server's user. For development, we used the user
+``service@tt.localhost'', but this is only accessible from the host where ejabberd
+is running. To enable access from other ejabberd servers and connecting from
+other hosts, {\tt tt.localhost} in the {\tt tt\_bot} module should be changed to
+a domain where ejabberd is configured to listen for connections.
 
 If a user sends  ``HELP'' or any unknown command to our component, it will
 return the list of all valid commands. All commands can be found in appendix
@@ -893,8 +898,9 @@ was one of the best decisions we made throughout the project. Unit tests are too
 low level to be covered here but they are of course there. We used EUnit for
 most of our testing and were generally happy with that choice except for one
 thing: EUnit declares a test as failed as soon as it runs for 5 seconds and
-there is no central way to change that behaviour. It's possible to do it for
-single tests, but the code duplication in that case is, of course, sub-optimal.
+there is no central way to change that behaviour. It's possible to change the
+default timeout for individual tests or test sets, but the code duplication in
+that case is, of course, sub-optimal.
 That 5 seconds ``feature'' was especially annoying in combination with
 continuous integration: our build server was very busy and therefore was
 interacting with our database a lot. When several builds were running at the
