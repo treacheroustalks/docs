@@ -93,15 +93,15 @@ To conclude, some of our relative weaknesses are mentioned.
 Diplomacy\cite{diplomacy} is a board game, invented in the 1950s where the goal
 is to try to conquer Europe just before WW I. You come close to this goal by
 talking to the other players --- by diplomacy --- and making them your allies.
-And you achieve it by attack them when they do not expect it.
+And you achieve it by attacking them when they do not expect it.
 
 The game is and was commonly played over distance --- starting with playing by
 mail, then email and nowadays over pretty web pages with full-blown map
 visualization.
 
-The requirements we were faced with asked for implementation of Diplomacy as a
-web service while providing several interfaces to this service. Scalability and
-Failure Tolerance were of high priority. \\
+The requirements we were faced with asked for an implementation of Diplomacy as 
+a web service while providing several interfaces to this service. Scalability
+and Failure Tolerance were of high priority. \\
 Even though a board game is a fun thing to implement, we do think that the most
 interesting part of our project is the scalability- and fault tolerance-
 engineering.
@@ -306,7 +306,7 @@ also used to load static content via AJAX.
 
 The web frontend relies heavily on JavaScript since it contains a large amount
 of the logic handling user interactions, requests and responses to the server
-and gameplay support for the user. We use the javascript library jQuery
+and gameplay support for the user. We use the JavaScript library jQuery
 \cite{jquery} to update the DOM elements and make AJAX requests.
 
 We use the toolkit Bootstrap\cite{bootstrap} for the user interface which
@@ -324,7 +324,7 @@ code in a lot of places, because of the way Nitrogen/SimpleBridge is structured.
 Instead we implemented the web frontend ourselves with HTML and JavaScript
 directly served by Yaws.
 
-Throughout the course of the project the websocket protocol has
+Throughout the course of the project the WebSocket protocol has
 been under development. Only towards the end of the project has a protocol
 (RFC 6455) been released that has been proposed to be the official standard.
 Since the protocol might have changed significantly during the project, we
@@ -433,10 +433,10 @@ Their main responsibilities are registration, login and the like.
 Fig.~\ref{fig:controller:session_proc} illustrates this.
 
 \subsubsection{Session Management}
-The session management consists of a group of processes and a mnesia table.
-Each session spawns its own session process and writes an entry into the mnesia
+The session management consists of a group of processes and a Mnesia table.
+Each session spawns its own session process and writes an entry into the Mnesia
 table, so that one such process exists for each logged in user.
-The mnesia table is necessary to have a mapping between users and sessions.
+The Mnesia table is necessary to have a mapping between users and sessions.
 The processes handle all requests for their session and have the session data
 (user data, knowledge of how to push events to the frontend, etc).
 The reasons for that are concurrency issues
@@ -460,9 +460,9 @@ other users.
 \subsection{Riak}
 \label{sec:riak}
 The choice of Riak as database was a careful one: we evaluated Riak, couchDB
-and mnesia but Riak was our favourite in the end --- its scalability features
+and Mnesia but Riak was our favourite in the end --- its scalability features
 are very simple to use and its potential for scalability is what we needed.
-Due to consistency issues, we had to resort to using mnesia for sessions and
+Due to consistency issues, we had to resort to using Mnesia for sessions and
 the game joining processes, as it provides transactions.
 
 Riak proved to be a good choice for us since its performance parameters (called
@@ -634,7 +634,7 @@ and each user is only allowed to be logged in once at a time.
 To ensure only one active session the login has to consider concurrency as well.
 Fig. \ref{fig:concurrency:login} shows how the login works.
 Any old session needs be terminated before we can start a new one.
-Also we use mnesia instead of Riak to store session information,
+Also, we use Mnesia instead of Riak to store session information,
 as it supports transactions.
 
 Unfortunately this still leaves one case.
@@ -676,7 +676,7 @@ player has joined.
 Therefore we have a game joining process for every game that has not started
 yet.
 All join and update requests go through that process, thus ensuring consistency.
-To ensure only one such process per game we use mnesia due to its transactions.
+To ensure only one such process per game we use Mnesia due to its transactions.
 
 \section{Code organization}
 
@@ -753,7 +753,7 @@ Additional notes on the code,
 \item The public API of all the modules has specs and edocs.
 \end{itemize}
 
-\newpage
+
 \section{Supervision}
 A supervisor in Erlang is a process that supervises processes it has spawned.
 The supervisor can spawn new child processes and if one of them would die, it
