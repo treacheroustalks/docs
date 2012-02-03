@@ -82,7 +82,7 @@ optimising performance and scalability. The project was mostly self organised
 by an international team of 9 students and developed using Scrum.
 }
 \chapter{Introduction}
-Diplomacy is a board game, invented in the 1950s where the goal is to try to
+Diplomacy\cite{diplomacy} is a board game, invented in the 1950s where the goal is to try to
 conquer Europe just before WW I. You come close to this goal by talking to the
 other players --- by diplomacy --- and making them your allies. And you achieve
 it by attack them when they do not expect it.
@@ -171,11 +171,11 @@ for several reasons:
 \subsection{Version Control}
 Perhaps even more vital to a software development project is a good version
 control system. There are several out there, but the most common open-source
-ones are Subversion and Git. They are fundamentally different and we chose Git
+ones are Subversion\cite{subversion} and Git\cite{git_vcs}. They are fundamentally different and we chose Git
 since it has very good tool support and handles branching and merging very well.
 
 Another plus for Git is Github, an online repository hosting service. Most
-open-source software written in Erlang (including Erlang/OTP itself) is hosted
+open-source software written in Erlang\cite{erlang_proglang} (including Erlang/OTP\cite{erlang_otp} itself) is hosted
 on Github. This makes the process of making modifications to upstream code a lot
 easier since it is trivial to fork (create your own hosted copy of another
 repository) repositories on Github.
@@ -186,10 +186,10 @@ checks out a copy of your source code tree from a version control repository and
 runs various commands manipulating that source tree, returning some result to
 the developers.
 
-Initially we installed Jenkins to do this since it is widely used. We tried to
+Initially we installed Jenkins\cite{jenkins_ci} to do this since it is widely used. We tried to
 integrate it with our code review system, but the plugins for doing that were
 very unstable and crashed often. We set out to find another system we could use
-and found Buildbot. Buildbot is a bit different from most other CI servers since
+and found Buildbot\cite{buildbot}. Buildbot is a bit different from most other CI servers since
 it is more like a framework than a finished product. You configure Buildbot by
 writing a Python program describing what it should do.
 
@@ -206,7 +206,7 @@ get acquainted with your own code. While many development projects uses code
 review in some fashion or another, we wanted to try a more formal approach to
 see if it could help us improve our code quality.
 
-We quickly settled on using the code review system Gerrit. It was by far the
+We quickly settled on using the code review system Gerrit\cite{gerrit_cr}. It was by far the
 easiest code review system to setup for Git. The idea was to combine continuous
 integration with the code review system to ensure that developers pay attention
 to the results from Buildbot and that the master branch always is buildable and
@@ -239,14 +239,14 @@ We also use this system for more than code. In fact, while this report is
 written, it is being code reviewed as well in the same manner.
 \subsection{Building}
 Build tools are important, especially since bad tools tend to cause frustration
-among developers. We started using the Erlang build tool Rebar from day one in
+among developers. We started using the Erlang build tool Rebar\cite{rebar} from day one in
 our project since it is the de-facto build tool in the Erlang community. Rebar
 can do quite a lot of things besides just compiling code. It also helps us run
 tests and create releases.
 
 We spent many hours integrating code from external parties into our system, such
-as the server parts of our frontends. The majority of the external projects was
-buildable with Rebar, but not the major ones such as ejabberd and exmpp. They
+as the server parts of our frontends. The majority of the external projects were
+buildable with Rebar, but not the major ones such as \emph{ejabberd}\cite{ejabberd_im} and \emph{exmpp}\cite{exmpp_api}. They
 use plain Makefiles and are not releasable since they are not proper OTP
 applications. To our great pleasure we learned at the Erlang User Conference
 that there are forked versions of these projects that are OTP compliant and can
@@ -261,9 +261,9 @@ configure a whole cluster. In retrospective, we should have kept all our
 applications in one release and then dynamically start the ones we want to be
 running on a specific node. That would have saved us some time and gray hair.
 \subsection{Unit and Integration Testing}
-There are several test frameworks for Erlang, but we used the standard EUnit
+There are several test frameworks for Erlang, but we used the standard EUnit\cite{eunit}
 framework for testing for pretty much everything. We did so without really
-considering CommonTest, so we do not know whether that choice was optimal or
+considering CommonTest\cite{commontest}, so we do not know whether that choice was optimal or
 not. EUnit worked okay for us but we had some problems with it.
 
 One problem is that EUnit assumes an automatic timeout of 5 seconds for all
@@ -281,11 +281,11 @@ code and sometimes hard to find the real problem behind a failing test.
 
 We also had integration tests for our frontends. Each frontend had a basic
 integration test checking that a user could log in and maybe do a few
-operations. We used Selenium for testing the web frontend, and it turned out to
-work okay-ish even though it was hard to write good tests for our
+operations. We used Selenium\cite{selenium} for testing the web frontend, and it turned out to
+work even though it was hard to write good tests for our
 Javascript-heavy web frontend.
 \subsection{Load Testing}
-For load testing we decided to use Basho Bench, which made it possible to run
+For load testing we decided to use Basho Bench\cite{basho_bench}, which made it possible to run
 load tests that were repeatable and produce graphs out of the given results.
 Basho Bench would run our tests, which contains a number of user commands, for
 example logging in, sending messages and playing games. To really push our
@@ -403,7 +403,7 @@ Our typical planning day looked as follows:
 \end{itemize}
 
 \subsection{Demo}
-The demo was held at the end of each sprint. Since in Scrum to try to produce
+The demo was held at the end of each sprint. Since Scrum tries to produce
 something that is potentially shippable in each sprint, the demo is there to
 ensure that. We invited teaching staff and customer to the demos and showed them
 what we did in the last weeks. The demo was always a nice ending of a sprint for
@@ -593,16 +593,16 @@ same.
 
 \subsubsection{Tune performance}
 After load testing in Sprint 4 we discovered that the performance of our system
-was degrading over time. The DoD for this story was quite vaguely, as you are
-never done tuning - and it's just fun! So we decided to solve the degradation
+was degrading over time. The DoD for this story was quite vague, as you are
+never done with tuning. So we decided to solve the degradation
 and if there is time left to tune performance, but not to spend more than 20 man
 days on that story.
 
-Our Riak storage backend was eleveldb, because it is the only one supporting
+Our Riak storage backend was \emph{eleveldb}\cite{eleveldb}, because it is the only one supporting
 secondary indices. The assumption was that eleveldb, was responsible for the
 degradation. The reason for that assumption was that Riak in general does not
 show such a degradation pattern, and the default and well-tested storage backend
-is bitcask. After replacing all uses of Riak's secondary indices with Riak
+is \emph{bitcask}\cite{bitcask}. After replacing all uses of Riak's secondary indices with Riak
 Search we could switch our backend back to bitcask.  This solved the degradation
 problem.
 
@@ -972,7 +972,7 @@ sprint.
 
 For me, the fourth sprint was mostly about making our releases actually work,
 system configuration and fault tolerance testing. I created a proper staging
-environment using the configuration manager Puppet. This allowed us to have
+environment using the configuration manager Puppet\cite{puppetlab}. This allowed us to have
 several light-weight virtual machines (containers) for fault tolerance testing
 in a very easy and automated way. I then worked with JD on fault
 tolerance testing. We reached a point were we needed an easy way to configure a
@@ -987,7 +987,7 @@ tests to actually use the cluster/system managers to control the system since
 this got rid of lots of false positives that we got on Buildbot. I spent several
 days on bug fixing our build-test-release cycle since we were hitting all kinds
 of weird bugs during testing. I also spent a few days on trying to fix problems
-found by Dialyzer in our codebase as part of the general clean-up.
+found by Dialyzer\cite{dialyzer} in our codebase as part of the general clean-up.
 \section{Sukumar Yethadka}
 Building large scale Internet systems and its challenges are very interesting to
 me, which is why, this project along with its requirement of ``Erlang for
@@ -1014,7 +1014,7 @@ I worked on Riak search and load testing during sprint 4. I setup Riak search
 and setup the search schema for the buckets. I also got it to work with the web
 frontend. During the later half of the sprint, I worked on defining and creating
 load tests along with Tiina and also created good visuals for the load test
-results, using a open source project - highcharts.
+results, using a open source project - \emph{highcharts}\cite{highcharts}.
 
 With most of the core features completed, I worked on adding the less important
 features, fixing bugs, cleaning code and fixing the documentation during sprint
