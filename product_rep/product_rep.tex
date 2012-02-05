@@ -497,6 +497,8 @@ the storage backend to {\tt bitcask}, Riak's standard storage backend.
 Bitcask does not support secondary indices, and because of that it was
 necessary to use {\tt riak\_search} more --- which led to scalability
 issues\ldots
+More on that in \ref{load_tests}.
+
 
 \subsubsection{Mnesia}
 \label{sec:mnesia}
@@ -924,9 +926,9 @@ exmpp helped us to provide fully automatic and repeatable test scenarios.
 Adding new functionality to our system was not completely done, until its coressponding integration test was added.
 
 \section{Load Tests}\label{load_tests}
-In sprint 4, we started to work on load testing our system. We found it very
-hard to get meaningful data from our testruns but even the first, quite informal
-load tests resulted in very valuable information.
+When starting to load test the system,
+we found it very hard to get meaningful data from our testruns.
+But even the first, quite informal, load tests resulted in very valuable information.
 
 Load testing was never ran fully automated. Although that would be very useful,
 this would have been impossible for us since we would have needed a separate
@@ -943,7 +945,113 @@ them and did the actual load generation. But: the time spent on this was time
 spent very well, since it ensured that performance drops because of single
 commits were noticed in several instances --- and their cause analyzed.
 
-Fig. \ref{fig:load_test:scaling} is a scaling graph from one to four PCs (x-axis).
+\subsection{Results}
+The load tests had a big influence on the overall system.
+The main changes were made to how Riak was being accessed.
+We discovered which Riak features are expensive and
+even discarded some completely.
+This section describes those discoveries and justifies our decisions.
+
+\subsubsection{Riak \& backend relation}
+First of all we were interested in how to setup our cluster -
+how many Riak nodes does a backend require to perform its best and
+should Riak and backend nodes be on the same machine?
+
+Fig. \ref{fig:load_test:setup} shows the different setups we tested.
+\begin{figure}[htbp!]
+ \hspace{-2.5cm}
+ \includegraphics[width=18cm]{./graphics/Load_test-setup.pdf}
+ \caption{Load tests of different cluster setups.}
+ \label{fig:load_test:setup}
+\end{figure}
+The x-axis is the time the tests were running and the y-axis the throughput.
+The flow included all game play operations like game creation, joining,
+order submission and messaging.
+Registration and login are not part of it.
+The graphs are the different setups, they are labeled with $XR$ or $XB$.
+Meaning on machine X there is a {\bf R}iak node or a {\bf B}ackend node
+\footnote{1B 2R means there is a backend node on machine 1 and a Riak node on machine 2.}.
+
+As you can see most of them performed quite bad.
+Fig. \ref{fig:load_test:setup2} shows only the best setups.
+\begin{figure}[htbp!]
+ \hspace{-2.5cm}
+ \includegraphics[width=18cm]{./graphics/Load_test-setup2.pdf}
+ \caption{The best graphs from Fig. \ref{fig:load_test:setup}.}
+ \label{fig:load_test:setup2}
+\end{figure}
+These three setups performed more or less the same.
+One of these setups is a cluster consisting of three machines each with a Riak and a backend node.
+Since this is also the simplest setup we decided to use setups with X machines
+each having a a Riak and a backend node in the future.
+
+
+\subsubsection{Degradation}
+The major issue with the previous results was the obvious performance degradation over time.
+\begin{figure}[htbp!]
+ \hspace{-2.5cm}
+ \includegraphics[width=18cm]{./graphics/Load_test-degradation.pdf}
+ \caption{Load tests for 1-6 machines.}
+ \label{fig:load_test:degradation}
+\end{figure}
+Fig. \ref{fig:load_test:degradation} shows that this occured for any cluster size
+Preliminary prototype benchmarks did not show this pattern,
+which made us compare our system and the prototype we benchmarked.
+The main difference was the usage of eLevelDB as Riaks backend storage in the system,
+whereas the prototype used bitcask, the default storage backend.
+
+The only reason we used eLevelDB was it being the only backend supporting secondary indices.
+We decided to do a comparison of those two backends,
+which required to remove the usage of secondary indices.
+Therefore we replaced it with Riak search.
+As you can see in Fig. \ref{fig:load_test:degradation_compare} our assumption proved to be correct.
+\begin{figure}[htbp!]
+ \hspace{-2.5cm}
+ \includegraphics[width=18cm]{./graphics/Load_test-degradation_compare.pdf}
+ \caption{Comparison of the storage backends bitcaks and eLevelDB.}
+ \label{fig:load_test:degradation_compare}
+\end{figure}
+Both start of the same but the throughput of eLevelDB version drops quickly,
+whereas the bitcask version remains almost stable.
+
+\subsubsection{CAP controls}
+Another small but effective change was the adaptation of the Riak CAP controls.
+\begin{figure}[htbp!]
+ \hspace{-2.5cm}
+ \includegraphics[width=18cm]{./graphics/Load_test-cap.pdf}
+ \caption{Improvement by changed CAP controls.}
+ \label{fig:load_test:cap}
+\end{figure}
+Many writes to Riak have a quite low priority.
+The message logging for example is such a case.
+The system does not need to await confirmation of the write.
+Fig. \ref{fig:load_test:cap} displays the increase in throughput this gave to our system.
+
+
+\subsubsection{Key filtering}
+\label{sec:load_tests:key_filtering}
+Despite those improvements the system did still not scale as well as hoped.
+The Riak community\footnote{IRC channel \#riak on freenode.net} recommended
+us to take a closer look into our Riak search usage,
+since it has not been as well tested as other parts of Riak.
+
+The system used Riak search quite extensively, especially after the change from eLevelDB.
+In many parts of the system it just replaced secondary indices.
+The full text search was not really necessary, as we just needed to find values
+without knowing the unique id.
+Therefore we tried to replace Riak search in parts with Riaks key filtering.
+For messages for example we introduced keys of the form $<unique-id>-<from>-<to>$.
+With key filtering it is then possible to query the messages for a certain user without
+the use of Riak search.
+
+The advice from the Riak community turned out to be very valuable.
+Riak search should be avoided for values that are being written often,
+as the indexing is too expensive to scale well.
+Unfortunately though we no longer have the data to show a comparison graph.
+
+
+\subsubsection{Final results}
+Fig. \ref{fig:load_test:scaling} shows the performance of the final system.
 \begin{figure}[htbp!]
   \hspace{.5cm}
  \includegraphics[width=14cm, angle=-90]{./graphics/Load_test-scaling.pdf}
@@ -952,18 +1060,20 @@ Fig. \ref{fig:load_test:scaling} is a scaling graph from one to four PCs (x-axis
  \label{fig:load_test:scaling}
 \end{figure}
 The y-axis is the amount of model users the system can handle.
-Where a model user is assumed to performe about 20 requests a day and
+Where a model user is assumed to perform about 20 requests a day and
 all users are distributed evenly throughout the day.
 The blue one is just for comparison and displays how perfect linear scaling would look like.
 The yellow graph shows the performance of the system right after we switched from
 riak search to key filtering.
 With one machine it can handle around 400k model users, and with 4 machines
 a bit more than double the amount.
-We ran this with up to four machines, which seems to scale.
 The green one is the system at the end of this project.
-We can see that performance dropped a lot.
+
+Unfortunately the performance dropped a lot.
 The cause for this is a single commit that introduced an increased usage of riak search again.
 Unfortunately there was no time left to get the system back to its previous performance.
+Still the system performs quite well and 400k model users is most likely
+more than the global count of diplomacy players.
 
 
 \section{Failure Tests}
