@@ -679,10 +679,10 @@ conflicts.
 
 Nevertheless, we could not avoid it completely.
 Multiple users might try to join the same game.
-There might be a conflict, if they want to play the same country or only one
+There might be a conflict if they want to play the same country or only one
 spot is left.
-Besides the creator of the game is no longer allowed to update the game once a
-player has joined.
+Furthermore, the creator of the game is not allowed to update the game once a
+player has joined it.
 Therefore we have a game joining process for every game that has not started
 yet.
 All join and update requests go through that process, thus ensuring consistency.
@@ -693,7 +693,6 @@ To ensure only one such process per game we use Mnesia due to its transactions.
 The project consists of a set of Erlang applications logically grouped
 based on their functionalities. We have two more directories at the
 project level, one for external tests and the other for the release.
-
 Below is the high level directory structure of the project.
 
 \begin{verbatim}
@@ -723,12 +722,14 @@ Below is the high level directory structure of the project.
    |-rel
 \end{verbatim}
 
-Briefly describing the applications,
+A short description of each application can be found in Table \ref{table1}.
 
 \begin{center}
-    \begin{tabular}{ | l | p{10cm} |}
+    \begin{table}[t]
+    \centering
+    \begin{tabular}{ | l |p{10cm}|}
     \hline
-    Application & Description \\ \hline \hline
+    \textbf{Application} & \textbf{Description} \\ \hline \hline
     cluster\_manager & escript for management of the distributed
     cluster \\ \hline
     controller\_app & The controller application \\ \hline
@@ -750,13 +751,15 @@ Briefly describing the applications,
     utils & Commonly used tools and utilities \\ \hline
     web\_frontend & Code for handling the web frontend, including client
     side code \\ \hline
-    xmpp\_lib & Library for handling XMPP communication \\ \hline \hline
+    xmpp\_lib & Library for handling XMPP communication \\ \hline
     \end{tabular}
+    \caption{Applications with their short descriptions.}
+    \label{table1}
+    \end{table}
 \end{center}
 
 
-
-Additional notes on the code,
+Additional notes on the code:
 
 \begin{itemize}
 \item General Erlang coding style and conventions were followed.
@@ -769,7 +772,7 @@ A supervisor in Erlang is a process that supervises processes it has spawned.
 The supervisor can spawn new child processes and if one of them would die, it
 can act according to its configured restart-policy, for example, it could be
 configured to never restart children or alway restart them, independent of the
-``cause of death''.\\
+``cause of death''.
 
 Each application (that is not only a library) in our backend and also the
 controller have a supervision tree structure that enables an operator to fine
