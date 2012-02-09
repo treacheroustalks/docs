@@ -562,9 +562,12 @@ will see the sender's nickname. The basic use case for the off-game messaging
 is giving users the chance to set up games for their friends and tell them
 about it.
 \subsubsection{Search}
-Our search module provides the functionality to search, for instance, for
-games, based on their properties (like all game parameters). For the
-implementation of search, we relied on the Riak extension {\tt riak\_search}.
+While search is an integrated part of our game application, it is important
+enough to mention here. Providing a search feature for users is important since
+it allows a user to find completed games or join an interesting game. To do
+this, users need to be able to search for games based on their properties (like
+all game parameters). For the implementation of search, we relied on the Riak
+extension {\tt riak\_search}.
 
 Riak search is a search engine that is tightly coupled with the Riak datastore.
 We added a precommit hook so that whenever a new object is added or an old one
