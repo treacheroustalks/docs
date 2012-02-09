@@ -119,6 +119,8 @@ how we tackled problems during the project, please refer to our course report.
 %This is the core of your report, and is therefore most likely the largest section.}
 
 \section{Requirements}
+We received a number of requirements from our customer Erlang Solutions that we
+were to include in the project.
 
 \subsection{Diplomacy server}
 The requirements specified that the system should consist of
@@ -164,7 +166,7 @@ should handle hardware failure of physical machines. As with scalability, we
 might have been able to get away with less work but this feature as well was
 too interesting to resist focusing on it.
 
-\subsection{Websockets}
+\subsection{WebSocket}
 Websockets\cite{websockets} are a tcp-like connection between a browser and a
 webserver.
 Their novelty is that they are not implemented by polling which makes them quite
@@ -173,10 +175,10 @@ They can be used to send javascript that updates only parts of the client page
 instead of reloading a page and are a great tool to shift computing to the
 client side.
 
-The websocket feature was mostly an issue because of the tool support (or lack
+The WebSocket feature was mostly an issue because of the tool support (or lack
 thereof) we were faced with. More is explained in Sec.~\ref{sec:frontends}.
-Otherwise, websockets are an amazing technology and as will have a great impact
-on web development in the future since tool support is increasing.
+Otherwise, WebSocket is an amazing technology and it we think that it will have
+a great impact on web development in the future as the tool support is increasing.
 
 \subsection{AI}
 Writing a simple AI was a requirement which interested us as well. However, we
@@ -189,11 +191,12 @@ performance characteristics and leaving the AI players for future work.
 
 Our Architecture is divided in three main blocks, the {\em frontends}, the
 {\em controller}, and the {\em backends}. In Fig.~\ref{fig:arch} a running
-cluster as it could be configured is shown. {\em server 1} shows a full
+cluster as it could be configured is shown. {\em Server 1} shows a full
 configuration as it includes all three frontends, a backend and Riak. Riak, our
 database is explained in sec.~\ref{sec:riak}.
 The operator, however, is free to choose to only run a specific selection of
-these and can combine them freely.
+these and can combine them freely, for example as the {\em server 2} in
+Fig.~\ref{fig:arch}.
 
 \begin{figure}[h]
  \centering
@@ -211,8 +214,8 @@ respond with an answer.
 \subsubsection{Communication between modules}
 We follow the MVC\cite{mvc} (Model~View~Controller) Pattern.
 The View contains all the supported User Interfaces (Web, SMTP, XMPP). The
-controller is an application that talks to the Model. In the Model there
-are backend services (Game, Messaging, User Management) and the database.
+Controller is an application that talks to the Model. In the Model there
+are backend services (Game, Messaging and User Management) and the database.
 Some of the backend services talk to each other, while others work completely
 independent. Each box in Fig.~\ref{fig:mod_conn} is an OTP application, and
 each of them can be distributed onto multiple nodes and work simultaneously.
@@ -228,17 +231,18 @@ Fig.~\ref{fig:mod_conn}
  \label{fig:mod_conn}
 \end{figure}
 
-Arrows in the Fig.~\ref{fig:mod_conn} represent messages, where one application
-sends a message to another one. It calls a function in the API library
+Arrows in Fig.~\ref{fig:mod_conn} represent messages, where one application
+sends a message to another one. Instead of direct message passing between
+applications, the application calls a function in the API library,
 which sends a message to a worker process in the target application. The worker
 process is chosen from the process group for workers
-(see Fig.~\ref{fig:service_app}) in that service application. In the
+(see Fig.~\ref{fig:service_app}) in that service application. In
 Fig.~\ref{fig:mod_conn} you can see two databases. The one in the bottom, Riak
 (see ~\ref{sec:riak}), is the main database. The other one, Session
 (see Mnesia ~\ref{sec:mnesia}), is part of the controller and stores sessions.
 
 \subsubsection{Modularity --- and its Relation to Scalability}
-One thing that is not immediately visible in our architecture is the fact that
+One thing that is not immediately visible in our architecture (Fig.~\ref{fig:arch})is the fact that
 the individual modules are very independent of each other. Even though the
 architecture graphic shows a complete example of a running cluster, we can
 choose to run some modules alone. \\
@@ -281,12 +285,12 @@ nodes can only have state that could be lost or must be stateless.
 With this in mind, our architecture was designed to allow applications to
 be distributed across the physical machines in various configurations
 (see Fig.~\ref{fig:arch}). All the system state is moved to the database
-and some nodes that have state can be restored from the database, in
+and nodes that have state can be restored from the database, in
 the event of failure.
 
 We did have to use state in certain parts of the system due to the
 distributed nature of the application. Briefly, the parts of the system
-with state and the reasoning behind them are,
+with state and the reasoning behind them are:
 
 \begin{itemize}
 \item Game timer --- A game has various events associated with it and
@@ -314,14 +318,14 @@ also used to load static content via AJAX.
 
 The web frontend relies heavily on JavaScript since it contains a large amount
 of the logic handling user interactions, requests and responses to the server
-and gameplay support for the user. We use the JavaScript library jQuery
-\cite{jquery} to update the DOM elements and make AJAX requests.
+and gameplay support for the user. We use the JavaScript library jQuery\cite{jquery}
+to update the DOM elements and make AJAX requests.
 
 We use the toolkit Bootstrap\cite{bootstrap} for the user interface which
-allows us to quickly develop web pages. It includes base CSS and HTML for
+allows us to quickly develop web pages. Bootstrap includes a CSS and HTML base for
 typography, forms, buttons, tables, grids, navigation, and more. Using it
 reduced the time needed for web development, allowing us to focus on the
-backend.\\
+backend.
 
 We had the option of extending Nitrogen to support WebSocket, but after
 investigating how much work would be involved, we came to the conclusion that it
@@ -339,10 +343,10 @@ Since the protocol might have changed significantly during the project, we
 decided to commit to a particular WebSocket draft version, and a web browser and
 server version that support it. This gave us a stable base to develop on.
 
-We chose the ``hybi-10'' draft of the protocol \cite{hybi-10} which was
-supported by Chromium 14 and a fork of Yaws 1.91 \cite{yaws-fork}. This draft
+We chose the ``hybi-10'' draft of the protocol\cite{hybi-10} which was
+supported by Chromium 14 and a fork of Yaws 1.91\cite{yaws-fork}. This draft
 version was chosen because it appeared likely to become the basis of the final
-standard \cite{new-websocket-google-blog} while the earlier drafts were
+standard\cite{new-websocket-google-blog} while the earlier drafts were
 incompatible.
 
 When RFC 6455 was released, only minor changes were needed to make the branch of
@@ -359,7 +363,7 @@ Using ejabberd\cite{ejabberd} as XMPP server was an obvious choice since ejabber
 standard solution for XMPP servers and ejabberd is implemented
 in Erlang which led us to hope that it would play well with our code.
 
-There are three ways to implement integration with ejabberd.
+There are three ways to implement integration with ejabberd:
 
 \begin{itemize}
 \item Client --- A bot that uses an Erlang client such as exmpp\cite{exmpp} can be used to
@@ -368,7 +372,7 @@ All users send messages to the bot via the ejabberd server. e.g. bot@example.com
 An issue the jabber client has, is that it doesn’t scale. Using a single bot
 will mean all the users will have to be in the bot’s roster (user list).
 ejabberd doesn’t handle the scaling of rosters very well (known to fail for
-$>$ 40k clients \cite{40k-roster}).
+$>$ 40k clients\cite{40k-roster}).
 \item Component --- A component is a trusted piece of an XMPP server that can send
 and receive arbitrary stanzas.
 In other words, we can add a module to ejabberd and define a virtual domain to
@@ -377,7 +381,7 @@ Because the name of a component is a domain (example: tt.localhost), a component
 can pretend to be many users.
 Any stanza addressed to service@tt.localhost will be delivered to tt.localhost
 no matter what the value is of 'service'.
-\item S2S(server to server) --- This is the next step for those who need very
+\item S2S (server to server) --- This is the next step for those who need very
 large scale. This was not suitable for us since it requires us to learn a new
 protocol and is most possibly not necessary for our needs.
 \end{itemize}
@@ -385,7 +389,7 @@ protocol and is most possibly not necessary for our needs.
 We decided to use component to communicate with users. We added a module to
 ejabberd that registers a hook to get all the messages that are sent to
 tt.localhost and forwards it to our backend. ejabberd automatically spawns a
-new process for a new user who sends message to this component.
+new process for a new user who sends messages to this component.
 If we need to communicate with a user, we use the corresponding process.
 
 In this way, not only users that have an account on our ejabberd server, but
@@ -405,7 +409,7 @@ However, since our SMTP frontend doesn't directly talk to email clients, we
 figured out that there's no need for an email retrieving mechanism for our
 servers. Therefore, we picked gen\_smtp server as our SMTP frontend since all
 of its modules are only focused on SMTP. In our system architecture, the
-SMTP~frontend is the bridge between client side and the backend
+SMTP~frontend is the bridge between the client side and the backend
 (see Fig.~\ref{fig:smtp_arch}).
 Once the SMTP frontend receives an email from the client side, it will extract
 the email content and pass it to the backend controller. The controller will
@@ -415,7 +419,7 @@ respond to client side through the SMTP frontend again.
 \begin{figure}[h]
  \centering
  \includegraphics[width=8cm]{./graphics/smtp_arch.pdf}
- \caption{Communication between client side and backend.}
+ \caption{SMTP communication between client side and backend.}
  \label{fig:smtp_arch}
 \end{figure}
 
@@ -453,14 +457,14 @@ The reasons for that are concurrency issues
 
 \subsubsection{Access Control}
 What users can perform what actions on the system is defined by a set of
-identities known as roles. The system has four roles.
+identities known as roles. The system has four roles:
 
 \begin{itemize}
-\item User --- registered member of the system who can create and play games.
-\item Blacklisted user --- a user who has been removed from the system.
-\item Moderator --- a user with enhanced privileges to moderate games and help
+\item User --- A registered member of the system who can create and play games.
+\item Blacklisted user --- A user who has been removed from the system.
+\item Moderator --- A user with enhanced privileges to moderate games and help
 other users.
-\item Operator --- an administrator who has complete control over the system.
+\item Operator --- An administrator who has complete control over the system.
 
 \end{itemize}
 
@@ -526,7 +530,7 @@ the use of one Erlang process per session makes the implementation complete.
 \subsection{Backend}
 \subsubsection{Game Managing}
 Managing games is split up in two main tasks: {\em game timing\/} and
-{\em order-processing}. \\
+{\em order-processing}.
 Game timing is implemented as a {\tt gen\_fsm} that changes states when a game
 phase needs to stop, eg.\ when the deadline for handing in orders is over.\\
 Before a phase is started, the rules processing is done by a module we call
@@ -537,9 +541,9 @@ map, to the rule engine.
 Since communication is very important in the game --- some even say, that the
 game is mostly about communication --- the messaging module is a very central
 feature for us. We support two types of messages: {\em in-game\/} and
-{\em off-game\/}-messages.\\
-Messages in game never involve the user nick for tactical reasons: if someone
-remembers my nickname, he has an easier time to anticipate my moves since he
+{\em off-game\/}-messages.
+Messages in-game never involves the user nickname for tactical reasons: if someone
+remembers my nickname, he/she has an easier time to anticipate my moves since he
 will likely remember my actions in last games.
 Or, worse: he might still hold a grudge against me. This is why you never
 communicate with players in-game by using their nickname, but by using their
@@ -615,7 +619,8 @@ Riak tries to automatically resolve this among others with vclocks.
 If Riak cannot resolve this it will leave both values as so called siblings
 in the database.
 It is then up to the backend to resolve the conflict on the next read
-and write back the real value.
+and write back the value which was decided to be the value that resulted after
+the conflict resolution.
 
 \subsubsection{Solution}
 A common solution for this problem is to serialize requests/writes to the same
@@ -677,7 +682,7 @@ Riak, instead we keep one value for each player.
 This leads to seven reads on phase change, but order writing does not have
 conflicts.
 
-Nevertheless, we could not avoid it completely.
+Nevertheless, we could not avoid it in all parts of the system.
 Multiple users might try to join the same game.
 There might be a conflict if they want to play the same country or only one
 spot is left.
@@ -791,26 +796,26 @@ die unexpectedly.
  \centering
  \includegraphics[width=\textwidth]{./graphics/Service_Application.png}
  \caption{General supervision structure for applications, double-rings are
-supervisors}
+supervisors.}
  \label{fig:service_app}
 \end{figure}
 
 The game application's supervision tree is slightly different, as it also has a
 number of game timers, which don't belong to a process group as seen in
-Fig.~\ref{fig:game_app}. The game timer processes have have their own supervisor
+Fig.~\ref{fig:game_app}. The game timer processes have their own supervisor
 which will restart the processes in case the process would die in an unnatural
 way, that is if the game has not yet finished nor been stopped by an operator.
 \begin{figure}[h]
  \centering
  \includegraphics[width=\textwidth]{./graphics/game_Application.png}
- \caption{Supervision tree for the game application}
+ \caption{Supervision tree for the game application,}
  \label{fig:game_app}
 \end{figure}
 
 \chapter{Treacherous Talks}
 \section{The Three Interfaces}
 \subsection{HTTP}
-The user goes to the landing page, there he finds a link to register which will
+The user goes to the landing page, there he/she finds a link to register which will
 display a simple form for him to fill out. After the user is registered, he is
 able to log in using the login textfields on the landing page.
 
@@ -852,7 +857,7 @@ corresponding orders will be automatically generated, see Fig.~\ref{fig:orders}.
 
 \subsection{XMPP}
 Users who log into our XMPP server, will get the address of the component that
-commands should be sent to them in an instant message. If a user has an account
+commands should be sent to in an instant message. If a user has an account
 on any other XMPP server, they can play the game by sending commands as instant
 messages to the server's user. For development, we used the user
 ``service@tt.localhost'', but this is only accessible from the host where ejabberd
@@ -863,7 +868,7 @@ a domain where ejabberd is configured to listen for connections.
 If a user sends  ``HELP'' or any unknown command to our component, it will
 return the list of all valid commands. All commands can be found in appendix
 \ref{sec:textbasedcmd}.
-Each command starts with the command keyword and must end with ``END'' tag.
+Each command starts with the command keyword and must end with an ``END'' tag.
 If the user enters some text before the command keyword or after the end
 keyword, they are simply ignored. Users can get the list of all mandatory fields
 for each command by sending the command name and ``END''.
@@ -889,14 +894,14 @@ and one for in-game-chat (they can be seen --- minimized --- in
 Fig.~\ref{fig:dashboard}. The user manually has to enter the recipient (in
 in-game chat the recipient-country and the game ID). If the recipient is not
 online when a message is sent, it will be stored and delivered by the message
-application after the recipient logs in the next time. \\
+application after the recipient logs in the next time. 
 Appendix \ref{sec:textbasedcmd} contains more detailed information on
 interaction through the text based interfaces.
 
 \section{Playing}
 For game play, as is mentioned in previous sections, the web frontend provides
 an interactive interface which is much more convenient than typing text orders
-for beginners. (Fig.~\ref{fig:orders}). \\
+for beginners. (Fig.~\ref{fig:orders}).
 On the contrary, the other two frontends (XMPP and SMTP) have to take text
 based orders. Instead of clicking, the user has to type them and additionally
 is required to supply his session ID which he receives after logging in.
@@ -1152,8 +1157,9 @@ Despite all this, the work left to be done is considerable:
 An AI was in the original requirements but was not delivered due to time
 constraints.
 Bug fixing in the rule engine is necessary. Scalability could be improved by
-applying tracing to the cluster which would be lots of interesting work as well
-as the interfaces polished.
+applying tracing to the cluster which would be lots of interesting work. A more
+polished interface, that is more appealing to the eye is something that could
+be worked on.
 
 In order to make the game playable by the public, a better system to find and
 join games would probably be necessary in the web frontend --- and we would
@@ -1467,14 +1473,14 @@ for more information.
 Being a system operator opens up a few special features, some are available as
 text based commands but all are available in the web interface of the operator:
 \begin{itemize}
-\item Adding or removing moderators (web only)
-\item Stop games (web only)
-\item Overview games including moves and messaging (web only)
-\item Blacklist or whitelist players
-\item Receive reports about issues from players (web only)
-\item Send messages to players in any game
-\item View the status of the system (web only)
-\item View the status of Riak
+\item Adding or removing moderators (web only).
+\item Stop games (web only).
+\item Overview games including moves and messaging (web only).
+\item Blacklist or whitelist players.
+\item Receive reports about issues from players (web only).
+\item Send messages to players in any game.
+\item View the status of the system (web only).
+\item View the status of Riak.
 \end{itemize}
 
 The status of the system gives information about which applications are running
@@ -1489,9 +1495,9 @@ interface.\\
 
 The following features are available for moderators:
 \begin{itemize}
-\item Blacklist or whitelist players
-\item Send messages to players in any game
-\item Receive reports from players reporting other players (web only)
+\item Blacklist or whitelist players.
+\item Send messages to players in any game.
+\item Receive reports from players reporting other players (web only).
 \end{itemize}
 
 \chapter{Text based commands}
