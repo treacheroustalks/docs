@@ -166,18 +166,17 @@ might have been able to get away with less work but this feature as well was
 too interesting to resist focusing on it.
 
 \subsection{WebSocket}
-WebSocket~\cite{websocket} is a tcp-like connection between a browser and a
-web server.
+WebSocket~\cite{websocket} is a web technology that enables two-way
+communication between a web browser and a web server over a TCP socket.
+
 Its novelty is that it is not implemented by polling which makes it quite
 fast for updates pushed from the server to the client.
 WebSocket can be used by javascript to update only parts of the client page
 instead of reloading a page and is a great tool to shift computing to the
 client side.
 
-The WebSocket feature was mostly an issue because of the tool support (or lack
-thereof) we were faced with. More is explained in Sec.~\ref{sec:frontends}.
-Otherwise, WebSocket is an amazing technology and will have a great impact
-on web development in the future since tool support is increasing.
+The lack of tool support for WebSocket was an issue during the project, as
+detailed in Sec.~\ref{sec:frontends}.
 
 \subsection{AI}
 Writing a simple AI was a requirement which interested us as well. However, we
