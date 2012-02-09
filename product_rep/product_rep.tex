@@ -210,7 +210,7 @@ The controller filters out illegal messages according to the session database
 and the user privileges before handing them off to the backends --- which will
 respond with an answer.
 
-\subsubsection{Communication between modules}
+\subsubsection{Communication between applications}
 We follow the MVC\cite{mvc} (Model~View~Controller) Pattern.
 The View contains all the supported User Interfaces (Web, SMTP, XMPP). The
 Controller is an application that talks to the Model. In the Model there
@@ -220,13 +220,13 @@ independent. Each box in Fig.~\ref{fig:mod_conn} is an OTP~\cite{erlang_otp}
 application, and each of them can be distributed onto multiple nodes and work
 simultaneously. The system is database-driven, that is, the backend services are
 stateless (see~\ref{sec:stateless}), and any request can be handled
-by any node. The communication between the applications is shown in
-Fig.~\ref{fig:mod_conn}
+by any node where that service application is running. The communication between
+the applications is shown in Fig.~\ref{fig:mod_conn}
 
 \begin{figure}[h]
  \centering
  \includegraphics[width=12cm]{./graphics/Modules_Communication.png}
- \caption{Communication between modules.}
+ \caption{Communication between applications.}
  \label{fig:mod_conn}
 \end{figure}
 
@@ -242,9 +242,9 @@ Fig.~\ref{fig:mod_conn} you can see two databases. The one in the bottom, Riak
 
 \subsubsection{Modularity --- and its Relation to Scalability}
 One thing that is not immediately visible in our architecture (see Fig.~\ref{fig:arch})
-is the fact that the individual modules are very independent of each other. Even
+is the fact that the individual applications are very independent of each other. Even
 though the architecture graphic shows a complete example of a running cluster,
-we can choose to run some modules alone.
+we can choose to run some applications alone.
 
 If we would, for example, find out that our system is slow because the
 web~frontend is the bottleneck, we could add more servers to the cluster that
@@ -252,9 +252,12 @@ run only a web~frontend (see Fig.~\ref{fig:arch}, ``Server n-1'').
 We can do the same with each of the frontend types, with backends and with Riak nodes.
 Our architecture, therefore, inherently supports scaling out very well.
 
-The controller application can be on any physical machine and any node. We
-decided to run it on each backend node. That distributes session management work
-evenly between backend nodes and has not given performance concerns.
+The controller application can be on any physical machine and any node. At least
+one instance of the controller application must be running. Extra instances will
+set up local copies of the session database, and session processes are distributed
+among the instances. We decided to run one controller instance on each backend
+node. That distributes session management work evenly between backend nodes and
+has not given performance concerns.
 
 Since the frontends are independent from each other, we did not expect issues
 scaling with additional frontends. We therefore focused on testing the performance
