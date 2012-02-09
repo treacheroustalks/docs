@@ -84,7 +84,7 @@
 \abstract{
 Treacherous Talks is an implementation of a board game (``Diplomacy'') as a web
 service. Technical and functional requirements of the project were defined by
- our customer --- Erlang Solutions\cite{erlsol}.
+our customer --- Erlang Solutions~\cite{erlsol}.
 
 The report explains the project and takes a look at the requirements.
 The technical details of the solutions chosen, are presented and their choices
@@ -94,7 +94,7 @@ To conclude, some of our relative weaknesses are mentioned.
 }
 
 \chapter{Introduction}
-Diplomacy\cite{diplomacy} is a board game, invented in the 1950s where the goal
+Diplomacy~\cite{diplomacy} is a board game, invented in the 1950s where the goal
 is to try to conquer Europe just before WW I. You come close to this goal by
 talking to the other players --- by diplomacy --- and making them your allies.
 And you achieve it by attacking them when they do not expect it.
@@ -123,8 +123,7 @@ We received a number of requirements from our customer Erlang Solutions that we
 were to include in the project.
 
 \subsection{Diplomacy server}
-The requirements specified that the system should consist of
-a server/backend with the following components.
+The requirements on the backend were initially grouped as follows:
 
 \begin{itemize}
 \item Authentication --- Only registered users should have access.
@@ -147,7 +146,7 @@ web~interface). Those interfaces are:\\
 \begin{enumerate}
 \item {\bf Web interface} ---
   The game should be accessible via a modern web browser {\em and\/} it should
-  use websockets to communicate with the browser.
+  use WebSocket to communicate with the browser.
 \item {\bf XMPP interface} ---
   The game should be accessible via a chat client using text based orders.
 \item {\bf SMTP interface} ---
@@ -167,18 +166,18 @@ might have been able to get away with less work but this feature as well was
 too interesting to resist focusing on it.
 
 \subsection{WebSocket}
-Websockets\cite{websockets} are a tcp-like connection between a browser and a
-webserver.
-Their novelty is that they are not implemented by polling which makes them quite
-fast.
-They can be used to send javascript that updates only parts of the client page
-instead of reloading a page and are a great tool to shift computing to the
+WebSocket~\cite{websocket} is a tcp-like connection between a browser and a
+web server.
+Its novelty is that it is not implemented by polling which makes it quite
+fast for updates pushed from the server to the client.
+WebSocket can be used by javascript to update only parts of the client page
+instead of reloading a page and is a great tool to shift computing to the
 client side.
 
 The WebSocket feature was mostly an issue because of the tool support (or lack
 thereof) we were faced with. More is explained in Sec.~\ref{sec:frontends}.
-Otherwise, WebSocket is an amazing technology and it we think that it will have
-a great impact on web development in the future as the tool support is increasing.
+Otherwise, WebSocket is an amazing technology and will have a great impact
+on web development in the future since tool support is increasing.
 
 \subsection{AI}
 Writing a simple AI was a requirement which interested us as well. However, we
@@ -193,9 +192,9 @@ Our Architecture is divided in three main blocks, the {\em frontends}, the
 {\em controller}, and the {\em backends}. In Fig.~\ref{fig:arch} a running
 cluster as it could be configured is shown. {\em Server 1} shows a full
 configuration as it includes all three frontends, a backend and Riak. Riak, our
-database is explained in sec.~\ref{sec:riak}.
+database is explained in Sec.~\ref{sec:riak}.
 The operator, however, is free to choose to only run a specific selection of
-these and can combine them freely, for example as the {\em server 2} in
+these and can combine them freely, for example as the {\em Server 2} in
 Fig.~\ref{fig:arch}.
 
 \begin{figure}[h]
@@ -217,35 +216,36 @@ The View contains all the supported User Interfaces (Web, SMTP, XMPP). The
 Controller is an application that talks to the Model. In the Model there
 are backend services (Game, Messaging and User Management) and the database.
 Some of the backend services talk to each other, while others work completely
-independent. Each box in Fig.~\ref{fig:mod_conn} is an OTP application, and
-each of them can be distributed onto multiple nodes and work simultaneously.
-The system is database-driven, that is, the backend services are stateless
-(see ~\ref{sec:stateless}), and any request can be handled
-by any node. The communication between the modules is shown in the
+independent. Each box in Fig.~\ref{fig:mod_conn} is an OTP~\cite{erlang_otp}
+application, and each of them can be distributed onto multiple nodes and work
+simultaneously. The system is database-driven, that is, the backend services are
+stateless (see~\ref{sec:stateless}), and any request can be handled
+by any node. The communication between the applications is shown in
 Fig.~\ref{fig:mod_conn}
 
 \begin{figure}[h]
  \centering
  \includegraphics[width=12cm]{./graphics/Modules_Communication.png}
- \caption{Communication between modules}
+ \caption{Communication between modules.}
  \label{fig:mod_conn}
 \end{figure}
 
 Arrows in Fig.~\ref{fig:mod_conn} represent messages, where one application
-sends a message to another one. Instead of direct message passing between
-applications, the application calls a function in the API library,
-which sends a message to a worker process in the target application. The worker
-process is chosen from the process group for workers
+sends a message to another one. Instead of direct message-passing between
+applications, an application calls a function in the API module of the target
+application, which sends a message to a worker process in the target application.
+The worker process is chosen from the process group for workers
 (see Fig.~\ref{fig:service_app}) in that service application. In
 Fig.~\ref{fig:mod_conn} you can see two databases. The one in the bottom, Riak
-(see ~\ref{sec:riak}), is the main database. The other one, Session
-(see Mnesia ~\ref{sec:mnesia}), is part of the controller and stores sessions.
+(see~\ref{sec:riak}), is the main database. The other one, Session
+(see Mnesia~\ref{sec:mnesia}), is part of the controller and stores sessions.
 
 \subsubsection{Modularity --- and its Relation to Scalability}
-One thing that is not immediately visible in our architecture (Fig.~\ref{fig:arch})is the fact that
-the individual modules are very independent of each other. Even though the
-architecture graphic shows a complete example of a running cluster, we can
-choose to run some modules alone. \\
+One thing that is not immediately visible in our architecture (see Fig.~\ref{fig:arch})
+is the fact that the individual modules are very independent of each other. Even
+though the architecture graphic shows a complete example of a running cluster,
+we can choose to run some modules alone.
+
 If we would, for example, find out that our system is slow because the
 web~frontend is the bottleneck, we could add more servers to the cluster that
 run only a web~frontend (see Fig.~\ref{fig:arch}, ``Server n-1'').
@@ -258,11 +258,11 @@ evenly between backend nodes and has not given performance concerns.
 
 Since the frontends are independent from each other, we did not expect issues
 scaling with additional frontends. We therefore focused on testing the performance
-of our backends and Riak nodes, as shown in Section \ref{load_tests}.
+of our backends and Riak nodes, as shown in Sec.~\ref{load_tests}.
 
 \subsubsection{Process groups}
 \label{sec:process_groups}
-The system uses process groups\cite{process_groups} to provide load balancing by
+The system uses process groups~\cite{process_groups} to provide load balancing by
 distributing work across nodes.
 This is done by each process in the backend joining the process group for its
 application. A calling process can then use the process groups to find a
@@ -270,13 +270,13 @@ process to call. The selection is done semi-randomly, if there is not a local
 process to call, a random process is used out of that group.
 Work is then distributed across the running nodes and prevents one node from
 receiving all calls. But, as it is done randomly it does not guarantee equal
-distribution, but during load testing we didn't see that the random selection
-caused any bottlenecks.
+distribution, but during load testing (see~\ref{load_tests}) we didn't see that the
+random selection caused any bottlenecks.
 
 \subsubsection{Stateless design}
 \label{sec:stateless}
 One of the ways to scale a system is to use a shared nothing (SN)
-architecture \cite{sn_arch}
+architecture~\cite{sn_arch}
 where every node is self-sufficient and the system has no single bottleneck.
 This allows for a distributed system that is both scalable and fault tolerant.
 The implementation of a SN architecture adds a constraint that individual
@@ -309,32 +309,33 @@ The frontends speak almost the same language to the user, which made the
 implementation of front-end logic very generic.
 
 \subsubsection{Web}
-The web frontend is running Yaws as a web server.
-We initially decided to use Nitrogen as a web framework, but had to drop Nitrogen
-because of the requirement of using WebSocket for interaction with the server.
-Yaws is configured as a ``/" application module (appmod) so that we can have a
-single entry point for handling all the requests. Server side includes (ssi) are
-also used to load static content via AJAX.
+The web frontend is running Yaws~\cite{yaws} as a web server.
+We initially decided to use Nitrogen~\cite{nitrogen} as a web framework,
+but had to drop Nitrogen because of the requirement of using WebSocket for
+interaction with the server. Yaws is configured as a ``/" application
+module (appmod) so that we can have a single entry point for handling all the
+requests. Server side includes (ssi) are also used to load static content via
+AJAX~\cite{ajax}.
 
-The web frontend relies heavily on JavaScript since it contains a large amount
-of the logic handling user interactions, requests and responses to the server
-and gameplay support for the user. We use the JavaScript library jQuery\cite{jquery}
-to update the DOM elements and make AJAX requests.
+The web frontend relies heavily on JavaScript~\cite{javascript} since it contains
+a large amount of the logic handling user interactions, requests and responses
+to the server and gameplay support for the user. We use the JavaScript library
+jQuery~\cite{jquery} to update the DOM elements and make AJAX requests.
 
-We use the toolkit Bootstrap\cite{bootstrap} for the user interface which
-allows us to quickly develop web pages. Bootstrap includes a CSS and HTML base for
-typography, forms, buttons, tables, grids, navigation, and more. Using it
+We use the toolkit Bootstrap~\cite{bootstrap} for the user interface which
+allows us to quickly develop web pages. Bootstrap includes basic CSS and HTML for
+typography, forms, buttons, tables, grids, navigation, and more. Using Bootstrap
 reduced the time needed for web development, allowing us to focus on the
 backend.
 
 We had the option of extending Nitrogen to support WebSocket, but after
 investigating how much work would be involved, we came to the conclusion that it
-would not be feasible given our time constraints. Nitrogen uses SimpleBridge
-which provides a standardized interface to all its supported web servers. We
-found that adding WebSocket support would mean adding and changing a lot of
-code in a lot of places, because of the way Nitrogen/SimpleBridge is structured.
-Instead we implemented the web frontend ourselves with HTML and JavaScript
-directly served by Yaws.
+would not be feasible given our time constraints. Nitrogen uses
+SimpleBridge~\cite{simple_bridge} which provides a standardized interface to all
+its supported web servers. We found that adding WebSocket support would mean
+adding and changing a lot of code in a lot of places, because of the way
+Nitrogen/SimpleBridge is structured. Instead we implemented the web frontend
+ourselves with HTML and JavaScript directly served by Yaws.
 
 Throughout the course of the project the WebSocket protocol has
 been under development. Only towards the end of the project has a protocol
@@ -343,10 +344,10 @@ Since the protocol might have changed significantly during the project, we
 decided to commit to a particular WebSocket draft version, and a web browser and
 server version that support it. This gave us a stable base to develop on.
 
-We chose the ``hybi-10'' draft of the protocol\cite{hybi-10} which was
-supported by Chromium 14 and a fork of Yaws 1.91\cite{yaws-fork}. This draft
+We chose the ``hybi-10'' draft of the protocol~\cite{hybi-10} which was
+supported by Chromium 14 and a fork of Yaws 1.91~\cite{yaws-fork}. This draft
 version was chosen because it appeared likely to become the basis of the final
-standard\cite{new-websocket-google-blog} while the earlier drafts were
+standard~\cite{new-websocket-google-blog} while the earlier drafts were
 incompatible.
 
 When RFC 6455 was released, only minor changes were needed to make the branch of
@@ -355,24 +356,25 @@ the ``hybi-10'' and newer drafts, or RFC 6455.
 
 Yaws has since merged a fork with support for RFC 6455 but we have not updated
 our code to use this version of Yaws due to time constraints and instead still
-use our fork of Yaws 1.91\cite{our-yaws}.
+use our fork of Yaws 1.91~\cite{our-yaws}.
 
 
 \subsubsection{XMPP}
-Using ejabberd\cite{ejabberd} as XMPP server was an obvious choice since ejabberd is the
+Using ejabberd~\cite{ejabberd} as XMPP server was an obvious choice since ejabberd is the
 standard solution for XMPP servers and ejabberd is implemented
 in Erlang which led us to hope that it would play well with our code.
 
 There are three ways to implement integration with ejabberd:
 
 \begin{itemize}
-\item Client --- A bot that uses an Erlang client such as exmpp\cite{exmpp} can be used to
+\item Client --- A bot that uses an Erlang client such as exmpp~\cite{exmpp} can be used to
 connect to the server.
 All users send messages to the bot via the ejabberd server. e.g. bot@example.com.
 An issue the jabber client has, is that it doesn’t scale. Using a single bot
 will mean all the users will have to be in the bot’s roster (user list).
-ejabberd doesn’t handle the scaling of rosters very well (known to fail for
-$>$ 40k clients\cite{40k-roster}).
+Ejabberd doesn’t handle the scaling of rosters very well (known to fail for
+$>$ 40k clients~\cite{40k-roster}).
+
 \item Component --- A component is a trusted piece of an XMPP server that can send
 and receive arbitrary stanzas.
 In other words, we can add a module to ejabberd and define a virtual domain to
@@ -388,7 +390,7 @@ protocol and is most possibly not necessary for our needs.
 
 We decided to use component to communicate with users. We added a module to
 ejabberd that registers a hook to get all the messages that are sent to
-tt.localhost and forwards it to our backend. ejabberd automatically spawns a
+tt.localhost and forwards it to our backend. Ejabberd automatically spawns a
 new process for a new user who sends messages to this component.
 If we need to communicate with a user, we use the corresponding process.
 
@@ -401,8 +403,8 @@ SMTP, together with POP and IMAP are the three most prevalent protocols for
 today's email servers.
 SMTP is used for sending emails from clients to servers while POP or IMAP
 are used for retrieving email from servers to clients.
-For our email server, we found three qualified candidates: Erlmail, gen\_smtp
-and erlang-smtp.
+For our email server, we found three qualified candidates: Erlmail~\cite{erlmail},
+gen\_smtp~\cite{gen_smtp} and erlang-smtp~\cite{erlang-smtp}.
 At first sight, Erlmail seemed to be the most competitive one since it
 supports all these three protocols when others support only one or two of them.
 However, since our SMTP frontend doesn't directly talk to email clients, we
@@ -445,6 +447,7 @@ Their main responsibilities are registration, login and the like.
 Fig.~\ref{fig:controller:session_proc} illustrates this.
 
 \subsubsection{Session Management}
+\label{sec:session}
 The session management consists of a group of processes and a Mnesia table.
 Each session spawns its own session process and writes an entry into the Mnesia
 table, so that one such process exists for each logged in user.
@@ -452,11 +455,11 @@ The Mnesia table is necessary to have a mapping between users and sessions.
 The processes handle all requests for their session and have the session data
 (user data, knowledge of how to push events to the frontend, etc).
 The reasons for that are concurrency issues
-(more on that in \ref{sec:concurrency}).
+(more on that in~\ref{sec:concurrency}).
 
 
 \subsubsection{Access Control}
-What users can perform what actions on the system is defined by a set of
+Which users can perform which actions on the system is defined by a set of
 identities known as roles. The system has four roles:
 
 \begin{itemize}
@@ -471,16 +474,18 @@ other users.
 
 \subsection{Riak}
 \label{sec:riak}
-The choice of Riak as database was a careful one: we evaluated Riak, couchDB
-and Mnesia but Riak was our favourite in the end --- its scalability features
-are very simple to use and its potential for scalability is what we needed.
-Due to consistency issues, we had to resort to using Mnesia for sessions and
-the game joining processes, as it provides transactions.
+The choice of Riak~\cite{riak} as database was a careful one: we evaluated Riak,
+couchDB~\cite{couchdb} and Mnesia~\cite{mnesia} but Riak was our favourite in the
+end --- its scalability features are very simple to use and its potential for
+scalability is what we needed. Due to consistency issues, we had to resort to
+using Mnesia for sessions (see~\ref{sec:stateless},~\ref{sec:session}) and the game joining
+processes (see~\ref{sec:stateless}), as it provides transactions.
 
 Riak proved to be a good choice for us since its performance parameters (called
-``CAP controls''\cite{cap_controls} in riak-lingo) are very easy to tune and it
+``CAP controls''~\cite{cap_controls} in riak-lingo) are very easy to tune and it
 is quite well documented how Riak behaves under load. The scalability problems
-we had came from using the search module too much.
+we had came from using the search module too much
+(see~\ref{sec:load_tests:key_filtering}).
 
 Riak is a distributed key/value store that connects an arbitrary number of
 {\em nodes} to form a cluster. All of these nodes can --- but don't have to ---
@@ -493,21 +498,21 @@ responsibilities which makes the architecture simpler.
 The ease of adding nodes to a running Riak cluster is one of its main
 advantages, data are redistributed in order to achieve fair distribution after
 one node is added. This can, of course, have performance implications but they
-were not measured by us.
+were not measured by us (see~\ref{load_tests}).
 
-\subsubsection{eleveldb}
+\subsubsection{eLevelDB}
 Riak's storage backend was a problem. Riak has the feature to switch the
 storage backend --- the way, key/value pairs are stored on a node.
-We initially used {\tt eleveldb} because it supported secondary indices, a
-feature we wanted. However, {\tt eleveldb} showed degrading performance
+We initially used {\tt eLevelDB}~\cite{eleveldb} because it supported secondary indices, a
+feature we wanted. However, {\tt eLevelDB} showed degrading performance
 in our context: the throughput of database operations was decreasing linearly
 over time, down to zero. We could not pinpoint the problem, so we had to switch
-the storage backend to {\tt bitcask}, Riak's standard storage backend.
-Bitcask does not support secondary indices, and because of that it was
-necessary to use {\tt riak\_search} more --- which led to scalability
-issues\ldots
-More on that in \ref{load_tests}.
-
+the storage backend to {\tt bitcask}~\cite{bitcask}, Riak's standard storage backend.
+Bitcask does not support secondary
+indices~\cite{secondary_idx}\cite{secondary_idx_riak},
+and because of that it was necessary to use
+{\tt riak\_search} more --- which led to scalability
+issues (see~\ref{sec:load_tests:key_filtering}).
 
 \subsubsection{Mnesia}
 \label{sec:mnesia}
@@ -520,8 +525,8 @@ backend in a different sequence, thereby creating inconsistent data. This was
 fixed by serializing the user's commands.
 
 The implementation of the above two solutions is not possible using Riak since
-it is an eventually consistent database. Mnesia, which is distributed and has
-transactions, is the right fit.
+it is an eventually consistent~\cite{eventual_consistency} database.
+Mnesia, which is distributed and has transactions, is the right fit.
 
 We use Mnesia to keep track of user sessions. Combining this with
 the use of one Erlang process per session makes the implementation complete.
@@ -531,8 +536,10 @@ the use of one Erlang process per session makes the implementation complete.
 \subsubsection{Game Managing}
 Managing games is split up in two main tasks: {\em game timing\/} and
 {\em order-processing}.
+
 Game timing is implemented as a {\tt gen\_fsm} that changes states when a game
-phase needs to stop, eg.\ when the deadline for handing in orders is over.\\
+phase needs to stop, eg.\ when the deadline for handing in orders is over.
+
 Before a phase is started, the rules processing is done by a module we call
 the ``rule engine'': the orders which were sent by the users before the
 deadline are read from the database and passed, along with the current game
@@ -542,9 +549,10 @@ Since communication is very important in the game --- some even say, that the
 game is mostly about communication --- the messaging module is a very central
 feature for us. We support two types of messages: {\em in-game\/} and
 {\em off-game\/}-messages.
-Messages in-game never involves the user nickname for tactical reasons: if someone
-remembers my nickname, he/she has an easier time to anticipate my moves since he
-will likely remember my actions in last games.
+
+In-game messages never involve the user nickname for tactical reasons: if someone
+remembers my nickname, he/she has an easier time to anticipate my moves since he/she
+will likely remember my actions in previous games.
 Or, worse: he might still hold a grudge against me. This is why you never
 communicate with players in-game by using their nickname, but by using their
 country.
@@ -592,7 +600,7 @@ Thus two requests involving an update on the same key-value pair can, and will,
 end up on different workers or even nodes.
 This can lead to inconsistency, because they might have different work load
 and execute the tasks out of order.
-Fig. \ref{fig:concurrency:problem_expl} illustrates this.
+Fig.~\ref{fig:concurrency:problem_expl} illustrates this.
 \begin{figure}[htbp!]
  \centering
  \includegraphics[width=10cm, angle=-90]{./graphics/Concurrency_-_Earlier_session_write_replace_later_session_write.pdf}
@@ -608,14 +616,14 @@ Fig. \ref{fig:concurrency:problem_expl} illustrates this.
  \caption{Sibling creation.}
  \label{fig:concurrency:siblings}
 \end{figure}
-Another problem is shown in Fig. \ref{fig:concurrency:siblings}.
+Another problem is shown in Fig.~\ref{fig:concurrency:siblings}.
 Two different nodes might end up writing to the same key without even knowing
 there was a concurrent write.
 Riak's CAP control specifies how many Riak nodes should respond a positive write
 before returning.
 In case 2/4 have to respond, two different writes can get the ``ok''.
 Our backends would not even know there was a simultaneous write.
-Riak tries to automatically resolve this among others with vclocks.
+Riak tries to automatically resolve this among others with vclocks~\cite{vclock}.
 If Riak cannot resolve this it will leave both values as so called siblings
 in the database.
 It is then up to the backend to resolve the conflict on the next read
@@ -629,7 +637,8 @@ A sequential execution of tasks will always ensure the correct order and not
 create inconsistent data.
 In Erlang this is best done with processes.
 Each process has a message queue and can only handle one message after another.
-Thus requests are serialized if they have to go to the same process.
+Thus requests are serialized if they have to go to the same process and if they are
+all matched against the same pattern in the receive statement.
 
 In our system there are two kinds of interactions that need to be considered:
 single user concurrency and multi user concurrency.
@@ -647,7 +656,7 @@ and each user is only allowed to be logged in once at a time.
  \label{fig:concurrency:login}
 \end{figure}
 To ensure only one active session the login has to consider concurrency as well.
-Fig. \ref{fig:concurrency:login} shows how the login works.
+Fig.~\ref{fig:concurrency:login} shows how the login works.
 Any old session needs be terminated before we can start a new one.
 Also, we use Mnesia instead of Riak to store session information,
 as it supports transactions.
@@ -670,7 +679,7 @@ We use a session history to resolve siblings, which is updated during login.
 Additionally we store which session was responsible for the update.
 When the backend encounters siblings it then checks the session history which
 is the newer one and picks the corresponding value to be the correct one.
-Fig. \ref{fig:concurrency:history} illustrates this.
+Fig.~\ref{fig:concurrency:history} illustrates this.
 
 \subsubsubsection{Multi user concurrency}
 Multi user concurrency involves the data that can be written by multiple users,
@@ -727,7 +736,7 @@ Below is the high level directory structure of the project.
    |-rel
 \end{verbatim}
 
-A short description of each application can be found in Table \ref{table1}.
+A short description of each application can be found in Table~\ref{table1}.
 
 \begin{center}
     \begin{table}[t]
@@ -785,7 +794,7 @@ tune the number of workers of each application, it also makes it possible
 to inspect the status of applications on each server.
 
 As seen in Fig.~\ref{fig:service_app}, there is one process group
-(see \ref{sec:process_groups}) for the application workers, and a ``management''
+(see~\ref{sec:process_groups}) for the application workers, and a ``management''
 group. The processes in the worker group are the ones doing the heavy work in an
 application. The ``manager'' of each application in each node makes it
 possible to change the number of workers, it also makes it possible to traverse
@@ -808,7 +817,7 @@ way, that is if the game has not yet finished nor been stopped by an operator.
 \begin{figure}[h]
  \centering
  \includegraphics[width=\textwidth]{./graphics/game_Application.png}
- \caption{Supervision tree for the game application,}
+ \caption{Supervision tree for the game application.}
  \label{fig:game_app}
 \end{figure}
 
@@ -816,7 +825,7 @@ way, that is if the game has not yet finished nor been stopped by an operator.
 \section{The Three Interfaces}
 \subsection{HTTP}
 The user goes to the landing page, there he/she finds a link to register which will
-display a simple form for him to fill out. After the user is registered, he is
+display a simple form for him/her to fill out. After the user is registered, he/she is
 able to log in using the login textfields on the landing page.
 
 After logging in, the user is shown a dashboard page (see Fig.~\ref{fig:dashboard})
@@ -866,9 +875,9 @@ other hosts, {\tt tt.localhost} in the {\tt tt\_bot} module should be changed to
 a domain where ejabberd is configured to listen for connections.
 
 If a user sends  ``HELP'' or any unknown command to our component, it will
-return the list of all valid commands. All commands can be found in appendix
-\ref{sec:textbasedcmd}.
-Each command starts with the command keyword and must end with an ``END'' tag.
+return the list of all valid commands. All commands can be found in
+appendix~\ref{sec:textbasedcmd}.
+Each command starts with the command keyword and must end with the ``END'' tag.
 If the user enters some text before the command keyword or after the end
 keyword, they are simply ignored. Users can get the list of all mandatory fields
 for each command by sending the command name and ``END''.
@@ -880,12 +889,12 @@ stored, because it is necessary for all the future commands.
 Like most play-by-email games, we enable users to play the game using their own
 account from any email service provider.
 To connect to our game server, users need to write an email in a required
-format(see appendix \ref{sec:examplecmd}),
+format(see appendix~\ref{sec:examplecmd}),
 then send it as an operation request to the email-address of our SMTP frontend
 server. After the email is sent, the users will soon receive an email in reply
 to their previous request from our game server. To users, the required format
 of the email text content is exactly the same as what they use in the XMPP
-interface (see appendix \ref{sec:textbasedcmd}), but the difference is that
+interface (see appendix~\ref{sec:textbasedcmd}), but the difference is that
 users are likely to receive replies more instantly in XMPP than in SMTP.
 
 \section{Messages}
@@ -894,19 +903,21 @@ and one for in-game-chat (they can be seen --- minimized --- in
 Fig.~\ref{fig:dashboard}. The user manually has to enter the recipient (in
 in-game chat the recipient-country and the game ID). If the recipient is not
 online when a message is sent, it will be stored and delivered by the message
-application after the recipient logs in the next time. 
-Appendix \ref{sec:textbasedcmd} contains more detailed information on
+application after the recipient logs in the next time.
+
+Appendix~\ref{sec:textbasedcmd} contains more detailed information on
 interaction through the text based interfaces.
 
 \section{Playing}
 For game play, as is mentioned in previous sections, the web frontend provides
 an interactive interface which is much more convenient than typing text orders
 for beginners. (Fig.~\ref{fig:orders}).
+
 On the contrary, the other two frontends (XMPP and SMTP) have to take text
 based orders. Instead of clicking, the user has to type them and additionally
 is required to supply his session ID which he receives after logging in.
-A full list of how to make text based plays can be found in appendix
-\ref{sec:textbasedcommands}.
+A full list of how to make text based plays can be found in
+appendix~\ref{sec:textbasedcommands}.
 
 \chapter{Evaluation and Testing}
 %\hi{Describe what experiments you have done to test your product.}
@@ -934,9 +945,10 @@ our tests for SMTP- and web-frontend are only testing the basics --- ``it's
 there and it reacts'' --- while the XMPP tests send orders, register to the
 system, log in, log off, and so on.
 
-The exmpp library\cite{exmpp} was used to do integration test through the XMPP interface.
-exmpp helped us to provide fully automatic and repeatable test scenarios.
-Adding new functionality to our system was not completely done, until its coressponding integration test was added.
+The exmpp library~\cite{exmpp} was used to do integration testing via the XMPP
+interface. Exmpp helped us to provide fully automatic and repeatable test
+scenarios. Adding new functionality to our system was not considered complete
+until its corresponding integration test was added.
 
 \section{Load Tests}\label{load_tests}
 When starting to load test the system,
@@ -970,7 +982,7 @@ First of all we were interested in how to setup our cluster -
 how many Riak nodes does a backend require to perform its best and
 should Riak and backend nodes be on the same machine?
 
-Fig. \ref{fig:load_test:setup} shows the different setups we tested.
+Fig.~\ref{fig:load_test:setup} shows the different setups we tested.
 \begin{figure}[htbp!]
  \hspace{-2.5cm}
  \includegraphics[width=18cm]{./graphics/Load_test-setup.pdf}
@@ -986,11 +998,11 @@ Meaning on machine X there is a {\bf R}iak node or a {\bf B}ackend node
 \footnote{1B 2R means there is a backend node on machine 1 and a Riak node on machine 2.}.
 
 As you can see most of them performed quite bad.
-Fig. \ref{fig:load_test:setup2} shows only the best setups.
+Fig.~\ref{fig:load_test:setup2} shows only the best setups.
 \begin{figure}[htbp!]
  \hspace{-2.5cm}
  \includegraphics[width=18cm]{./graphics/Load_test-setup2.pdf}
- \caption{The best graphs from Fig. \ref{fig:load_test:setup}.}
+ \caption{The best graphs from Fig.~\ref{fig:load_test:setup}.}
  \label{fig:load_test:setup2}
 \end{figure}
 These three setups performed more or less the same.
@@ -1007,7 +1019,7 @@ The major issue with the previous results was the obvious performance degradatio
  \caption{Load tests for 1-6 machines.}
  \label{fig:load_test:degradation}
 \end{figure}
-Fig. \ref{fig:load_test:degradation} shows that this occured for any cluster size
+Fig.~\ref{fig:load_test:degradation} shows that this occured for any cluster size
 Preliminary prototype benchmarks did not show this pattern,
 which made us compare our system and the prototype we benchmarked.
 The main difference was the usage of eLevelDB as Riaks backend storage in the system,
@@ -1017,7 +1029,7 @@ The only reason we used eLevelDB was it being the only backend supporting second
 We decided to do a comparison of those two backends,
 which required to remove the usage of secondary indices.
 Therefore we replaced it with Riak search.
-As you can see in Fig. \ref{fig:load_test:degradation_compare} our assumption proved to be correct.
+As you can see in Fig.~\ref{fig:load_test:degradation_compare} our assumption proved to be correct.
 \begin{figure}[htbp!]
  \hspace{-2.5cm}
  \includegraphics[width=18cm]{./graphics/Load_test-degradation_compare.pdf}
@@ -1038,7 +1050,7 @@ Another small but effective change was the adaptation of the Riak CAP controls.
 Many writes to Riak have a quite low priority.
 The message logging for example is such a case.
 The system does not need to await confirmation of the write.
-Fig. \ref{fig:load_test:cap} displays the increase in throughput this gave to our system.
+Fig.~\ref{fig:load_test:cap} displays the increase in throughput this gave to our system.
 
 
 \subsubsection{Key filtering}
@@ -1064,7 +1076,7 @@ Unfortunately though we no longer have the data to show a comparison graph.
 
 
 \subsubsection{Final results}
-Fig. \ref{fig:load_test:scaling} shows the performance of the final system.
+Fig.~\ref{fig:load_test:scaling} shows the performance of the final system.
 \begin{figure}[htbp!]
   \hspace{.5cm}
  \includegraphics[width=14cm, angle=-90]{./graphics/Load_test-scaling.pdf}
@@ -1103,7 +1115,7 @@ We start the backend~A again and then halt backend~B. Now the game gets moved to
 backend~A. This way, we can be sure that the game was moved at least once.
 If the game continues to run, the test was successful.
 
-Instructions for running this test are in Section~\ref{run_fault_tolerance}.
+Instructions for running this test are in Sec.~\ref{run_fault_tolerance}.
 
 \chapter{Related Work}
 %\hi{Similarities with existing products/systems. How are you similar and how are you different? What do you do better? What can you learn from what's already out there?
@@ -1131,7 +1143,8 @@ of {\em active\/} users.
 The advantages the existing solutions have, are generally better interfaces:
 the existing email systems are a bit easier to use since you reference games by
 name and not by a number and there is no session ID handling involved.
-These issues would be fixable with reasonable resources though. \\
+These issues would be fixable with reasonable resources though.
+
 They also provide several game modes (from minor changes to starting units to
 playing on a world map). We have the code to handle new maps, but we don't have
 the map data. Creating those would be an easy but work-intensive task since
@@ -1167,8 +1180,9 @@ One more thing would be to think a lot about security --- not much thought has
 been spent on it yet.
 
 The rule engine does not support multi-fleet convoys yet but they are important
-for the game tactics (the classic Italian opening called ``lepanto~opening''
-uses it, for instance). This could be done quite easily in the rule engine.
+for the game tactics (the classic Italian opening called
+``lepanto~opening''~\cite{lepanto} uses it, for instance).
+This could be done quite easily in the rule engine.
 
 \appendix
 \chapter{Installation Instructions}
@@ -1226,7 +1240,7 @@ and release Riak. It then moves the release package into the directory {\tt
   system-release} in the top-level source code directory.
 
 Next it's time to build Treacherous Talks. This is done by executing {\tt
-  make}. This will invoke the build tool Rebar that is present in the source
+  make}. This will invoke the build tool Rebar~\cite{rebar} that is present in the source
 code directory. Rebar will download all dependencies and compile everything in
 the right order. This step can take a while to complete.
 
@@ -1247,20 +1261,19 @@ After building, unit and integration tests can be run together using
 make test
 \end{Verbatim}
 
-This is similar to running {\tt make unittest inttest}.
+This is equivalent to running {\tt make unittest inttest}.
 
 \subsection{Node Failure Tolerance Tests}\label{run_fault_tolerance}
 
-An escript\cite{escript} {\tt fault\_tolerance} is generated when building a full release. This
+An escript~\cite{escript} {\tt fault\_tolerance} is generated when building a full release. This
 allows the tests in {\tt ext\_test/fault\_folerance} to be run from the command
 line e.g.
 
 \begin{Verbatim}
 ./system-release/tt/bin/fault_tolerance   tt.config
 \end{Verbatim}
-
 where {\tt tt.config} is a cluster configuration file. This requires the same
-setup as the Cluster Manager needs for starting a cluster. The
+setup as the Cluster Manager (see~\ref{sec:settingup}) needs for starting a cluster. The
 {\tt fault\_tolerance} escript will exit with a non-zero exit status if any tests
 failed and outputs debugging information to the console.
 
@@ -1277,6 +1290,7 @@ executing the program owning the files.
 If you intend to allow any part of the system to communicate over privileged
 ports, ensure that the user has privileges to do so.
 \section{Setting up and starting the System Manager}
+\label{sec:settingup}
 There is an application called the System Manager in Treacherous Talks. The
 purpose of this application is to configure, start and stop Riak and the rest of
 the Treacherous Talks system on a single machine. The System Operator uses the
@@ -1413,7 +1427,7 @@ is started.
 Sometimes the need arise to add another server to an already running
 cluster. This is a rather simple operation when using the Cluster Manager.
 
-First, ensure that the system has been properly installed (see section
+First, ensure that the system has been properly installed (see
 ~\ref{sec:installing}) on the new node. Start the System Manager if not already
 started on that node. Then add the configuration of the new node to the
 system-wide configuration file.
