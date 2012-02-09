@@ -273,7 +273,7 @@ distributing work across nodes.
 This is done by each process in the backend joining the process group for its
 application. A calling process can then use the process groups to find a
 process to call. The selection is done semi-randomly. Since process groups are
-visible globally, if there is not a local process to call, a random process on
+visible globally, if there is no local process to call, a random process on
 another node is used out of that group.
 Work is then distributed across other running nodes, providing redundancy. Since
 selection is done randomly, it does not guarantee equal distribution between local
