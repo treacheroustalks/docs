@@ -943,7 +943,10 @@ Our integration tests tried to cover everything from the frontends down to the
 database. It showed, that the XMPP frontend was the easiest to be tested, so
 our tests for SMTP- and web-frontend are only testing the basics --- ``it's
 there and it reacts'' --- while the XMPP tests send orders, register to the
-system, log in, log off, and so on.
+system, log in, log off, and so on. Because of the small size of our interfaces' IO
+parts (the parsing was handled by a dedicated module), we reach reasonable quality
+of tests (in terms of test coverage) using this approach while greatly reducing the
+amount of tests to be written.
 
 The exmpp library~\cite{exmpp} was used to do integration testing via the XMPP
 interface. Exmpp helped us to provide fully automatic and repeatable test
