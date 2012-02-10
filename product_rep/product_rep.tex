@@ -254,9 +254,12 @@ Our architecture, therefore, inherently supports scaling out very well.
 The controller application can be on any physical machine and any node. At least
 one instance of the controller application must be running. Extra instances will
 set up local copies of the session database, and session processes are distributed
-among the instances. We decided to run one controller instance on each backend
-node. That distributes session management work evenly between backend nodes and
-has not given performance concerns.
+among the instances. We decided to run it on each backend node, since sessions
+would be created on the node where the controller worker process handling the
+login attempt is running. That distributes work evenly between backend nodes,
+except if some local application cannot deal with the request, and this was
+found to work as expected during load tests of various cluster sizes
+(see Sec.\ref{load_testing_balancing}.
 
 Since the frontends are independent from each other, we did not expect issues
 scaling with additional frontends. We therefore focused on testing the performance
@@ -268,12 +271,13 @@ The system uses process groups~\cite{process_groups} to provide load balancing b
 distributing work across nodes.
 This is done by each process in the backend joining the process group for its
 application. A calling process can then use the process groups to find a
-process to call. The selection is done semi-randomly, if there is not a local
-process to call, a random process is used out of that group.
-Work is then distributed across the running nodes and prevents one node from
-receiving all calls. But, as it is done randomly it does not guarantee equal
-distribution, but during load testing (see~\ref{load_tests}) we didn't see that the
-random selection caused any bottlenecks.
+process to call. The selection is done semi-randomly. Since process groups are
+visible globally, if there is no local process to call, a random process on
+another node is used out of that group.
+Work is then distributed across other running nodes, providing redundancy. Since
+selection is done randomly, it does not guarantee equal distribution between local
+or remote processes, but load testing showed this to work sufficiently
+(see~\ref{load_tests}).
 
 \subsubsection{Stateless design}
 \label{sec:stateless}
@@ -963,7 +967,7 @@ When starting to load test the system,
 we found it very hard to get meaningful data from our testruns.
 But even the first, quite informal, load tests resulted in very valuable information.
 
-Load testing was never ran fully automated. Although that would be very useful,
+Load testing was never fully automated. Although that would be very useful,
 this would have been impossible for us since we would have needed a separate
 cluster to do that and just could not get that amount of hardware.
 A smaller automated test on one dedicated machine would have probably helped
@@ -978,12 +982,50 @@ them and did the actual load generation. But: the time spent on this was time
 spent very well, since it ensured that performance drops because of single
 commits were noticed in several instances --- and their cause analyzed.
 
+\subsubsection{Gathering data}
+We used Basho Bench \cite{bashobench}\cite{bashobench_github} to drive several \emph{custom test drivers}.
+During a test run, test drivers are repeatedly \emph{invoked} by Basho Bench,
+which records statistics about the invocations, such as the number completed in
+a period of time, the average time an invocation takes to complete, etc.
+
+Each invocation of our test drivers performed a number of operations on our system,
+for example creating a game, writing several game orders and sending several
+messages. We called such a compound invocation a \emph{flow}. While a driver
+which performs a single specific operation can be used to test one part of the
+system, we estimated a common usage pattern based on experience playing the game,
+and used flows to simulate use of the system as a whole.
+
+Following a test run, we recorded system information provided by the operator
+overview features, including the number of \emph{reductions} performed on that
+Erlang Runtime System, as reported by {\tt erlang:statistics/1}. This records
+the number of functions, including Erlang built-in functions, called
+since the runtime system was started. Since we started new Erlang instances
+for each test run, we could compare the values between machines in a cluster
+to evaluate whether load is being balanced properly between machines in the
+cluster. This might appear to be a crude measure, and one function might be a
+lot more computationally intensive than another. However, as long as each machine
+is running the same set of applications (as was the case when we compared
+reductions), each machine should perform the same number operations for long
+enough that random variation becomes negligible.
+
 \subsection{Results}
 The load tests had a big influence on the overall system.
 The main changes were made to how Riak was being accessed.
 We discovered which Riak features are expensive and
 even discarded some completely.
 This section describes those discoveries and justifies our decisions.
+
+\subsubsection{Load balancing}\label{load_testing_balancing}
+One of the first issues that appeared with load testing was that the system
+hardly scaled at all. Once we compared the number of reductions between machines
+in the test cluster, we realised one machine was getting much more load than
+others, explaining the bad scaling result. Test sessions were being allocated to
+random machines but we were using too few sessions, resulting in an uneven
+distribution between backends. By changing our load test setup to create more
+sessions, we ensured that the test load was evenly distributed among backends.
+
+Once this was fixed, the number of reductions on different machines indicated
+even balance of work between machines.
 
 \subsubsection{Riak \& backend relation}
 First of all we were interested in how to setup our cluster -
