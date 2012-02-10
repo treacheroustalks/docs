@@ -577,7 +577,7 @@ Off-game messages on the other hand are sent to a nickname and the recipient
 will see the sender's nickname. The basic use case for the off-game messaging
 is giving users the chance to set up games for their friends and tell them
 about it.
-\subsubsection{Search}
+\subsubsection{Search}\label{sec:backend:search}
 While search is an integrated part of our game application, it is important
 enough to mention here. Providing a search feature for users is important since
 it allows a user to find completed games or join an interesting game. To do
@@ -594,8 +594,8 @@ Riak provides a rich query language consisting of term searches, field searches,
 boolean operators and wildcards to fetch matching objects ordered by relevance.
 
 This feature comes with a price though and should be used with caution.
-During load testing we discovered, that it should be avoided for often updated
-data.
+During load testing we discovered that it should be avoided for often updated
+data (See Sec.\ref{sec:load_tests:key_filtering}).
 As it has to re-index all fields of an object on every write it can kill the
 performance.
 Therefore we tried minimizing writes on search indexed data and if possible not
@@ -1222,6 +1222,10 @@ in bug fixing and user interaction.
 \chapter{Conclusions and Future Work}
 We are very happy with the work we have done and that the product is, even
 though the seemingly endless scope, quite close to being ``ready''.
+We found that Riak's performance depends heavily on the usage pattern.
+Particularly, we found that Riak Search is best for storing data that is
+not written very frequently, as discussed in Sections~\ref{sec:backend:search}
+and~\ref{sec:load_tests:key_filtering}.
 
 Despite all this, the work left to be done is considerable:
 An AI was in the original requirements but was not delivered due to time
