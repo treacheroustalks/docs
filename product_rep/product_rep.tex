@@ -209,7 +209,7 @@ The controller filters out illegal messages according to the session database
 and the user privileges before handing them off to the backends --- which will
 respond with an answer.
 
-\subsubsection{Communication between applications}
+\subsubsection{Communication between applications}\label{mvc}
 We follow the MVC~\cite{mvc} (Model~View~Controller) Pattern.
 The View contains all the supported User Interfaces (Web, SMTP, XMPP). The
 Controller is an application that talks to the Model. In the Model there
@@ -311,8 +311,14 @@ at different times creating inconsistent data.
 
 \subsection{Frontends}
 \label{sec:frontends}
-The frontends speak almost the same language to the user, which made the
-implementation of front-end logic very generic.
+While the three interfaces provide very different forms of interaction, namely
+via instant messaging, email and a web browser, we tried to make them as homogenous
+as possible in terms of the data transferred between the client and the server.
+This allowed us to make the implementation of front-end logic very generic. The
+frontends use the same API to the backend via the Controller, and responses
+and messasges pushed to the View do not vary between frontends (See Sec.\ref{mvc}).
+Each frontend transforms data between their respective format and that used to
+interact with the backend.
 
 \subsubsection{Web}
 The web frontend is running Yaws~\cite{yaws} as a web server.
