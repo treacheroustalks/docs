@@ -830,9 +830,10 @@ supervisors.}
 
 The game application's supervision tree is slightly different, as it also has a
 number of game timers, which don't belong to a process group as seen in
-Fig.~\ref{fig:game_app}. The game timer processes have their own supervisor
-which will restart the processes in case the process would die in an unnatural
-way, that is if the game has not yet finished nor been stopped by an operator.
+Fig.~\ref{fig:game_app}. The game timer processes have their own supervisor.
+It will restart the processes in case if the process dies in an unnatural way,
+that is, a case in which neither the game has yet finished nor it has been
+stopped by an operator.
 \begin{figure}[h]
  \centering
  \includegraphics[width=\textwidth]{./graphics/game_Application.png}
