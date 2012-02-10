@@ -520,16 +520,15 @@ Riak configurations (see~\ref{load_tests}).
 \subsubsection{eLevelDB}
 Riak's storage backend was a problem. Riak has the feature to switch the
 storage backend --- the way, key/value pairs are stored on a node.
-We initially used {\tt eLevelDB}~\cite{eleveldb} because it supported secondary indices, a
-feature we wanted. However, {\tt eLevelDB} showed degrading performance
+We initially used {\tt eLevelDB}~\cite{eleveldb} because it supported secondary
+indices\cite{elmasri2007fundamentals,riak_secondary_indices,secondary_idx}, a
+feature we intended to use. However, {\tt eLevelDB} showed degrading performance
 in our context: the throughput of database operations was decreasing linearly
 over time, down to zero. We could not pinpoint the problem, so we had to switch
 the storage backend to {\tt bitcask}~\cite{bitcask}, Riak's standard storage backend.
-Bitcask does not support secondary
-indices~\cite{secondary_idx}\cite{secondary_idx_riak},
-and because of that it was necessary to use
-{\tt riak\_search} more --- which led to scalability
-issues (see~\ref{sec:load_tests:key_filtering}).
+Bitcask does not support secondary indices, and because of that it was necessary
+to use {\tt riak\_search} more --- which led to scalability issues
+(see~\ref{sec:load_tests:key_filtering}).
 
 \subsubsection{Mnesia}
 \label{sec:mnesia}
