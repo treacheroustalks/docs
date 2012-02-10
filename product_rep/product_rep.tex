@@ -521,7 +521,7 @@ Riak configurations (see~\ref{load_tests}).
 Riak's storage backend was a problem. Riak has the feature to switch the
 storage backend --- the way, key/value pairs are stored on a node.
 We initially used {\tt eLevelDB}~\cite{eleveldb} because it supported secondary
-indices\cite{elmasri2007fundamentals,riak_secondary_indices,secondary_idx}, a
+indices~\cite{elmasri2007fundamentals, riak_secondary_indices, secondary_idx}, a
 feature we intended to use. However, {\tt eLevelDB} showed degrading performance
 in our context: the throughput of database operations was decreasing linearly
 over time, down to zero. We could not pinpoint the problem, so we had to switch
@@ -993,7 +993,7 @@ spent very well, since it ensured that performance drops because of single
 commits were noticed in several instances --- and their cause analyzed.
 
 \subsubsection{Gathering data}
-We used Basho Bench~\cite{bashobench}\cite{bashobench_github} to drive several \emph{custom test drivers}.
+We used Basho Bench~\cite{bashobench, bashobench_github} to drive several \emph{custom test drivers}.
 During a test run, test drivers are repeatedly \emph{invoked} by Basho Bench,
 which records statistics about the invocations, such as the number completed in
 a period of time, the average time an invocation takes to complete, etc.
