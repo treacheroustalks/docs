@@ -130,7 +130,7 @@ The requirements on the backend were initially grouped as follows:
 \item Game master --- To moderate games.
 \item Rule engine --- The rule engine should evaluate orders and determine
       the results.
-\item Database --- For storing game and user data
+\item Database --- For storing game and user data.
 \item AI --- Artificial intelligence based player for testing and playing games
       when real players are unavailable.
 \end{itemize}
@@ -171,7 +171,7 @@ communication between a web browser and a web server over a TCP socket.
 
 Its novelty is that it is not implemented by polling which makes it quite
 fast for updates pushed from the server to the client.
-WebSocket can be used by javascript to update only parts of the client page
+WebSocket can be used by JavaScript to update only parts of the client page
 instead of reloading a page and is a great tool to shift computing to the
 client side.
 
@@ -210,7 +210,7 @@ and the user privileges before handing them off to the backends --- which will
 respond with an answer.
 
 \subsubsection{Communication between applications}
-We follow the MVC\cite{mvc} (Model~View~Controller) Pattern.
+We follow the MVC~\cite{mvc} (Model~View~Controller) Pattern.
 The View contains all the supported User Interfaces (Web, SMTP, XMPP). The
 Controller is an application that talks to the Model. In the Model there
 are backend services (Game, Messaging and User Management) and the database.
@@ -220,7 +220,7 @@ application, and each of them can be distributed onto multiple nodes and work
 simultaneously. The system is database-driven, that is, the backend services are
 stateless (see~\ref{sec:stateless}), and any request can be handled
 by any node where that service application is running. The communication between
-the applications is shown in Fig.~\ref{fig:mod_conn}
+the applications is shown in Fig.~\ref{fig:mod_conn}.
 
 \begin{figure}[h]
  \centering
@@ -259,7 +259,7 @@ would be created on the node where the controller worker process handling the
 login attempt is running. That distributes work evenly between backend nodes,
 except if some local application cannot deal with the request, and this was
 found to work as expected during load tests of various cluster sizes
-(see Sec.\ref{load_testing_balancing}.
+(see Sec.~\ref{load_testing_balancing}).
 
 Since the frontends are independent from each other, we did not expect issues
 scaling with additional frontends. We therefore focused on testing the performance
@@ -470,7 +470,7 @@ identities known as roles. The system has four roles:
 
 \begin{itemize}
 \item User --- A registered member of the system who can create and play games.
-\item Blacklisted user --- A user whose access to the system is blocked and his
+\item Blacklisted user --- A user whose access to the system is blocked and his/her
 login credentials disabled. The Operator has the option to restore such a user's
 privileges.
 \item Moderator --- A user with enhanced privileges to moderate games and help
@@ -564,7 +564,7 @@ feature for us. We support two types of messages: {\em in-game\/} and
 In-game messages never involve the user nickname for tactical reasons: if someone
 remembers my nickname, he/she has an easier time to anticipate my moves since he/she
 will likely remember my actions in previous games.
-Or, worse: he might still hold a grudge against me. This is why you never
+Or, worse: he/she might still hold a grudge against me. This is why you never
 communicate with players in-game by using their nickname, but by using their
 country.
 
@@ -637,7 +637,7 @@ Riak's CAP control specifies how many Riak nodes should respond a positive write
 before returning.
 In case 2/4 have to respond, two different writes can get the ``ok''.
 Our backends would not even know there was a simultaneous write.
-Riak tries to automatically resolve this among others with vclocks~\cite{vclock}.
+Riak tries to automatically resolve this with vclocks~\cite{vclock}.
 If Riak cannot resolve this it will leave both values as so called siblings
 in the database.
 It is then up to the backend to resolve the conflict on the next read
@@ -676,7 +676,7 @@ Also, we use Mnesia instead of Riak to store session information,
 as it supports transactions.
 
 Unfortunately this still leaves one case.
-For example a user might re-login while his requests to update the profile is
+For example a user might re-login while his/her requests to update the profile is
 being handled and then tries to update the profile again before the previous
 update has been written.
 This is very unlikely to happen, as the user needs to do the update very
@@ -753,7 +753,7 @@ Below is the high level directory structure of the project.
 A short description of each application can be found in Table~\ref{table1}.
 
 \begin{center}
-    \begin{table}[t]
+    \begin{table}[h]
     \centering
     \begin{tabular}{ | l |p{10cm}|}
     \hline
@@ -843,7 +843,7 @@ display a simple form for him/her to fill out. After the user is registered, he/
 able to log in using the login textfields on the landing page.
 
 After logging in, the user is shown a dashboard page (see Fig.~\ref{fig:dashboard})
-where he is able to search for games, look at the games he is playing in (if
+where he/she is able to search for games, look at the games he/she is playing in (if
 any) and chat with other users in-game or off-game.
 
 \begin{figure}[h]
@@ -856,7 +856,7 @@ any) and chat with other users in-game or off-game.
 The web frontend has several key advantages over the two purely text based
 frontends:
 \begin{itemize}
-\item The user does not need to remember his session id.
+\item The user does not need to remember his/her session id.
 \item The user sees a graphical map (generated using a HTML5 canvas),
   see Fig.~\ref{fig:map}.
 \item It allows users to have a better gaming experience since the graphical map
@@ -903,7 +903,7 @@ stored, because it is necessary for all the future commands.
 Like most play-by-email games, we enable users to play the game using their own
 account from any email service provider.
 To connect to our game server, users need to write an email in a required
-format(see appendix~\ref{sec:examplecmd}),
+format (see appendix~\ref{sec:examplecmd}),
 then send it as an operation request to the email-address of our SMTP frontend
 server. After the email is sent, the users will soon receive an email in reply
 to their previous request from our game server. To users, the required format
@@ -914,7 +914,7 @@ users are likely to receive replies more instantly in XMPP than in SMTP.
 \section{Messages}
 In the web frontend, the user is shown two chat boxes: one for off-game chat
 and one for in-game-chat (they can be seen --- minimized --- in
-Fig.~\ref{fig:dashboard}. The user manually has to enter the recipient (in
+Fig.~\ref{fig:dashboard}). The user manually has to enter the recipient (in
 in-game chat the recipient-country and the game ID). If the recipient is not
 online when a message is sent, it will be stored and delivered by the message
 application after the recipient logs in the next time.
@@ -925,11 +925,11 @@ interaction through the text based interfaces.
 \section{Playing}
 For game play, as is mentioned in previous sections, the web frontend provides
 an interactive interface which is much more convenient than typing text orders
-for beginners. (Fig.~\ref{fig:orders}).
+for beginners (Fig.~\ref{fig:orders}).
 
 On the contrary, the other two frontends (XMPP and SMTP) have to take text
 based orders. Instead of clicking, the user has to type them and additionally
-is required to supply his session ID which he receives after logging in.
+is required to supply his/her session ID which he/she receives after logging in.
 A full list of how to make text based plays can be found in
 appendix~\ref{sec:textbasedcommands}.
 
@@ -988,7 +988,7 @@ spent very well, since it ensured that performance drops because of single
 commits were noticed in several instances --- and their cause analyzed.
 
 \subsubsection{Gathering data}
-We used Basho Bench \cite{bashobench}\cite{bashobench_github} to drive several \emph{custom test drivers}.
+We used Basho Bench~\cite{bashobench}\cite{bashobench_github} to drive several \emph{custom test drivers}.
 During a test run, test drivers are repeatedly \emph{invoked} by Basho Bench,
 which records statistics about the invocations, such as the number completed in
 a period of time, the average time an invocation takes to complete, etc.
@@ -1223,7 +1223,7 @@ An AI was in the original requirements but was not delivered due to time
 constraints.
 Bug fixing in the rule engine is necessary. Scalability could be improved by
 applying tracing to the cluster which would be lots of interesting work. A more
-polished interface, that is more appealing to the eye is something that could
+polished interface, that is more appealing to the eye, is something that could
 be worked on.
 
 In order to make the game playable by the public, a better system to find and
