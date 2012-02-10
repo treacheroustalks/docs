@@ -470,7 +470,9 @@ identities known as roles. The system has four roles:
 
 \begin{itemize}
 \item User --- A registered member of the system who can create and play games.
-\item Blacklisted user --- A user who has been removed from the system.
+\item Blacklisted user --- A user whose access to the system is blocked and his
+login credentials disabled. The Operator has the option to restore such a user's
+privileges.
 \item Moderator --- A user with enhanced privileges to moderate games and help
 other users.
 \item Operator --- An administrator who has complete control over the system.
@@ -488,10 +490,10 @@ using Mnesia for sessions (see~\ref{sec:stateless},~\ref{sec:session}) and the g
 processes (see~\ref{sec:stateless}), as it provides transactions.
 
 Riak proved to be a good choice for us since its performance parameters (called
-``CAP controls''~\cite{cap_controls} in riak-lingo) are very easy to tune and it
-is quite well documented how Riak behaves under load. The scalability problems
-we had came from using the search module too much
-(see~\ref{sec:load_tests:key_filtering}).
+``CAP controls''~\cite{cap_controls}) are very easy to tune and it
+is quite well documented how Riak behaves under load~\cite{mozilla_riak, joyent_riak}.
+The scalability problems we had came from using the search
+module too much (see~\ref{sec:load_tests:key_filtering}).
 
 Riak is a distributed key/value store that connects an arbitrary number of
 {\em nodes} to form a cluster. All of these nodes can --- but don't have to ---
@@ -504,7 +506,10 @@ responsibilities which makes the architecture simpler.
 The ease of adding nodes to a running Riak cluster is one of its main
 advantages, data are redistributed in order to achieve fair distribution after
 one node is added. This can, of course, have performance implications but they
-were not measured by us (see~\ref{load_tests}).
+were not measured by us.
+
+Load testing was done in terms of how well the entire system behaves with different
+Riak configurations (see~\ref{load_tests}).
 
 \subsubsection{eLevelDB}
 Riak's storage backend was a problem. Riak has the feature to switch the
