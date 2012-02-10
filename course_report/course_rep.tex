@@ -82,7 +82,7 @@ service.
 
 We developed the service completely in Erlang while spending lots of time on
 optimising performance and scalability. The project was mostly self organised
-by an international team of 9 students and developed using Scrum.
+by an international team of 9 students and developed using Scrum\cite{scrum}.
 }
 \chapter{Introduction}
 Diplomacy\cite{diplomacy} is a board game, invented in the 1950s where the goal is to try to
@@ -163,14 +163,14 @@ for several reasons:
 \begin{itemize}
 \item Built-in wiki \\
   We used the wiki as a basis for high level documentation of things such as our
-  architecture and design, guidelines, scrum process details, test flow results,
+  architecture and design, guidelines, Scrum process details, test flow results,
   our data model and many other things.
 \item Scrum plugin \\
   Redmine has a plugin system and we used the Backlogs plugin heavily. It is a
-  plugin designed to help teams using scrum. It was very valuable since it
-  quickly replaced the post-it based scrum board solution while providing the
-  same visual overview. The scrum master had to spend no time on keeping our
-  issue tracker and physical scrum board consistent any more.
+  plugin designed to help teams using Scrum. It was very valuable since it
+  quickly replaced the post-it based Scrum board solution while providing the
+  same visual overview. The Scrum master had to spend no time on keeping our
+  issue tracker and physical Scrum board consistent any more.
 \item Forum \\
   We used it for discussions during the initial sprints.
 \item Version control integration \\
@@ -320,29 +320,93 @@ configurations and analyze. During load testing we were able to find both bugs
 and performance bottlenecks.
 
 \chapter{Project Methodology and Organisation}
+\section{What Is Scrum}
+Scrum is a way for a group of people to work together and develop a product.
+It is widely used among the software industry due to its effectiveness for
+team collaboration in complex projects. Besides, Scrum has a simple learning
+curve which allows people to get used to it quickly. In this section,
+some key concepts about Scrum will be introduced.
+\subsection{Scrum Roles}
+\begin{itemize}
+\item \textbf{Development Team}\\
+A group of developers who take the responsibility of the product
+implementation. Their jobs inculde coding, testing, documenting and
+all sorts of experiment. In this course, each student belongs to this
+group. 
+\item \textbf{Scrum Master}\\
+The person that makes sure the Scrum process is on the right track.
+For example, when some team members have no idea what to do today,
+the Scrum master has to help them to find tasks, so that each member could contribute
+to the product.
+\item \textbf{Product Owner}\\
+Normally, in Scrum context, the product owner is the one who is responsible for
+prioritizing tasks for the development team, and examine if the quality of
+products is accepctable.
+But in our case, the product owner is the customer who ordered the product.
+He specified a list of product requirements, then the development team tried to
+analyse these requirements and implement corresponding features. The prioritization
+of the tasks were largely up to the development team.
 
-\section{The Customer}
-Our customer was Jan Henry Nyström from Erlang Solutions\cite{erlsol}. Henry's
-job according to Scrum was to prioritise the tasks at hand and be at the
-planning meeting. What Henry did instead was to act more like a teacher which
-led to confusion on our side at the beginning of the project. Once we got
-accustomed to that, we were able to work very efficiently for and with him.
-Henry's experience in developing Erlang systems was extremely useful and we hope
-that he learned a little bit through this project as well since some of our
-tools were not known to him (in practice) before.
-\section{Erlang User Conference}
-We were invited to present our project in poster form at the Erlang User
-Conference in Stockholm\cite{euc2011}. The attendance was free of charge for us
-thanks to Erlang Solutions.
+\end{itemize}
+\subsection{More Scrum Terminologies}
+\begin{itemize}
+\item{\textbf{User Stories}}\\
+In order to let developers understand the product requirements more
+precisely, a customer will break down his/her requirements into small
+stories.
+Each story is a use case of how a user can interact with the product. A good
+story should also explain why the user needs such feature.
 
-In Stockholm many people asked about the project, most questions were on a high
-level, though. We did not get direct feedback that changed the project after the
-EUC but the talks there were quite relevant to our project and therefore a big
-help.
+\item{\textbf{Product Backlog}}\\
+As soon as all user stories are prioritized, it becomes the
+product backlog.
 
-It was as well a very fortunate place for us to be as some companies that were
-there are actively trying to hire young developers with Erlang experience.
-\section{Scrum}
+\item{\textbf{Sprints}}\\
+A sprint is a period of time for the team to develop the actual
+product, typically 2 to 4 weeks. Each sprint has its own goal that specifying
+what should be done during the sprint. The entire project period
+is consisted of a number of sprints.
+
+\item{\textbf{Sprint Backlog}}\\
+The sprint backlog is a list of tasks that should be completed during the sprint.
+
+\item{\textbf{Sprint Planning}}\\
+At the beginning of a sprint cycle, the team will hold a meeting
+deciding what to achieve by the end of the sprint. During the meeting,
+the team has to discuss which stories in product backlog to checkout,
+and how to break it down to tasks for the sprint backlog. In addition,
+everyone in the team has to estimate
+the workload for each task, so that they can estimate the amount of
+tasks they can burden in the given sprint cycle.
+
+\item{\textbf{Standup Meetings}}\\
+A short meeting that starts precisely on time every day.
+Each team member is mandatory to attend. During the meeting, each
+member will summarize what has been done by him/her the previous day,
+and tell what will be done today.
+
+\item{\textbf{Sprint Demo}}\\
+Present the completed work to some audiences at the end of a sprint
+(e.g. customer and teachers).
+
+\item{\textbf{Sprint Retrospectives}}\\
+Right after the sprint demo, all group members reflect on the past
+sprint, summarizing what was good about the sprint and what could be
+improved in the next sprint.
+
+\end{itemize}
+\subsection{The Overall Scrum Process}
+By wrapping up all the key concepts above, the overall scrum process can be easily
+illustrated by Fig. \ref{fig:scrum}.
+\begin{figure}[h]
+ \centering
+ \includegraphics[width=12cm]{flags/scrum.png}
+ % DSCF6548.jpg: 3296x2472 pixel, 72dpi, 116.28x87.21 cm, bb=0 0 3296 2472
+ \caption{The Scrum Process}
+ \label{fig:scrum}
+\end{figure}
+
+\section{How We Used Scrum}
 For managing our project we used Scrum as in~\cite{kniberg}.
 We tried hard to start up a well functioning software process and believe that
 we succeeded. Our flavour of Scrum looked as follows: \\ \\
@@ -374,7 +438,7 @@ room:
 \item since everything is announced before-hand,
   (``today, I am going to \ldots''), bad decisions can be caught, the rule to
   always work on the most important item is enforced and so on.
-\item the standup meeting is an ideal opportunity for the scrum master to team
+\item the standup meeting is an ideal opportunity for the Scrum master to team
   up people who don't really know what they should work on.
 \end{itemize}
 \subsection{Fika}
@@ -437,6 +501,29 @@ whiteboard), we ``dot-voted'' --- everyone gets three or four votes and can
 distribute them in the form of a dot over the negative items on the board.
 Giving multiple dots to one item is allowed. We took the three items with the
 most points and tried to fix them in the course of the next sprint.
+
+\section{The Customer}
+Our customer was Jan Henry Nyström from Erlang Solutions\cite{erlsol}. Henry's
+job according to Scrum was to prioritise the tasks at hand and be at the
+planning meeting. What Henry did instead was to act more like a teacher which
+led to confusion on our side at the beginning of the project. Once we got
+accustomed to that, we were able to work very efficiently for and with him.
+Henry's experience in developing Erlang systems was extremely useful and we hope
+that he learned a little bit through this project as well since some of our
+tools were not known to him (in practice) before.
+\section{Erlang User Conference}
+We were invited to present our project in poster form at the Erlang User
+Conference in Stockholm\cite{euc2011}. The attendance was free of charge for us
+thanks to Erlang Solutions.
+
+In Stockholm many people asked about the project, most questions were on a high
+level, though. We did not get direct feedback that changed the project after the
+EUC but the talks there were quite relevant to our project and therefore a big
+help.
+
+It was as well a very fortunate place for us to be as some companies that were
+there are actively trying to hire young developers with Erlang experience.
+
 \section{Quality Management}
 \subsection*{Coding Conventions}
 Our coding conventions were agreed on in sprint 1 and we enforced them through
@@ -471,7 +558,7 @@ always has a regression test suite that immediately highlights errors.
 Duration: Sep 19 -- Sep 30 (2 weeks)
 \subsubsection{Servers}
 We set up a Git-server and a Redmine-server, Buildbot was not
-a task in this sprint. We started off with JD as scrum master and Stephan as
+a task in this sprint. We started off with JD as Scrum master and Stephan as
 spokesperson. Scrum was done on a whiteboard with post-its.
 As we all were new to the process, it took us a little while to figure out how
 to act.
@@ -548,7 +635,7 @@ them by the end of sprint 2. We vowed to not make this mistake again.
 
 \subsection*{Sprint 3 --- Sprint Goal: ``Play a Basic Game''}
 Duration: Oct 24 -- Nov 11 (3 weeks)\\\\
-From this sprint on, JD resigned as our scrum master --- but he had warned us
+From this sprint on, JD resigned as our Scrum master --- but he had warned us
 from the beginning of the project. Andre replaced him with the beginning of
 sprint~3.
 
