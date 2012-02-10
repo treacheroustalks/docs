@@ -82,10 +82,10 @@ service.
 
 We developed the service completely in Erlang while spending lots of time on
 optimising performance and scalability. The project was mostly self organised
-by an international team of 9 students and developed using Scrum\cite{scrum}.
+by an international team of 9 students and developed using Scrum~\cite{scrum}.
 }
 \chapter{Introduction}
-Diplomacy\cite{diplomacy} is a board game, invented in the 1950s where the goal is to try to
+Diplomacy~\cite{diplomacy} is a board game, invented in the 1950s where the goal is to try to
 conquer Europe just before WW I. You come close to this goal by talking to the
 other players --- by diplomacy --- and making them your allies. And you achieve
 it by attack them when they do not expect it.
@@ -96,12 +96,13 @@ visualization.
 
 The requirements we were faced with asked for implementation of Diplomacy as a
 web service while providing several interfaces to this service. Scalability and
-Failure Tolerance were of high priority. \\
+Failure Tolerance were of high priority.
+
 Even though a board game is a fun thing to implement, we do think that the most
 interesting part of our project is the scalability- and fault tolerance-
 engineering.
 
-Apart from the above mentioned requirements, using Erlang\cite{erlang_proglang}
+Apart from the above mentioned requirements, using Erlang~\cite{erlang_proglang}
 and Erlang based tools was another one. 
 In fact, We could not imagine how hard life would be 
 to design such a fault tolerant and scalable system without Erlang. If you want
@@ -157,34 +158,34 @@ very valuable, especially in times where much design and architecture was done.
 \section{Tools}
 \subsection{Issue Tracking}
 All projects need a system for tracking issues and planning. We opted to use one
-of the more popular open-source solutions called Redmine\cite{redmine}, a
+of the more popular open-source solutions called Redmine~\cite{redmine}, a
 web-based issue tracker and project management system. Redmine was useful to us
 for several reasons:
 \begin{itemize}
-\item Built-in wiki \\
+\item \textbf{Built-in wiki} \\
   We used the wiki as a basis for high level documentation of things such as our
   architecture and design, guidelines, Scrum process details, test flow results,
   our data model and many other things.
-\item Scrum plugin \\
+\item \textbf{Scrum plugin} \\
   Redmine has a plugin system and we used the Backlogs plugin heavily. It is a
   plugin designed to help teams using Scrum. It was very valuable since it
   quickly replaced the post-it based Scrum board solution while providing the
   same visual overview. The Scrum master had to spend no time on keeping our
   issue tracker and physical Scrum board consistent any more.
-\item Forum \\
+\item \textbf{Forum} \\
   We used it for discussions during the initial sprints.
-\item Version control integration \\
+\item \textbf{Version control integration} \\
   We used the version control integration mostly for connecting tickets in
   Redmine to the associated commits in our Git repository.
 \end{itemize}
 \subsection{Version Control}
 Perhaps even more vital to a software development project is a good version
 control system. There are several out there, but the most common open-source
-ones are Subversion\cite{subversion} and Git\cite{git_vcs}. They are fundamentally different and we chose Git
+ones are Subversion~\cite{subversion} and Git~\cite{git_vcs}. They are fundamentally different and we chose Git
 since it has very good tool support and handles branching and merging very well.
 
 Another plus for Git is Github, an online repository hosting service. Most
-open-source software written in Erlang\cite{erlang_proglang} (including Erlang/OTP\cite{erlang_otp} itself) is hosted
+open-source software written in Erlang~\cite{erlang_proglang} (including Erlang/OTP~\cite{erlang_otp} itself) is hosted
 on Github. This makes the process of making modifications to upstream code a lot
 easier since it is trivial to fork (create your own hosted copy of another
 repository) repositories on Github.
@@ -195,10 +196,10 @@ checks out a copy of your source code tree from a version control repository and
 runs various commands manipulating that source tree, returning some result to
 the developers.
 
-Initially we installed Jenkins\cite{jenkins_ci} to do this since it is widely used. We tried to
+Initially we installed Jenkins~\cite{jenkins_ci} to do this since it is widely used. We tried to
 integrate it with our code review system, but the plugins for doing that were
 very unstable and crashed often. We set out to find another system we could use
-and found Buildbot\cite{buildbot}. Buildbot is a bit different from most other CI servers since
+and found Buildbot~\cite{buildbot}. Buildbot is a bit different from most other CI servers since
 it is more like a framework than a finished product. You configure Buildbot by
 writing a Python program describing what it should do.
 
@@ -215,7 +216,7 @@ get acquainted with your own code. While many development projects uses code
 review in some fashion or another, we wanted to try a more formal approach to
 see if it could help us improve our code quality.
 
-We quickly settled on using the code review system Gerrit\cite{gerrit_cr}. It was by far the
+We quickly settled on using the code review system Gerrit~\cite{gerrit_cr}. It was by far the
 easiest code review system to setup for Git. The idea was to combine continuous
 integration with the code review system to ensure that developers pay attention
 to the results from Buildbot and that the master branch always is buildable and
@@ -248,14 +249,14 @@ We also use this system for more than code. In fact, while this report is
 written, it is being code reviewed as well in the same manner.
 \subsection{Building}
 Build tools are important, especially since bad tools tend to cause frustration
-among developers. We started using the Erlang build tool Rebar\cite{rebar} from day one in
+among developers. We started using the Erlang build tool Rebar~\cite{rebar} from day one in
 our project since it is the de-facto build tool in the Erlang community. Rebar
 can do quite a lot of things besides just compiling code. It also helps us run
 tests and create releases.
 
 We spent many hours integrating code from external parties into our system, such
 as the server parts of our frontends. The majority of the external projects were
-buildable with Rebar, but not the major ones such as \emph{ejabberd}\cite{ejabberd_im} and \emph{exmpp}\cite{exmpp_api}. They
+buildable with Rebar, but not the major ones such as \emph{ejabberd}~\cite{ejabberd_im} and \emph{exmpp}~\cite{exmpp_api}. They
 use plain Makefiles and are not releasable since they are not proper OTP
 applications. To our great pleasure we learned at the Erlang User Conference
 that there are forked versions of these projects that are OTP compliant and can
@@ -270,9 +271,9 @@ configure a whole cluster. In retrospective, we should have kept all our
 applications in one release and then dynamically start the ones we want to be
 running on a specific node. That would have saved us some time and gray hair.
 \subsection{Unit and Integration Testing}
-There are several test frameworks for Erlang, but we used the standard EUnit\cite{eunit}
+There are several test frameworks for Erlang, but we used the standard EUnit~\cite{eunit}
 framework for testing for pretty much everything. We did so without really
-considering CommonTest\cite{commontest}, so we do not know whether that choice was optimal or
+considering CommonTest~\cite{commontest}, so we do not know whether that choice was optimal or
 not. EUnit worked okay for us but we had some problems with it.
 
 One problem is that EUnit assumes an automatic timeout of 5 seconds for all
@@ -290,11 +291,11 @@ code and sometimes hard to find the real problem behind a failing test.
 
 We also had integration tests for our frontends. Each frontend had a basic
 integration test checking that a user could log in and maybe do a few
-operations. We used Selenium\cite{selenium} for testing the web frontend, and it turned out to
+operations. We used Selenium~\cite{selenium} for testing the web frontend, and it turned out to
 work even though it was hard to write good tests for our
-Javascript-heavy web frontend.
+JavaScript-heavy web frontend.
 \subsection{Load Testing}
-For load testing we decided to use Basho Bench\cite{basho_bench}, which made it possible to run
+For load testing we decided to use Basho Bench~\cite{basho_bench}, which made it possible to run
 load tests that were repeatable and produce graphs out of the given results.
 Basho Bench would run our tests, which contains a number of user commands, for
 example logging in, sending messages and playing games. To really push our
@@ -397,7 +398,7 @@ improved in the next sprint.
 \end{itemize}
 \subsection{The Overall Scrum Process}
 By wrapping up all the key concepts above, the overall scrum process can be easily
-illustrated by Fig. \ref{fig:scrum}.
+illustrated by Fig.~\ref{fig:scrum}.
 \begin{figure}[h]
  \centering
  \includegraphics[width=12cm]{flags/scrum.png}
@@ -503,7 +504,7 @@ Giving multiple dots to one item is allowed. We took the three items with the
 most points and tried to fix them in the course of the next sprint.
 
 \section{The Customer}
-Our customer was Jan Henry Nyström from Erlang Solutions\cite{erlsol}. Henry's
+Our customer was Jan Henry Nyström from Erlang Solutions~\cite{erlsol}. Henry's
 job according to Scrum was to prioritise the tasks at hand and be at the
 planning meeting. What Henry did instead was to act more like a teacher which
 led to confusion on our side at the beginning of the project. Once we got
@@ -513,7 +514,7 @@ that he learned a little bit through this project as well since some of our
 tools were not known to him (in practice) before.
 \section{Erlang User Conference}
 We were invited to present our project in poster form at the Erlang User
-Conference in Stockholm\cite{euc2011}. The attendance was free of charge for us
+Conference in Stockholm~\cite{euc2011}. The attendance was free of charge for us
 thanks to Erlang Solutions.
 
 In Stockholm many people asked about the project, most questions were on a high
@@ -564,18 +565,18 @@ As we all were new to the process, it took us a little while to figure out how
 to act.
 \subsubsection{Surveys}
 We tried out some tools/libraries and evaluated how they would fit
-our project. The end result of that process was (see Appendix B for details): \\
+our project. The end result of that process was (see Appendix~\ref{appendix_b} for details): \\
 \\
 \begin{tabular}{r|l}
-Ubuntu 11.04\cite{ubuntu} & operating system                                   \\
+Ubuntu 11.04~\cite{ubuntu} & operating system                                   \\
 Git          & version control                                    \\
 Gerrit       & code reviews                                       \\
-Riak\cite{riakdb}         & database                                           \\
-Nitrogen\cite{nitrogen}     & web framework                                      \\
-Yaws\cite{yaws}         & web server                                         \\
+Riak~\cite{riakdb}         & database                                           \\
+Nitrogen~\cite{nitrogen}     & web framework                                      \\
+Yaws~\cite{yaws}         & web server                                         \\
 ejabberd     & XMPP server                                        \\
-gen\_smtp\cite{gensmtp}    & email server library                               \\
-Chromium 14\cite{chromium}  & web browser with WebSocket\cite{websocket} support \\
+gen\_smtp~\cite{gensmtp}    & email server library                               \\
+Chromium 14~\cite{chromium}  & web browser with WebSocket~\cite{websocket} support \\
 Buildbot     & continuous integration server
 \end{tabular}
 \subsubsection{Git-School}
@@ -699,11 +700,11 @@ never done with tuning. So we decided to solve the degradation
 and if there is time left to tune performance, but not to spend more than 20 man
 days on that story.
 
-Our Riak storage backend was \emph{eleveldb}\cite{eleveldb}, because it is the only one supporting
+Our Riak storage backend was \emph{eleveldb}~\cite{eleveldb}, because it is the only one supporting
 secondary indices. The assumption was that eleveldb, was responsible for the
 degradation. The reason for that assumption was that Riak in general does not
 show such a degradation pattern, and the default and well-tested storage backend
-is \emph{bitcask}\cite{bitcask}. After replacing all uses of Riak's secondary indices with Riak
+is \emph{bitcask}~\cite{bitcask}. After replacing all uses of Riak's secondary indices with Riak
 Search we could switch our backend back to bitcask.  This solved the degradation
 problem.
 
@@ -742,7 +743,7 @@ A rather small, but to us very important, feature of that sprint was the
 graphical map for the web interface. The game was not really playable with just
 the textual representation of the map. We decided to do this only for the web
 interface, since the other interface are purely text based anyway, and this was
-a good task for HTML5 canvas\cite{html5_canvas}.
+a good task for HTML5 canvas~\cite{html5_canvas}.
 \subsection*{Sprint 6}
 Duration: Jan 2 -- Jan 11 (approximately 1 week)\\\\
 The last sprint was very short and was just about finishing up - we did not even
@@ -1074,7 +1075,7 @@ sprint.
 
 For me, the fourth sprint was mostly about making our releases actually work,
 system configuration and fault tolerance testing. I created a proper staging
-environment using the configuration manager Puppet\cite{puppetlab}. This allowed us to have
+environment using the configuration manager Puppet~\cite{puppetlab}. This allowed us to have
 several light-weight virtual machines (containers) for fault tolerance testing
 in a very easy and automated way. I then worked with JD on fault
 tolerance testing. We reached a point were we needed an easy way to configure a
@@ -1089,7 +1090,7 @@ tests to actually use the cluster/system managers to control the system since
 this got rid of lots of false positives that we got on Buildbot. I spent several
 days on bug fixing our build-test-release cycle since we were hitting all kinds
 of weird bugs during testing. I also spent a few days on trying to fix problems
-found by Dialyzer\cite{dialyzer} in our codebase as part of the general clean-up.
+found by Dialyzer~\cite{dialyzer} in our codebase as part of the general clean-up.
 \section{Sukumar Yethadka}
 Building large scale Internet systems and its challenges are very interesting to
 me, which is why, this project along with its requirement of ``Erlang for
@@ -1110,13 +1111,13 @@ architecture.
 During sprint 3, I worked on the web frontend. After holding the Unix school, I
 refactored the web frontend making it more modular, consistent and easily
 extendible. It could have been better if we had used a traditional MVC
-framework, but we decided to keep it simple making it Javascript heavy.
+framework, but we decided to keep it simple making it JavaScript heavy.
 
 I worked on Riak search and load testing during sprint 4. I setup Riak search
 and setup the search schema for the buckets. I also got it to work with the web
 frontend. During the later half of the sprint, I worked on defining and creating
 load tests along with Tiina and also created good visuals for the load test
-results, using a open source project - \emph{highcharts}\cite{highcharts}.
+results, using a open source project - \emph{highcharts}~\cite{highcharts}.
 
 With most of the core features completed, I worked on adding the less important
 features, fixing bugs, cleaning code and fixing the documentation during sprint
@@ -1125,6 +1126,7 @@ features, fixing bugs, cleaning code and fixing the documentation during sprint
 Overall, this project was a unique and memorable experience for me and is
 definitely a recommendation for future students.
 \chapter{Survey}
+\label{appendix_b}
 After a brief survey in the early stages of the project, we chose a few projects
 to look at in more detail, to be able to make a fair decision on what might be
 suitable for the Diplomacy server. As a reminder, all the projects mentioned
@@ -1132,7 +1134,7 @@ below are based on Erlang.
 
 \section{Web Frameworks}
 \subsection{Zotonic}
-Zotonic\cite{zotonic} is a CMS based on Erlang. It has a powerful control
+Zotonic~\cite{zotonic} is a CMS based on Erlang. It has a powerful control
 interface, has quite a number of modules available such as authentication and
 chat and it achieves modularity by following OTP principles. Zotonic has support
 for WebSocket and when WebSocket is not supported by the browser, it will
@@ -1140,19 +1142,19 @@ use Comet instead. Zotonic has been inspired by Nitrogen and it can only be run
 on a MochiWeb server.
 
 \subsection{Erlang Web}
-Erlang Web\cite{erlangweb} is quite simplistic, it has support for multiple web
+Erlang Web~\cite{erlangweb} is quite simplistic, it has support for multiple web
 servers and distribution. It does not have any extras like a chat nor does it
 have support for WebSocket. Erlang Web can be run on INETS and Yaws web
 servers.
 
 \subsection{Nitrogen}
-Nitrogen\cite{nitrogen} uses an event-driven model and offers hot code swapping,
+Nitrogen~\cite{nitrogen} uses an event-driven model and offers hot code swapping,
 stability and scalability. It includes a simple, yet powerful, template system
 and is well documented which is important for us as developers. Nitrogen can run
 on several web servers; MochiWeb, Yaws and INETS.
 
 \subsection{Chicago Boss}
-Chicago Boss\cite{chicagoboss} is a new web framework, which has not yet reached
+Chicago Boss~\cite{chicagoboss} is a new web framework, which has not yet reached
 a stable state. Even though it hasn't reached 1.0, it still offers some nice
 features, as it supports multiple databases, hot code swapping and e-mail among
 other things. It is well documented but it does not support WebSocket nor
@@ -1183,21 +1185,21 @@ we thought we would be able to implement that.
 
 Unfortunately, we came to the conclusion that implementing WebSocket support
 into Nitrogen is a project on its own, and we decided to not use a web
-framework at all. We ended up using only Javascript, which was sufficient for
+framework at all. We ended up using only JavaScript, which was sufficient for
 our use.
 
 \section{Web Servers}
 \subsection{MochiWeb}
-Mochiweb\cite{mochiweb} claims to provide a lightweight and lightning fast
+Mochiweb~\cite{mochiweb} claims to provide a lightweight and lightning fast
 web server. Several sources say that it has been used by Facebook for their
-chat\cite{fb_chat}\cite{fb_pres}, due to these properties. It is easy to set up
+chat~\cite{fb_chat, fb_pres}, due to these properties. It is easy to set up
 and get running. It was really hard to find any documentation, because there is
 almost no documentation online, only the API that can be generated by edocs
 which in retrospective should be quite intuitive. A big drawback for this
 project was that it doesn't have support for WebSocket.
 
 \subsection{Yaws}
-Yaws\cite{yaws} is a high performance web server, which has a large and active
+Yaws~\cite{yaws} is a high performance web server, which has a large and active
 community and is thus regularly updated. It can be run in two different modes;
 as a standalone application or as an embedded application. Their web page
 provides a large number of example use cases and it is well documented, which
@@ -1217,7 +1219,7 @@ and cool. He updated the WebSocket implementation in Yaws, and these changes for
 WebSocket RFC 6455 are now included in the release of Yaws 1.92.
 
 Yaws seems to have been a fairly good choice, but during the EUC we became aware
-of another web server, Cowboy\cite{cowboy_pres}, which in retrospective,
+of another web server, Cowboy~\cite{cowboy_pres}, which in retrospective,
 probably would have been an even better decision as the developer for Cowboy is
 very keen on having the latest WebSocket version at all times. Why we didn't
 even consider it an option was because it was very new and it had just entered
@@ -1256,9 +1258,9 @@ ejabberd is a distributed Jabber/XMPP instant messaging server. It has a modular
 architecture, a web administrator interface and simple configuration. It
 supports extension via \emph{internal components} in the form of Erlang modules
 using hooks which can be added allowing it to control the server in a
-programmatic way\cite{ejabberd-plugin}. It also supports more advanced features
-such as the Jabber Component Protocol \cite{xmpp-component} and a server to
-server (S2S) protocol\cite{xmpp-s2s}.
+programmatic way~\cite{ejabberd-plugin}. It also supports more advanced features
+such as the Jabber Component Protocol~\cite{xmpp-component} and a server to
+server (S2S) protocol~\cite{xmpp-s2s}.
 
 \subsection{exmpp client}
 \emph{exmpp} is a XMPP client with SSL support. It provides a lot of functionality to
@@ -1279,14 +1281,14 @@ testing since it is easy to script test cases using the IM interface.
 \subsection{Mnesia}
 Mnesia is a distributed relational database designed for telecom systems and is
 a part of the Erlang/OTP distribution. It is a well documented, fault tolerant
-database that provides the ACID\cite{ACID} guarantees of Atomicity, Consistency,
+database that provides the ACID~\cite{ACID} guarantees of Atomicity, Consistency,
 Isolation and Durability and supports dynamic reconfiguration as well
 as transactions. However, it has a storage limit of 4 gigabytes and has a
 learning curve of its own custom query language.
 
 \subsection{Riak}
 Riak is a distributed key value database based on the CAP
-theorem\cite{cap_theorem} and Amazon's dynamo paper\cite{dynamo}. It provides
+theorem~\cite{cap_theorem} and Amazon's dynamo paper~\cite{dynamo}. It provides
 features such as RESTful interface, protocol buffers interface, ability to tune
 CAP values at the bucket level, map reduce queries, link walking, secondary
 indicies and search. All the data is replicated across the nodes based on the
